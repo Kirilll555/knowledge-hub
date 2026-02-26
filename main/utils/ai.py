@@ -77,10 +77,18 @@ class HistoryStrategy(SubjectStrategy):
 
 class GeographyStrategy(SubjectStrategy):
     def get_system_prompt(self) -> str:
-        return "Ты — историк. Показывай связи событий, объясняй контекст."
+        return "Ты учитель по географии."
 
     def get_subject_name(self) -> str:
         return "География"
+
+
+class OtherSubjectStrategy(SubjectStrategy):
+    def get_system_prompt(self) -> str:
+        return "Ты ИИ Ассистент, который помогает людям получить ответ на свой вопрос."
+
+    def get_subject_name(self) -> str:
+        return "Другое"
 
 
 class SolveStrategy(TaskTypeStrategy):
@@ -124,17 +132,38 @@ class AnalyzeStrategy(TaskTypeStrategy):
         return "Анализ"
 
 
-class IntentDetector:
-    def __init__(self, client, model: str):
-        self.client = client
-        self.model = model
+class SmartAssistant:
+    def __init__(self, api_key: str):
+        self.client = OpenAI(
+            base_url="https://openrouter.ai/api/v1",
+            api_key=api_key
+        )
+        self.model = "arcee-ai/trinity-large-preview:free"
+
+        self.subject_strategies = {
+            'math': MathStrategy(),
+            'physics': PhysicsStrategy(),
+            'literature': LiteratureStrategy(),
+            'programming': ProgrammingStrategy(),
+            'history': HistoryStrategy(),
+            'geography': GeographyStrategy(),
+            'other': OtherSubjectStrategy(),
+        }
+
+        self.task_strategies = {
+            'solve': SolveStrategy(),
+            'explain': ExplainStrategy(),
+            'verify': VerifyStrategy(),
+            'generate': GenerateStrategy(),
+            'analyze': AnalyzeStrategy(),
+        }
 
     def detect(self, text: str) -> tuple[str, str]:
         prompt = f"""
         Из текста: "{text}"
 
         Определи:
-        1. Предмет (одно слово): math, physics, literature, programming, history
+        1. Предмет (одно слово): math, physics, literature, programming, history, geography, other
         2. Тип задачи (одно слово): solve, explain, verify, generate, analyze
 
         Ответь строго в формате: предмет|тип
@@ -154,38 +183,35 @@ class IntentDetector:
             return subject.strip(), task_type.strip()
 
         except Exception:
-            return 'general', 'explain'
+            return 'other', 'explain'
 
+    def check_answer(self, answer, question):
+        prompt = f"""
+            Из ответа ИИ-Агента: "{answer}" на вопрос {question}
 
-class SmartAssistant:
-    def __init__(self, api_key: str):
-        self.client = OpenAI(
-            base_url="https://openrouter.ai/api/v1",
-            api_key=api_key
-        )
-        self.model = "arcee-ai/trinity-large-preview:free"
+            Определи: српавилась ли нейросеть с задачей, судя по ее ответу? На нужный ли вопрос она ответила?
 
-        self.detector = IntentDetector(self.client, self.model)
+            Ответь строго в формате: +/-, где + - все верно, а - - неверно
+            Пример: +
+        """
 
-        self.subject_strategies = {
-            'math': MathStrategy(),
-            'physics': PhysicsStrategy(),
-            'literature': LiteratureStrategy(),
-            'programming': ProgrammingStrategy(),
-            'history': HistoryStrategy(),
-        }
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.3,
+                max_tokens=20
+            )
 
-        self.task_strategies = {
-            'solve': SolveStrategy(),
-            'explain': ExplainStrategy(),
-            'verify': VerifyStrategy(),
-            'generate': GenerateStrategy(),
-            'analyze': AnalyzeStrategy(),
-        }
+            result = response.choices[0].message.content.strip()
+            return result
+
+        except Exception:
+            return "-"
 
     def ask(self, user_input: str) -> dict:
         try:
-            subject_key, task_key = self.detector.detect(user_input)
+            subject_key, task_key = self.detect(user_input)
 
             subject = self.subject_strategies.get(subject_key)
             task = self.task_strategies.get(task_key)
@@ -201,12 +227,18 @@ class SmartAssistant:
 
             answer = response.choices[0].message.content
 
-            return {
-                'success': True,
-                'answer': answer,
-                'subject': subject.get_subject_name(),
-                'task': task.get_task_name()
-            }
+            if self.check_answer(answer, user_input) == "+":
+                return {
+                    'success': True,
+                    'answer': answer,
+                    'subject': subject.get_subject_name(),
+                    'task': task.get_task_name()
+                }
+            else:
+                return {
+                    'success': False,
+                    'error': answer
+                }
 
         except Exception as e:
             return {
@@ -238,3 +270,4 @@ def ask_ai(question):
                 "error": result['error'],
                 }
 
+print(ask_ai("Есть ли жизнь на Марсе?"))

@@ -1,18 +1,48 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Профиль</title>
-</head>
-<body>
-    <h1>Профиль 3.1</h1>
+{% extends "base.html" %}
 
-    <h1>Тут будет инфо о профиле</h1>
+{% block title %}Профиль {{ username }}{% endblock %}
+
+{% block content %}
+    <h1>Профиль пользователя: {{ username }}</h1>
+    
+    <table>
+        <tr>
+            <td>Репутация:</td>
+            <td><strong>2,547</strong></td>
+        </tr>
+        <tr>
+            <td>Ответов:</td>
+            <td>156</td>
+        </tr>
+        <tr>
+            <td>Вопросов:</td>
+            <td>43</td>
+        </tr>
+        <tr>
+            <td>Статей:</td>
+            <td>89</td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <h2>Активность</h2>
+    
     <ul>
-        <li><a href="{% url 'index' %}">Главная</a></li>
-        <li><a href="{% url 'about' %}">О нас</a></li>
-        <li><a href="{% url 'register' %}">Регистрация</a></li>
+        <li>
+            <a href="{% url 'question_detail' question_id=1 %}">
+                Ответ на вопрос "Как работает замыкание в JS?"
+            </a> - 2 часа назад (+15)
+        </li>
+        <li>
+            <a href="{% url 'articles' %}">
+                Опубликована статья "Полное руководство по React Hooks"
+            </a> - вчера (+50)
+        </li>
+        <li>
+            <a href="{% url 'question_detail' question_id=2 %}">
+                Лучший ответ на вопрос "Что такое Docker?"
+            </a> - 3 дня назад (+100)
+        </li>
     </ul>
-
-</body>
-</html>
+{% endblock %}

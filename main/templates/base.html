@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>МШП Знания - {% block title %}{% endblock %}</title>
+</head>
+<body>
+    <!-- Меню -->
+    <table width="100%" cellpadding="10" bgcolor="#f0f0f0">
+        <tr>
+            <td><a href="{% url 'index' %}">Главная</a></td>
+            <td><a href="{% url 'index' %}">Вопросы</a></td>
+            <td><a href="{% url 'articles' %}">Статьи</a></td>
+            <td><a href="{% url 'profile' username='john_doe' %}">Профиль</a></td>
+            <td><a href="{% url 'ratings' %}">Рейтинги</a></td>
+            <td><a href="{% url 'login' %}">Войти</a></td>
+            <td><a href="{% url 'moderation' %}">Модерация</a></td>
+        </tr>
+    </table>
+
+    <!-- Контент -->
+    <table width="100%" cellpadding="20">
+        <tr>
+            <td>
+                {% block content %}
+                {% endblock %}
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

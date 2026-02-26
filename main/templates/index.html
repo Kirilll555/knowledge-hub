@@ -1,18 +1,43 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Главная</title>
-</head>
-<body>
-    <h1>Главная страница</h1>
+{% extends "base.html" %}
 
-    <h2>Ссылки:</h2>
-    <ul>
-        <li><a href="{% url 'about' %}">О нас </a></li>
-        <li><a href="{% url 'profile' %}">Профиль </a></li>
-        <li><a href="{% url 'login' %}">Вход </a></li>
-        <li><a href="{% url 'register' %}">Регистрация </a></li>
-    </ul>
-</body>
-</html>
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+    <h1>Последние вопросы</h1>
+    
+    <p>
+        <a href="{% url 'new_question' %}">[+] Задать вопрос</a>
+    </p>
+
+    <hr>
+
+    <!-- Вопрос 1 -->
+    <div>
+        <h3>
+            <a href="{% url 'question_detail' question_id=1 %}">
+                Как работает замыкание (closure) в JavaScript?
+            </a>
+        </h3>
+        <p>Не могу понять, зачем они нужны...</p>
+        <p>
+            Рейтинг: 15 | 
+            Ответов: 8 | 
+            Автор: <a href="{% url 'profile' username='ivan_p' %}">ivan_p</a>
+        </p>
+    </div>
+
+    <!-- Вопрос 2 -->
+    <div>
+        <h3>
+            <a href="{% url 'question_detail' question_id=2 %}">
+                Разница между REST и GraphQL?
+            </a>
+        </h3>
+        <p>Готовлюсь к собеседованию...</p>
+        <p>
+            Рейтинг: 42 | 
+            Ответов: 23 | 
+            Автор: <a href="{% url 'profile' username='ann_dev' %}">ann_dev</a>
+        </p>
+    </div>
+{% endblock %}

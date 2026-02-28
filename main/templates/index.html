@@ -175,6 +175,41 @@
             opacity: 0.8;
         }
 
+
+
+
+        .comments-block {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.03);
+            border: 1px solid #eef2f6;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 25px;
+            min-height: 0;
+        }
+
+        .comments-block h2 {
+            color: #1a1e2b;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .comments-placeholder {
+            flex: 1;
+            color: #8895aa;
+            font-size: 1.1rem;
+            text-align: center;
+            background-color: #f8fafd;
+            border-radius: 10px;
+            border: 2px dashed #d0e0ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+
     </style>
 </head>
 
@@ -209,6 +244,12 @@
                     <h3>Спросить ИИ</h3>
                     <p>Получи ответ от искусственного интеллекта</p>
                 </a>
+            </div>
+            <div class="comments-block">
+                <h2>Комментарии</h2>
+                <div class="comments-placeholder">
+                    Скоро появится
+                </div>
             </div>
     </div>
 </body>

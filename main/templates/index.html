@@ -85,11 +85,43 @@
             color: #0066cc;
             font-weight: 600;
         }
+
+
+
+        .banner {
+            background-color: #e6f0ff;
+            margin: 40px 5%;
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .banner h1 {
+            color: #1a1e2b;
+            margin: 0 0 15px 0;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .banner p {
+            color: #4a5568;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
     </style>
 </head>
 
 <body>
     {% include 'menu.html' %}
+
+    <div class="banner">
+        <h1>Обменивайся знаниями и учись вместе</h1>
+        <p>Задавай вопросы, отвечай и делись опытом с сообществом</p>
+    </div>
+
 
 </body>
 </html>

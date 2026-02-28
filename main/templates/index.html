@@ -111,6 +111,70 @@
             margin: 0 auto;
             line-height: 1.5;
         }
+
+
+
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            gap: 30px;
+            margin: 0 5% 40px 5%;
+            min-height: 0;
+        }
+
+
+
+        .center-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            min-height: 0;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .link-card {
+            background: white;
+            padding: 20px 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid #eef2f6;
+        }
+
+        .link-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,102,204,0.08);
+            border-color: #0066cc;
+        }
+
+        .link-emoji {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .link-card h3 {
+            color: #1a1e2b;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .link-card p {
+            color: #4a5568;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            opacity: 0.8;
+        }
+
     </style>
 </head>
 
@@ -122,6 +186,30 @@
         <p>Задавай вопросы, отвечай и делись опытом с сообществом</p>
     </div>
 
-
+    <div class="main-content">
+        <div class="center-content">
+            <div class="links-grid">
+                <a href="#" class="link-card">
+                    <div class="link-emoji">✏️</div>
+                    <h3>Задать вопрос</h3>
+                    <p>Опубликуй свой вопрос</p>
+                </a>
+                <a href="#" class="link-card">
+                    <div class="link-emoji">💬</div>
+                    <h3>Обсуждения</h3>
+                    <p>Оставляй комментарии и отзывы</p>
+                </a>
+                <a href="#" class="link-card">
+                    <div class="link-emoji">📚</div>
+                    <h3>Вопросы</h3>
+                    <p>Изучай и отвечай на вопросы</p>
+                </a>
+                <a href="#" class="link-card">
+                    <div class="link-emoji">🤖</div>
+                    <h3>Спросить ИИ</h3>
+                    <p>Получи ответ от искусственного интеллекта</p>
+                </a>
+            </div>
+    </div>
 </body>
 </html>

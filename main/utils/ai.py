@@ -108,6 +108,7 @@ class GeographyStrategy(SubjectStrategy):
     def get_subject_name(self) -> str:
         return "География"
 
+
 class ByologyStrategy(SubjectStrategy):
     def get_system_prompt(self) -> str:
         return """Ты - опытный и любящий свой предмет школьный учитель биологии. Твоя задача - не просто заставить выучить
@@ -120,6 +121,25 @@ class ByologyStrategy(SubjectStrategy):
 
     def get_subject_name(self) -> str:
         return "Биология"
+
+
+class ChemistryStrategy(SubjectStrategy):
+    def get_system_prompt(self) -> str:
+        return """Ты - опытный и увлечённый школьный учитель химии. Твоя главная цель - показать ученику, что химия
+        окружает нас повсюду, и объяснить сложные concepts простым и понятным языком. Рассказывай не только теорию, но и то,
+        как это выглядит на практике. Описывай цвета веществ, запахи (осторожно!), агрегатные состояния, возможные реакции.
+        Не используй сложную научную лексику без объяснения. Ссылайся на фундаментальные законы (сохранения массы, постоянства
+        состава, Авогадро, Менделеева-Клапейрона). При решении задач требуй соблюдения размерностей, правильного округления
+        и учёта условий (нормальные условия, температура, давление),Объясняй механизмы реакций (нуклеофильное замещение,
+        электрофильное присоединение) на молекулярном уровне. НЕ БЕРИ ФОРМУЛЫ И УРАВНЕНИЯ ИЗ ВОЗДУХА НЕ ПРОПУСКАЙ ШАГИ РЕШЕНИЯ
+        ЕСЛИ ЗАДАЧА ТЕКСТОВАЯ (НАХОЖДЕНИЕ МАССЫ ОБЪЕМА ИЛИ КОЛИЧЕСТВА ВЕЩЕСТВА) ИСПОЛЬЗУЙ ФОРМАТ ДАНО->НАЙТИ->РЕШЕНИЕ
+        ПИШИ ПРЕДЛЛОЖЕНИЯ ГРАМОТНО, СОБЛЮДАЯ ВСЕ ПРАВИЛА РУССКОГО ЯЗЫКА!!!!"""
+
+    def get_subject_name(self) -> str:
+        return "Химия"
+
+
+
 
 
 class SolveStrategy(TaskTypeStrategy):
@@ -173,7 +193,7 @@ class IntentDetector:
         Из текста: "{text}"
 
         Определи:
-        1. Предмет (одно слово): math, physics, literature, programming, history, geography, biology
+        1. Предмет (одно слово): math, physics, literature, programming, history, geography, biology, chemistry
         2. Тип задачи (одно слово): solve, explain, verify, generate, analyze
 
         Ответь строго в формате: предмет|тип
@@ -214,6 +234,7 @@ class SmartAssistant:
             'history': HistoryStrategy(),
             'geography': GeographyStrategy(),
             'biology': ByologyStrategy(),
+            'chemistry': ChemistryStrategy(),
         }
 
         self.task_strategies = {
@@ -279,4 +300,4 @@ def ask_ai(question):
                 "error": result['error'],
                 }
 
-print(ask_ai(" Опишите этапы фотосинтеза (световая и темновая фазы). Назовите причины микроэволюции. Объясните биохимические процессы: транспорт веществ, синтез белка, роль ДНК. "))
+print(ask_ai("Сформулируйте периодический закон Д.И. Менделеева."))

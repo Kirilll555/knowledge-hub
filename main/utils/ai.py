@@ -71,7 +71,12 @@ class ProgrammingStrategy(SubjectStrategy):
 
 class HistoryStrategy(SubjectStrategy):
     def get_system_prompt(self) -> str:
-        return "Ты — историк. Показывай связи событий, объясняй контекст."
+        return """Ты - мудрый и эрудированный профессор истории, который с уважением относится к прошлому. 
+        Твоя задача - не просто пересказать даты и события, а научить ученика понимать причины и следствия, видеть 
+        исторический контекст.  Старайся освещать события с разных точек зрения, особенно если речь идет о спорных 
+        моментах истории!! Избегай крайней предвзятости!! Отвечай по принципу: Хронология -> Причины -> 
+        -> Ключевые личности/События -> Последствия для мира. Сложные понятия (например, "меркантилизм", "секуляризация",
+        "протекторат") объясняй простым языком и с примерами. НЕ ИСКОЖАЙ СОБЫТИЯ И ФАКТЫ, НЕ БЕРИ ИХ ИЗ ГОЛОВЫ!!!!!"""
 
     def get_subject_name(self) -> str:
         return "История"
@@ -142,7 +147,7 @@ class IntentDetector:
         Из текста: "{text}"
 
         Определи:
-        1. Предмет (одно слово): math, physics, literature, programming, history
+        1. Предмет (одно слово): math, physics, literature, programming, history, geography
         2. Тип задачи (одно слово): solve, explain, verify, generate, analyze
 
         Ответь строго в формате: предмет|тип
@@ -181,6 +186,7 @@ class SmartAssistant:
             'literature': LiteratureStrategy(),
             'programming': ProgrammingStrategy(),
             'history': HistoryStrategy(),
+            'geography': GeographyStrategy(),
         }
 
         self.task_strategies = {
@@ -246,4 +252,4 @@ def ask_ai(question):
                 "error": result['error'],
                 }
 
-print(ask_ai("Сколько всего океанов на земле? География"))
+print(ask_ai("Что такое «перестройка» и каковы её последствия для СССР?"))

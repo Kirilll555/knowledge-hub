@@ -1,0 +1,282 @@
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html, body {
+        height: 100%;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background-color: #f5f7fa;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .navbar {
+        background-color: white;
+        padding: 1rem 0;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        border-bottom: 1px solid #eef2f6;
+        width: 100%;
+    }
+
+    .nav-container {
+        width: 100%;
+        padding: 0 5%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .site-title {
+        color: #1a1e2b;
+        text-decoration: none;
+        font-size: 1.6rem;
+        font-weight: 600;
+        letter-spacing: -0.3px;
+        background: linear-gradient(135deg, #0066cc, #0052a3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        white-space: nowrap;
+    }
+
+    .nav-right {
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 20px;
+        list-style: none;
+        align-items: center;
+    }
+
+    .nav-links a {
+        color: #4a5568;
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: 500;
+        padding: 0.6rem 1rem;
+        border-radius: 30px;
+        transition: all 0.2s;
+        white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+        background-color: #f0f7ff;
+        color: #0066cc;
+    }
+
+    .nav-links a.active {
+        background-color: #e6f0ff;
+        color: #0066cc;
+        font-weight: 600;
+    }
+
+    .banner {
+        background-color: #e6f0ff;
+        margin: 40px 5%;
+        padding: 60px 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        text-align: center;
+    }
+
+    .banner h1 {
+        color: #1a1e2b;
+        margin: 0 0 15px 0;
+        font-size: 2.2rem;
+        font-weight: 700;
+    }
+
+    .banner p {
+        color: #4a5568;
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.5;
+    }
+
+    .main-content {
+        flex: 1;
+        display: flex;
+        gap: 30px;
+        margin: 0 5% 40px 5%;
+        min-height: 0;
+    }
+
+    .center-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        min-height: 0;
+    }
+
+    .links-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .link-card {
+        background: white;
+        padding: 20px 15px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        text-align: center;
+        text-decoration: none;
+        transition: all 0.2s;
+        border: 1px solid #eef2f6;
+    }
+
+    .link-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,102,204,0.08);
+        border-color: #0066cc;
+    }
+
+    .link-emoji {
+        font-size: 2rem;
+        margin-bottom: 8px;
+    }
+
+    .link-card h3 {
+        color: #1a1e2b;
+        margin-bottom: 5px;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .link-card p {
+        color: #4a5568;
+        font-size: 0.85rem;
+        line-height: 1.4;
+        opacity: 0.8;
+    }
+
+    .comments-block {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.03);
+        border: 1px solid #eef2f6;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 25px;
+        min-height: 0;
+    }
+
+    .comments-block h2 {
+        color: #1a1e2b;
+        margin-bottom: 20px;
+        font-size: 1.3rem;
+    }
+
+    .comments-placeholder {
+        flex: 1;
+        color: #8895aa;
+        font-size: 1.1rem;
+        text-align: center;
+        background-color: #f8fafd;
+        border-radius: 10px;
+        border: 2px dashed #d0e0ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+    }
+
+    .ad-block {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.03);
+        border: 1px solid #eef2f6;
+        width: 280px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #8895aa;
+        font-size: 1.2rem;
+        text-align: center;
+        padding: 30px;
+    }
+
+    .profile-content {
+        margin: 40px 5%;
+        padding: 30px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.03);
+        border: 1px solid #eef2f6;
+    }
+
+    .profile-content h1 {
+        color: #1a1e2b;
+        margin-bottom: 20px;
+    }
+
+    .settings-content {
+        margin: 40px 5%;
+        padding: 30px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.03);
+        border: 1px solid #eef2f6;
+    }
+
+    .settings-content h1 {
+        color: #1a1e2b;
+        margin-bottom: 20px;
+    }
+
+    .questions-content {
+        margin: 40px 5%;
+        padding: 30px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.03);
+        border: 1px solid #eef2f6;
+    }
+
+    .questions-content h1 {
+        color: #1a1e2b;
+        margin-bottom: 20px;
+    }
+
+    .ask-content {
+        margin: 40px 5%;
+        padding: 30px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.03);
+        border: 1px solid #eef2f6;
+    }
+
+    .ask-content h1 {
+        color: #1a1e2b;
+        margin-bottom: 20px;
+    }
+
+    .comments-content {
+        margin: 40px 5%;
+        padding: 30px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.03);
+        border: 1px solid #eef2f6;
+    }
+
+    .comments-content h1 {
+        color: #1a1e2b;
+        margin-bottom: 20px;
+    }
+</style>

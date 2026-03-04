@@ -37,5 +37,20 @@ def register(request):
 
 def profile(request):
     return render(request, 'profile.html')
+
 def login(request):
     return render(request, 'login.html')
+def questions(request):
+    return render(request, 'questions.html')
+
+def ask_ai(request):
+    return render(request, 'ask_ai.html')
+
+def ask_question(request):
+    return render(request, 'ask.html')
+
+def comments(request):
+    return render(request, 'comments.html')
+
+def settings(request):
+    return render(request, 'settings.html')

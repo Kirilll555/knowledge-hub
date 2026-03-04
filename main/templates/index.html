@@ -1,43 +1,83 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+    {% include 'styles.html' %}
+</head>
 
-{% block title %}Главная{% endblock %}
+<body>
+    {% include 'menu.html' %}
 
-{% block content %}
-    <h1>Последние вопросы</h1>
-    
-    <p>
-        <a href="{% url 'new_question' %}">[+] Задать вопрос</a>
-    </p>
-
-    <hr>
-
-    <!-- Вопрос 1 -->
-    <div>
-        <h3>
-            <a href="{% url 'question_detail' question_id=1 %}">
-                Как работает замыкание (closure) в JavaScript?
-            </a>
-        </h3>
-        <p>Не могу понять, зачем они нужны...</p>
-        <p>
-            Рейтинг: 15 | 
-            Ответов: 8 | 
-            Автор: <a href="{% url 'profile' username='ivan_p' %}">ivan_p</a>
-        </p>
+    <div class="banner">
+        <h1>Обменивайся знаниями и учись вместе</h1>
+        <p>Задавай вопросы, отвечай и делись опытом с сообществом</p>
     </div>
 
-    <!-- Вопрос 2 -->
-    <div>
-        <h3>
-            <a href="{% url 'question_detail' question_id=2 %}">
-                Разница между REST и GraphQL?
-            </a>
-        </h3>
-        <p>Готовлюсь к собеседованию...</p>
-        <p>
-            Рейтинг: 42 | 
-            Ответов: 23 | 
-            Автор: <a href="{% url 'profile' username='ann_dev' %}">ann_dev</a>
-        </p>
+    <div class="main-content">
+        <div class="ad-block">
+            Реклама<br>Скоро появится
+        </div>
+
+        <div class="center-content">
+            <div class="links-grid">
+                <a href="#" class="link-card" onclick="window.location.href='/ask/'; return false;">
+                    <div class="link-emoji">✏️</div>
+                    <h3>Задать вопрос</h3>
+                    <p>Опубликуй свой вопрос</p>
+                </a>
+
+                <a href="#" class="link-card" onclick="window.location.href='/comments/'; return false;">
+                    <div class="link-emoji">💬</div>
+                    <h3>Обсуждения</h3>
+                    <p>Оставляй комментарии и отзывы</p>
+                </a>
+
+                <a href="#" class="link-card" onclick="window.location.href='/questions/'; return false;">
+                    <div class="link-emoji">📚</div>
+                    <h3>Вопросы</h3>
+                    <p>Изучай и отвечай на вопросы</p>
+                </a>
+
+                <a href="#" class="link-card" onclick="window.location.href='/ask_ai/'; return false;">
+                    <div class="link-emoji">🤖</div>
+                    <h3>Спросить ИИ</h3>
+                    <p>Получи ответ от искусственного интеллекта</p>
+                </a>
+            </div>
+
+            <div class="comments-block">
+                <h2>Комментарии</h2>
+                <div class="comments-placeholder">
+                    Скоро появится
+                </div>
+            </div>
+        </div>
+
+        <div class="ad-block">
+            Реклама<br>Скоро появится
+        </div>
     </div>
-{% endblock %}
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.link-card');
+            cards.forEach(function(card) {
+                card.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const title = this.querySelector('h3').textContent;
+                    let url = '';
+                    if (title === 'Задать вопрос') url = '/ask/';
+                    if (title === 'Обсуждения') url = '/comments/';
+                    if (title === 'Вопросы') url = '/questions/';
+                    if (title === 'Спросить ИИ') url = '/ask_ai/';
+                    if (url) {
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,13 +1,16 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('new-question/', views.new_question, name='new_question'),
-    path('question/<int:question_id>/', views.question_detail, name='question_detail'),
-    path('profile/<str:username>/', views.profile, name='profile'),
-    path('articles/', views.articles, name='articles'),
-    path('moderation/', views.moderation, name='moderation'),
-    path('ratings/', views.ratings, name='ratings'),
-    path('login/', views.login_page, name='login'),
+    path('profile/', views.profile, name='profile'),
+    path('about/', views.about, name='about'),
+    path('login/', views.login, name='login'),
+    path('register/', views.register, name='register'),
+    path('questions/', views.questions, name='questions'),
+    path('ask_ai/', views.ask_ai, name='ask_ai'),
+    path('ask/', views.ask_question, name='ask'),
+    path('comments/', views.comments, name='comments'),
+    path('settings/', views.settings, name='settings'),
 ]

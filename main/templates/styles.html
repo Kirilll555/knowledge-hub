@@ -57,6 +57,7 @@
         gap: 20px;
         list-style: none;
         align-items: center;
+        flex-wrap: wrap;
     }
 
     .nav-links a {
@@ -192,7 +193,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        min-height: 200px;
+        min-height: 30px;
     }
 
     .ad-block {
@@ -278,5 +279,73 @@
     .comments-content h1 {
         color: #1a1e2b;
         margin-bottom: 20px;
+    }
+
+    @media (max-width: 1200px) {
+        .main-content {
+            flex-direction: column;
+        }
+
+        .ad-block {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+        }
+
+        .links-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .nav-container {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .nav-links {
+            justify-content: center;
+        }
+
+        .banner h1 {
+            font-size: 1.8rem;
+        }
+
+        .banner p {
+            font-size: 1rem;
+        }
+
+        .links-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .profile-content, .settings-content, .questions-content, .ask-content, .comments-content {
+            margin: 20px 3%;
+            padding: 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .nav-links {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .nav-links a {
+            width: 100%;
+            text-align: center;
+        }
+
+        .banner {
+            padding: 40px 20px;
+        }
+
+        .banner h1 {
+            font-size: 1.5rem;
+        }
+
+        .link-card {
+            padding: 15px 10px;
+        }
     }
 </style>

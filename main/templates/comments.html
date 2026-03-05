@@ -7,6 +7,31 @@
 </head>
 <body>
     {% include 'menu.html' %}
-    <h1>Здесь будут комментарии пользователей</h1>
+    <h1>Комментарии</h1>
+
+    <div>
+        <p><strong>Анна:</strong> Отличная статья, помогла разобраться!</p>
+    </div>
+
+    <div>
+        <p><strong>Михаил:</strong> А можно подробнее про второй пример?</p>
+    </div>
+
+    <div>
+        <p><strong>Елена:</strong> Спасибо, жду продолжения.</p>
+    </div>
+
+    <hr>
+
+    <h3>Добавить комментарий</h3>
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            <textarea name="comment" rows="3" cols="50" placeholder="Ваш комментарий..."></textarea>
+        </p>
+        <p>
+            <button type="submit">Отправить</button>
+        </p>
+    </form>
 </body>
 </html>

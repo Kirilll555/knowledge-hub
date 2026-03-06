@@ -1,45 +1,82 @@
-<div class="links-grid">
-    <a href="#" class="link-card">
-        <div class="link-emoji">✏️</div>
-        <h3>Задать вопрос</h3>
-        <p>Опубликуй свой вопрос</p>
-    </a>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+    {% include 'styles.html' %}
+</head>
 
-    <a href="#" class="link-card">
-        <div class="link-emoji">💬</div>
-        <h3>Обсуждения</h3>
-        <p>Оставляй комментарии и отзывы</p>
-    </a>
+<body>
+    {% include 'menu.html' %}
 
-    <a href="#" class="link-card">
-        <div class="link-emoji">📚</div>
-        <h3>Вопросы</h3>
-        <p>Изучай и отвечай на вопросы</p>
-    </a>
+    <div class="banner">
+        <h1>Обменивайся знаниями и учись вместе</h1>
+        <p>Задавай вопросы, отвечай и делись опытом с сообществом</p>
+    </div>
 
-    <a href="#" class="link-card">
-        <div class="link-emoji">🤖</div>
-        <h3>Спросить ИИ</h3>
-        <p>Получи ответ от искусственного интеллекта</p>
-    </a>
-</div>
+    <div class="main-content">
+        <div class="ad-block">
+            Реклама<br>Скоро появится
+        </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const cards = document.querySelectorAll('.link-card');
-        cards.forEach(function(card) {
-            card.addEventListener('click', function(event) {
-                event.preventDefault();
-                const title = this.querySelector('h3').textContent;
-                let url = '';
-                if (title === 'Задать вопрос') url = '/ask/';
-                if (title === 'Обсуждения') url = '/comments/';
-                if (title === 'Вопросы') url = '/questions/';
-                if (title === 'Спросить ИИ') url = '/ask_ai/';
-                if (url) {
-                    window.location.href = url;
-                }
+        <div class="center-content">
+            <div class="links-grid">
+                <a href="#" class="link-card">
+                    <div class="link-emoji">✏️</div>
+                    <h3>Задать вопрос</h3>
+                    <p>Опубликуй свой вопрос</p>
+                </a>
+
+                <a href="#" class="link-card">
+                    <div class="link-emoji">💬</div>
+                    <h3>Обсуждения</h3>
+                    <p>Оставляй комментарии и отзывы</p>
+                </a>
+
+                <a href="#" class="link-card">
+                    <div class="link-emoji">📚</div>
+                    <h3>Вопросы</h3>
+                    <p>Изучай и отвечай на вопросы</p>
+                </a>
+
+                <a href="#" class="link-card">
+                    <div class="link-emoji">🤖</div>
+                    <h3>Спросить ИИ</h3>
+                    <p>Получи ответ от искусственного интеллекта</p>
+                </a>
+            </div>
+
+            <div class="comments-block">
+                <h2>Комментарии</h2>
+                <div class="comments-placeholder">
+                    Скоро появится
+                </div>
+            </div>
+        </div>
+
+        <div class="ad-block">
+            Реклама<br>Скоро появится
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.link-card');
+            cards.forEach(function(card) {
+                card.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const title = this.querySelector('h3').textContent;
+                    let url = '';
+                    if (title === 'Задать вопрос') url = '/ask/';
+                    if (title === 'Обсуждения') url = '/comments/';
+                    if (title === 'Вопросы') url = '/questions/';
+                    if (title === 'Спросить ИИ') url = '/ask_ai/';
+                    if (url) {
+                        window.location.href = url;
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
+</body>
+</html>

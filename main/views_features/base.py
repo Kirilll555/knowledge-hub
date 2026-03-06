@@ -1,27 +1,19 @@
 from django.shortcuts import render, redirect
 from datetime import datetime
-from django.shortcuts import render
-
-
 
 def get_menu():
     return [
         {'name': 'Главная', 'url': '/'},
     ]
 
-
 def home(request):
-    """Главная страница"""
     context = {
         'user': request.user,
     }
     return render(request, '###home.html', context)
 
-
 def about(request):
-    """Страница О нас"""
     return render(request, 'about.html')
-
 
 def index(request):
     today = datetime.now().strftime('%d.%m.%Y')
@@ -40,6 +32,7 @@ def profile(request):
 
 def login(request):
     return render(request, 'login.html')
+
 def questions(request):
     return render(request, 'questions.html')
 

@@ -7,23 +7,33 @@
 </head>
 <body>
     {% include 'menu.html' %}
-    <h1>Задать новый вопрос искусственному интеллекту</h1>
+    <h1>Спросить искусственный интеллект</h1>
 
     <form method="post">
         {% csrf_token %}
-
         <p>
-            <label>Заголовок:</label><br>
-            <input type="text" name="title" size="80" required>
-        </p>
-
-        <p>
-            <label>Описание:</label><br>
-            <textarea name="description" rows="10" cols="80" required></textarea>
+            <label>Ваш вопрос:</label><br>
+            <textarea name="question" rows="5" cols="60" placeholder="Введите ваш вопрос..." required></textarea>
         </p>
         <p>
-            <button type="submit">Задать вопрос</button>
+            <button type="submit">Отправить вопрос</button>
         </p>
     </form>
+
+    {% if answer %}
+    <hr>
+    <h2>Ответ:</h2>
+    <div>
+        <p>{{ answer }}</p>
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <hr>
+    <h2>Ошибка:</h2>
+    <div>
+        <p>{{ error }}</p>
+    </div>
+    {% endif %}
 </body>
 </html>

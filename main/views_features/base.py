@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from datetime import datetime
+from main.utils.AI.Assistant import Assistant
 
 def get_menu():
     return [
@@ -36,8 +37,25 @@ def login(request):
 def questions(request):
     return render(request, 'questions.html')
 
+
 def ask_ai(request):
-    return render(request, 'ask_ai.html')
+    answer = None
+    error = None
+
+    if request.method == 'POST':
+        question = request.POST.get('question', '')
+        if question:
+            assistant = Assistant()
+            result = assistant.ask(question)
+            if result.get('success'):
+                answer = result.get('answer')
+            else:
+                error = result.get('error', 'Ошибка при получении ответа')
+
+    return render(request, 'ask_ai.html', {
+        'answer': answer,
+        'error': error
+    })
 
 def ask_question(request):
     return render(request, 'ask.html')

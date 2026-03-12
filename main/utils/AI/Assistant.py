@@ -45,4 +45,4 @@ class Assistant:
                 'error': str(e),
             }
 
-print(Assistant().ask("Что такое суперпозиция?"))
+print(Assistant().ask(".."))

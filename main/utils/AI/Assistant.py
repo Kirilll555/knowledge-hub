@@ -18,6 +18,7 @@ class Assistant:
             'geography': GeographyStrategy(),
             'biology': ByologyStrategy(),
             'chemistry': ChemistryStrategy(),
+            'social_study': SocialStudyStrategy(),
             'other': OtherStrategy(),
         }
 
@@ -44,4 +45,4 @@ class Assistant:
                 'error': str(e),
             }
 
-print(Assistant().ask("jnvnjvnjinjifnvg"))
+print(Assistant().ask("Что такое суперпозиция?"))

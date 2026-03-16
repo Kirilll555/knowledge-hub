@@ -33,3 +33,4 @@ def ratings(request):
 
 def login_page(request):
     return render(request, 'login.html')
+

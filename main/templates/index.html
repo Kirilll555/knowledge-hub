@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Главная</title>
+    <link rel="stylesheet" href="styles.css">
     {% include 'styles.html' %}
 </head>
 <body>
@@ -23,16 +24,45 @@
             <div class="recent-questions">
                 <h2>Последние вопросы</h2>
                 <div class="questions-list">
-                    <div class="question-placeholder">Скоро появится</div>
+                    <div class="question-item">
+                        <span class="question-icon">💻</span>
+                        <span>Как настроить VPN на iPhone?</span>
+                    </div>
+                    <div class="question-item">
+                        <span class="question-icon">📚</span>
+                        <span>Что лучше: Python или JavaScript для начинающего?</span>
+                    </div>
+                    <div class="question-item">
+                        <span class="question-icon">🌐</span>
+                        <span>Где найти качественные курсы по английскому?</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="right-column">
             <div class="recent-answers">
-                <h2>Самые полезные ответы</h2>
+                <div class="header-with-icon">
+                    <h2>
+                        <span>Самые</span>
+                        <span>полезные</span>
+                        <span>ответы</span>
+                    </h2>
+                    <span class="calendar-icon">📅</span>
+                </div>
                 <div class="answers-list">
-                    <div class="answer-placeholder">Скоро появится</div>
+                    <div class="answer-item">
+                        <span class="avatar">👤</span>
+                        <span>Для VPN на iPhone лучше всего использовать V2Box или Outline</span>
+                    </div>
+                    <div class="answer-item">
+                        <span class="avatar">👤</span>
+                        <span>Python проще для старта, JavaScript нужен для веб-разработки</span>
+                    </div>
+                    <div class="answer-item">
+                        <span class="avatar">👤</span>
+                        <span>Бесплатные курсы: Duolingo, Lingualeo, BBC English</span>
+                    </div>
                 </div>
             </div>
         </div>

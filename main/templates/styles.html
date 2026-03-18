@@ -1,5 +1,5 @@
 <style>
-    * {
+        * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
@@ -17,14 +17,14 @@
     }
 
     .navbar {
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(15px);
         padding: 1rem 0;
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 6px 40px rgba(0, 0, 0, 0.3);
         position: sticky;
         top: 0;
         z-index: 1000;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.25);
         width: 100%;
     }
 
@@ -39,46 +39,46 @@
     .site-title {
         color: white;
         text-decoration: none;
-        font-size: 1.6rem;
+        font-size: 1.8rem;
         font-weight: 700;
         letter-spacing: -0.3px;
         white-space: nowrap;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+        text-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
 
     .search-container {
         display: flex;
         align-items: center;
-        width: 300px;
+        width: 320px;
     }
 
     .search-input {
         width: 100%;
-        padding: 8px 15px;
-        border: 1px solid rgba(255,255,255,0.25);
-        border-radius: 20px 0 0 20px;
-        font-size: 0.95rem;
+        padding: 10px 18px;
+        border: 1px solid rgba(255,255,255,0.35);
+        border-radius: 30px 0 0 30px;
+        font-size: 1rem;
         outline: none;
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.2);
         color: white;
         backdrop-filter: blur(5px);
     }
 
     .search-input::placeholder {
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(255, 255, 255, 0.9);
     }
 
     .search-input:focus {
         border-color: white;
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.25);
     }
 
     .search-btn {
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.25);
         color: white;
-        border: 1px solid rgba(255,255,255,0.25);
-        padding: 8px 15px;
-        border-radius: 0 20px 20px 0;
+        border: 1px solid rgba(255,255,255,0.35);
+        padding: 10px 18px;
+        border-radius: 0 30px 30px 0;
         cursor: pointer;
         font-size: 1rem;
         font-weight: 500;
@@ -90,7 +90,7 @@
     }
 
     .search-btn:hover {
-        background: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.35);
         border-color: white;
     }
 
@@ -101,7 +101,7 @@
 
     .nav-links {
         display: flex;
-        gap: 20px;
+        gap: 25px;
         list-style: none;
         align-items: center;
         flex-wrap: wrap;
@@ -110,25 +110,27 @@
     .nav-links a {
         color: white;
         text-decoration: none;
-        font-size: 1rem;
-        font-weight: 500;
-        padding: 0.6rem 1.2rem;
-        border-radius: 30px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        padding: 0.7rem 1.5rem;
+        border-radius: 40px;
         transition: all 0.2s;
         white-space: nowrap;
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(5px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        text-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
 
     .nav-links a:hover {
-        background: rgba(255, 255, 255, 0.25);
-        transform: translateY(-2px);
-        border-color: rgba(255, 255, 255, 0.35);
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-3px);
+        border-color: rgba(255, 255, 255, 0.45);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
 
     .nav-links a.active {
-        background: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.35);
         color: white;
         font-weight: 600;
         border-color: white;
@@ -136,27 +138,27 @@
 
     .main-content {
         display: flex;
-        gap: 40px;
-        margin: 40px 5%;
+        gap: 50px;
+        margin: 50px 5%;
         flex: 1;
         min-height: 0;
     }
 
     .left-column {
-        flex: 1.5;
+        flex: 1.2;
         display: flex;
         flex-direction: column;
-        gap: 30px;
+        gap: 35px;
         min-height: 0;
     }
 
     .right-column {
-        flex: 1;
+        flex: 0.9;
         display: flex;
         flex-direction: column;
         min-height: 0;
-        max-width: 500px;
-        width: 500px;
+        max-width: 450px;
+        width: 450px;
     }
 
     .hero-section {
@@ -164,170 +166,283 @@
     }
 
     .hero-section h1 {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
         color: white;
-        margin-bottom: 15px;
-        font-weight: 700;
+        margin-bottom: 20px;
+        font-weight: 800;
         letter-spacing: -0.5px;
         text-transform: uppercase;
-        text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        text-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }
 
     .hero-section p {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
         color: white;
-        line-height: 1.6;
-        text-shadow: 0 1px 6px rgba(0,0,0,0.25);
+        line-height: 1.7;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+        max-width: 90%;
+        font-weight: 400;
     }
 
     .action-buttons {
         display: flex;
         flex-direction: column;
-        gap: 15px;
-        max-width: 600px;
+        gap: 20px;
+        max-width: 700px;
     }
 
     .action-btn {
         color: #F2DAAC;
         text-decoration: none;
-        padding: 20px 40px;
-        border-radius: 50px;
-        font-size: 1.4rem;
-        font-weight: 600;
+        padding: 28px 50px;
+        border-radius: 70px;
+        font-size: 1.9rem;
+        font-weight: 700;
         transition: all 0.3s;
         display: inline-flex;
         align-items: center;
-        gap: 15px;
+        gap: 18px;
         width: 100%;
         justify-content: center;
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        background: rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        text-shadow: 0 3px 8px rgba(0,0,0,0.4);
     }
 
     .action-btn:hover {
-        background: rgba(255, 255, 255, 0.25);
-        transform: translateY(-3px);
+        background: rgba(255, 255, 255, 0.28);
+        transform: translateY(-5px);
         border-color: white;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.3);
         color: #F2DAAC;
     }
 
     .recent-questions {
-        background: rgba(255, 255, 255, 0.2);
+        background: linear-gradient(145deg, rgba(255, 242, 215, 0.35), rgba(255, 229, 180, 0.3), rgba(255, 216, 156, 0.35), rgba(255, 242, 215, 0.35));
+        background-size: 300% 300%;
+        animation: softGlow 10s ease infinite;
         backdrop-filter: blur(12px);
-        border-radius: 20px;
+        border-radius: 28px;
         padding: 25px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 20px 40px rgba(255, 215, 150, 0.15), 0 12px 25px rgba(0,0,0,0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
         display: flex;
         flex-direction: column;
         flex: 1;
         min-height: 0;
+        transition: all 0.3s ease;
+    }
+
+    .recent-questions:hover {
+        box-shadow: 0 25px 50px rgba(255, 215, 150, 0.25), 0 15px 30px rgba(0,0,0,0.25);
+        transform: translateY(-3px);
+        border-color: rgba(255, 255, 255, 0.6);
+    }
+
+    @keyframes softGlow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
 
     .recent-questions h2 {
         color: #F2DAAC;
-        font-size: 1.4rem;
+        font-size: 1.6rem;
         margin-bottom: 20px;
         flex-shrink: 0;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        text-shadow: 0 1px 6px rgba(0,0,0,0.25);
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-shadow: 0 3px 8px rgba(0,0,0,0.4);
+        border-bottom: 2px solid rgba(242, 218, 172, 0.4);
+        padding-bottom: 12px;
+    }
+
+    .questions-list {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .question-item {
+        padding: 16px 20px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
+        border-radius: 20px;
+        color: white;
+        font-size: 1.2rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .question-item:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateX(5px);
+        border-color: rgba(242, 218, 172, 0.6);
+        box-shadow: 0 8px 20px rgba(242, 218, 172, 0.25);
+    }
+
+    .question-icon {
+        font-size: 1.8rem;
+        min-width: 40px;
+        text-align: center;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
     }
 
     .recent-answers {
-        background: rgba(255, 255, 255, 0.2);
+        background: linear-gradient(145deg, rgba(255, 242, 215, 0.35), rgba(255, 229, 180, 0.3), rgba(255, 216, 156, 0.35), rgba(255, 242, 215, 0.35));
+        background-size: 300% 300%;
+        animation: softGlow 10s ease infinite;
         backdrop-filter: blur(12px);
-        border-radius: 20px;
+        border-radius: 28px;
         padding: 25px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 20px 40px rgba(255, 215, 150, 0.15), 0 12px 25px rgba(0,0,0,0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
         display: flex;
         flex-direction: column;
         flex: 1;
         min-height: 0;
+        transition: all 0.3s ease;
+    }
+
+    .recent-answers:hover {
+        box-shadow: 0 25px 50px rgba(255, 215, 150, 0.25), 0 15px 30px rgba(0,0,0,0.25);
+        transform: translateY(-3px);
+        border-color: rgba(255, 255, 255, 0.6);
+    }
+
+    .header-with-icon {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 20px;
+        border-bottom: 2px solid rgba(242, 218, 172, 0.4);
+        padding-bottom: 12px;
     }
 
     .recent-answers h2 {
         color: #F2DAAC;
-        font-size: 1.4rem;
-        margin-bottom: 20px;
-        flex-shrink: 0;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        text-shadow: 0 1px 6px rgba(0,0,0,0.25);
-    }
-
-    .questions-list, .answers-list {
-        flex: 1;
-        min-height: 0;
-    }
-
-    .question-placeholder, .answer-placeholder {
-        color: white;
-        text-align: left;
-        padding: 15px;
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 12px;
-        font-size: 1.1rem;
-        height: 100%;
+        font-size: 2rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-shadow: 0 3px 8px rgba(0,0,0,0.4);
+        margin: 0;
+        border-bottom: none;
+        padding-bottom: 0;
         display: flex;
         flex-direction: column;
-        gap: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        line-height: 1.3;
+    }
+
+    .calendar-icon {
+        color: #F2DAAC;
+        font-size: 4rem;
+        line-height: 1;
+        opacity: 0.95;
+        text-shadow: 0 3px 8px rgba(0,0,0,0.4);
+        cursor: default;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+        margin-left: auto;
+    }
+
+    .calendar-icon:hover {
+        opacity: 1;
+        transform: scale(1.15) rotate(5deg);
+    }
+
+    .answers-list {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
     }
 
     .answer-item {
-        padding: 12px 15px;
-        background: rgba(255, 255, 255, 0.12);
-        border-radius: 10px;
-        color: white;
-        font-size: 1rem;
-        border-left: 3px solid #F2DAAC;
+        padding: 16px 20px;
+        background: rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(5px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-left-width: 3px;
-        border-left-color: #F2DAAC;
+        border-radius: 20px;
+        color: white;
+        font-size: 1.2rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .answer-item:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateX(5px);
+        border-color: rgba(242, 218, 172, 0.6);
+        box-shadow: 0 8px 20px rgba(242, 218, 172, 0.25);
+    }
+
+    .avatar {
+        font-size: 1.8rem;
+        min-width: 40px;
+        text-align: center;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
     }
 
     .pravnaya-nastroyka {
-        margin-top: 20px;
-        padding: 15px;
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(5px);
-        border-radius: 12px;
+        margin-top: 25px;
+        padding: 18px;
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(8px);
+        border-radius: 16px;
         color: #F2DAAC;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         text-align: center;
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         letter-spacing: 0.5px;
-        font-weight: 500;
-        text-shadow: 0 1px 4px rgba(0,0,0,0.25);
+        font-weight: 600;
+        text-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
 
     .profile-content, .settings-content, .questions-content, .ask-content, .comments-content {
         margin: 40px 5%;
-        padding: 30px;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(12px);
-        border-radius: 20px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 35px;
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(15px);
+        border-radius: 25px;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+        border: 1px solid rgba(255, 255, 255, 0.25);
     }
 
     .profile-content h1, .settings-content h1, .questions-content h1, .ask-content h1, .comments-content h1 {
         color: white;
-        margin-bottom: 20px;
-        font-size: 2rem;
-        font-weight: 600;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+        margin-bottom: 25px;
+        font-size: 2.3rem;
+        font-weight: 700;
+        text-shadow: 0 3px 10px rgba(0,0,0,0.3);
     }
 
     @media (max-width: 768px) {
         .main-content {
             flex-direction: column;
+            gap: 30px;
         }
 
         .right-column {
@@ -342,6 +457,12 @@
 
         .nav-links {
             justify-content: center;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            padding: 0.6rem 1.2rem;
+            font-size: 1rem;
         }
 
         .search-container {
@@ -351,11 +472,12 @@
         }
 
         .hero-section h1 {
-            font-size: 2rem;
+            font-size: 2.3rem;
         }
 
         .hero-section p {
-            font-size: 1rem;
+            font-size: 1.2rem;
+            max-width: 100%;
         }
 
         .action-buttons {
@@ -363,8 +485,8 @@
         }
 
         .action-btn {
-            padding: 16px 30px;
-            font-size: 1.2rem;
+            padding: 22px 40px;
+            font-size: 1.6rem;
         }
     }
 
@@ -380,21 +502,45 @@
         }
 
         .hero-section h1 {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
         }
 
-        .action-btn {
-            padding: 14px 25px;
+        .hero-section p {
             font-size: 1.1rem;
         }
 
-        .recent-questions h2, .recent-answers h2 {
-            font-size: 1.2rem;
+        .action-btn {
+            padding: 18px 30px;
+            font-size: 1.4rem;
         }
 
-        .answer-item {
-            padding: 10px;
-            font-size: 0.95rem;
+        .header-with-icon {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .recent-answers h2 {
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .recent-questions h2, .recent-answers h2 {
+            font-size: 1.4rem;
+        }
+
+        .question-item, .answer-item {
+            padding: 14px 18px;
+            font-size: 1.1rem;
+        }
+
+        .question-icon, .avatar {
+            font-size: 1.5rem;
+            min-width: 30px;
+        }
+
+        .calendar-icon {
+            font-size: 3rem;
         }
     }
 </style>

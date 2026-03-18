@@ -120,10 +120,33 @@
         font-weight: 600;
     }
 
+    .main-content {
+        display: flex;
+        gap: 40px;
+        margin: 40px 5%;
+        flex: 1;
+        min-height: 0;
+    }
+
+    .left-column {
+        flex: 1.5;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        min-height: 0;
+    }
+
+    .right-column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        max-width: 1500px;
+        width: 500px;
+    }
+
     .hero-section {
         text-align: left;
-        margin: 40px 5% 30px 5%;
-        max-width: 800px;
     }
 
     .hero-section h1 {
@@ -141,25 +164,24 @@
     .action-buttons {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-        margin: 0 5% 40px 5%;
-        max-width: 500px;
+        gap: 25px;
+        max-width: 600px;
     }
 
     .action-btn {
         color: white;
         text-decoration: none;
-        padding: 16px 40px;
-        border-radius: 50px;
-        font-size: 1.3rem;
-        font-weight: 500;
+        padding: 28px 60px;
+        border-radius: 70px;
+        font-size: 1.9rem;
+        font-weight: 600;
         transition: all 0.2s;
         display: inline-flex;
         align-items: center;
-        gap: 10px;
+        gap: 15px;
         width: 100%;
         justify-content: center;
+        letter-spacing: 0.5px;
     }
 
     .ask-btn {
@@ -168,8 +190,8 @@
 
     .ask-btn:hover {
         background: #0052a3;
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(0,102,204,0.2);
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(0,102,204,0.3);
     }
 
     .ai-btn {
@@ -178,31 +200,35 @@
 
     .ai-btn:hover {
         background: #5b4bc4;
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(108,92,231,0.2);
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(108,92,231,0.3);
     }
 
-    .recent-questions {
-        margin: 0 5% 40px 5%;
-        max-width: 800px;
+    .recent-questions, .recent-answers {
         background: white;
         border-radius: 15px;
         padding: 25px;
         box-shadow: 0 3px 15px rgba(0,0,0,0.03);
         border: 1px solid #eef2f6;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
     }
 
-    .recent-questions h2 {
+    .recent-questions h2, .recent-answers h2 {
         color: #1a1e2b;
         font-size: 1.5rem;
         margin-bottom: 20px;
+        flex-shrink: 0;
     }
 
-    .questions-list {
-        min-height: 150px;
+    .questions-list, .answers-list {
+        flex: 1;
+        min-height: 0;
     }
 
-    .question-placeholder {
+    .question-placeholder, .answer-placeholder {
         color: #8895aa;
         text-align: center;
         padding: 40px;
@@ -210,6 +236,10 @@
         border-radius: 10px;
         border: 2px dashed #d0e0ff;
         font-size: 1.1rem;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .profile-content, .settings-content, .questions-content, .ask-content, .comments-content {
@@ -227,6 +257,14 @@
     }
 
     @media (max-width: 768px) {
+        .main-content {
+            flex-direction: column;
+        }
+
+        .right-column {
+            max-width: 100%;
+        }
+
         .nav-container {
             flex-direction: column;
             gap: 15px;
@@ -255,8 +293,8 @@
         }
 
         .action-btn {
-            padding: 14px 30px;
-            font-size: 1.2rem;
+            padding: 22px 45px;
+            font-size: 1.6rem;
         }
     }
 
@@ -275,30 +313,16 @@
             font-size: 1.5rem;
         }
 
-        .hero-section {
-            margin: 30px 5% 20px 5%;
-        }
-
-        .action-buttons {
-            margin: 0 5% 30px 5%;
-            gap: 12px;
-        }
-
         .action-btn {
-            padding: 12px 25px;
-            font-size: 1.1rem;
+            padding: 18px 35px;
+            font-size: 1.4rem;
         }
 
-        .recent-questions {
-            margin: 0 5% 30px 5%;
-            padding: 20px;
-        }
-
-        .recent-questions h2 {
+        .recent-questions h2, .recent-answers h2 {
             font-size: 1.3rem;
         }
 
-        .question-placeholder {
+        .question-placeholder, .answer-placeholder {
             padding: 30px;
             font-size: 1rem;
         }

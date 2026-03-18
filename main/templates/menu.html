@@ -1,15 +1,18 @@
 <nav class="navbar">
     <div class="nav-container">
-        <a href="#" class="site-title" id="site-title">🎓 Knowledge Exchange</a>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <a href="#" class="site-title" id="site-title">🎓 Knowledge Exchange</a>
+
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Поиск вопросов...">
+                <a href="/questions/" class="search-btn">🔍</a>
+            </div>
+        </div>
+
         <div class="nav-right">
             <ul class="nav-links">
                 <li><a href="#">Главная</a></li>
-                <li><a href="#">Профиль</a></li>
-                <li><a href="#">Вопросы</a></li>
-                <li><a href="#">Спросить ИИ</a></li>
-                <li><a href="#">Комментарии</a></li>
-                <li><a href="#">Задать вопрос</a></li>
-                <li><a href="#">⚙️</a></li>
+                <li><a href="#">Настройки</a></li>
             </ul>
         </div>
     </div>
@@ -22,6 +25,7 @@
             event.preventDefault();
             window.location.href = '/';
         });
+
         const navLinks = document.querySelectorAll('.nav-links a');
         navLinks.forEach(function(link) {
             link.addEventListener('click', function(event) {
@@ -29,28 +33,19 @@
                 const text = this.textContent.trim();
                 let url = '';
                 if (text === 'Главная') url = '/';
-                if (text === 'Профиль') url = '/profile/';
-                if (text === 'Вопросы') url = '/questions/';
-                if (text === 'Спросить ИИ') url = '/ask_ai/';
-                if (text === 'Комментарии') url = '/comments/';
-                if (text === 'Задать вопрос') url = '/ask/';
-                if (text === '⚙️') url = '/settings/';
+                if (text === 'Настройки') url = '/settings/';
                 if (url) {
                     window.location.href = url;
                 }
             });
         });
+
         const currentPath = window.location.pathname;
         navLinks.forEach(function(link) {
             const text = link.textContent.trim();
             let linkPath = '';
             if (text === 'Главная') linkPath = '/';
-            if (text === 'Профиль') linkPath = '/profile/';
-            if (text === 'Вопросы') linkPath = '/questions/';
-            if (text === 'Спросить ИИ') linkPath = '/ask_ai/';
-            if (text === 'Комментарии') linkPath = '/comments/';
-            if (text === 'Задать вопрос') linkPath = '/ask/';
-            if (text === '⚙️') linkPath = '/settings/';
+            if (text === 'Настройки') linkPath = '/settings/';
             if (currentPath === linkPath) {
                 link.classList.add('active');
             }

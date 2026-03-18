@@ -47,6 +47,44 @@
         white-space: nowrap;
     }
 
+    .search-container {
+        display: flex;
+        align-items: center;
+        width: 300px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 8px 15px;
+        border: 1px solid #e0e7ed;
+        border-radius: 20px 0 0 20px;
+        font-size: 0.95rem;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+        border-color: #0066cc;
+    }
+
+    .search-btn {
+        background: #0066cc;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 0 20px 20px 0;
+        cursor: pointer;
+        font-size: 1rem;
+        text-decoration: none;
+        display: inline-block;
+        line-height: 1;
+        transition: background-color 0.2s;
+    }
+
+    .search-btn:hover {
+        background: #0052a3;
+    }
+
     .nav-right {
         display: flex;
         align-items: center;
@@ -211,7 +249,7 @@
         padding: 30px;
     }
 
-    .profile-content {
+    .profile-content, .settings-content, .questions-content, .ask-content, .comments-content {
         margin: 40px 5%;
         padding: 30px;
         background: white;
@@ -220,63 +258,7 @@
         border: 1px solid #eef2f6;
     }
 
-    .profile-content h1 {
-        color: #1a1e2b;
-        margin-bottom: 20px;
-    }
-
-    .settings-content {
-        margin: 40px 5%;
-        padding: 30px;
-        background: white;
-        border-radius: 15px;
-        box-shadow: 0 3px 15px rgba(0,0,0,0.03);
-        border: 1px solid #eef2f6;
-    }
-
-    .settings-content h1 {
-        color: #1a1e2b;
-        margin-bottom: 20px;
-    }
-
-    .questions-content {
-        margin: 40px 5%;
-        padding: 30px;
-        background: white;
-        border-radius: 15px;
-        box-shadow: 0 3px 15px rgba(0,0,0,0.03);
-        border: 1px solid #eef2f6;
-    }
-
-    .questions-content h1 {
-        color: #1a1e2b;
-        margin-bottom: 20px;
-    }
-
-    .ask-content {
-        margin: 40px 5%;
-        padding: 30px;
-        background: white;
-        border-radius: 15px;
-        box-shadow: 0 3px 15px rgba(0,0,0,0.03);
-        border: 1px solid #eef2f6;
-    }
-
-    .ask-content h1 {
-        color: #1a1e2b;
-        margin-bottom: 20px;
-    }
-
-    .comments-content {
-        margin: 40px 5%;
-        padding: 30px;
-        background: white;
-        border-radius: 15px;
-        box-shadow: 0 3px 15px rgba(0,0,0,0.03);
-        border: 1px solid #eef2f6;
-    }
-
-    .comments-content h1 {
+    .profile-content h1, .settings-content h1, .questions-content h1, .ask-content h1, .comments-content h1 {
         color: #1a1e2b;
         margin-bottom: 20px;
     }
@@ -322,6 +304,12 @@
         .profile-content, .settings-content, .questions-content, .ask-content, .comments-content {
             margin: 20px 3%;
             padding: 20px;
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 10px 0;
         }
     }
 

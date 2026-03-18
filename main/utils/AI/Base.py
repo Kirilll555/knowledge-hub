@@ -17,7 +17,6 @@ class BaseAI:
         )
         self.model = "arcee-ai/trinity-large-preview:free"
         self.identifier = Identifier(self.client, self.model)
-
     def generate(self, prompt: str, system_prompt: str) -> dict:
         messages = []
         if system_prompt:

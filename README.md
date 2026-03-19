@@ -8,8 +8,8 @@
     . ./.venv/Scripts/activate - активация виртуального акружения если Windows
 
     pip install -r requirements.txt - скачивание нужных библиотек
-    python manage.py runserver - запуск проекта
+    python start.py - запуск проекта
 
 
 Регулярный запуск
-    python manage.py runserver - запуск проекта
+    python start.py - запуск проекта

@@ -45,8 +45,10 @@ class GenerateStrategy(TaskTypeStrategy):
 
 class AnalyzeStrategy(TaskTypeStrategy):
     def get_user_prompt(self, user_input: str) -> str:
-        return (f"Проанализируй:\n{user_input}. Если не знаешь полного произведения, то скажи только известные факты, "
-                f"а не выдумывай из головы!")
+        return (
+            f"Проанализируй:\n{user_input}. Если не знаешь полного произведения, то скажи только известные факты, "
+            f"а не выдумывай из головы!"
+        )
 
     def get_task_name(self) -> str:
         return "Анализ"

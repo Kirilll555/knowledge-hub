@@ -20,15 +20,15 @@ class Identifier:
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.3,
-                max_tokens=20
+                max_tokens=20,
             )
 
             result = response.choices[0].message.content.strip()
-            subject, task_type = result.split('|')
+            subject, task_type = result.split("|")
             return subject.strip(), task_type.strip()
 
         except Exception:
-            return 'other', 'explain'
+            return "other", "explain"
 
     def check_answer(self, answer: str, question: str) -> bool:
         prompt = f"""
@@ -44,7 +44,7 @@ class Identifier:
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.3,
-                max_tokens=20
+                max_tokens=20,
             )
 
             result = response.choices[0].message.content.strip()

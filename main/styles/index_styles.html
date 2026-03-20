@@ -5,7 +5,7 @@
     margin: 50px 5%;
     flex: 1;
     min-height: 0;
-    height: 100%;
+    align-items: stretch;
 }
 
 .left-column {
@@ -14,7 +14,6 @@
     flex-direction: column;
     gap: 35px;
     min-height: 0;
-    height: 100%;
 }
 
 .right-column {
@@ -22,9 +21,8 @@
     display: flex;
     flex-direction: column;
     min-height: 0;
-    max-width: 450px;
-    width: 450px;
-    height: 100%;
+    max-width: 550px;
+    width: 550px;
 }
 
 .hero-section {
@@ -43,7 +41,7 @@
 }
 
 .hero-section p {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     color: white;
     line-height: 1.7;
     text-shadow: 0 2px 10px rgba(0,0,0,0.35);
@@ -54,22 +52,23 @@
 .action-buttons {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    max-width: 700px;
+    gap: 18px;
+    max-width: 650px;
     flex-shrink: 0;
+    margin-bottom: 0;
 }
 
 .action-btn {
     color: #F2DAAC;
     text-decoration: none;
-    padding: 28px 50px;
-    border-radius: 70px;
-    font-size: 1.9rem;
+    padding: 22px 45px;
+    border-radius: 60px;
+    font-size: 1.7rem;
     font-weight: 700;
     transition: all 0.3s;
     display: inline-flex;
     align-items: center;
-    gap: 18px;
+    gap: 15px;
     width: 100%;
     justify-content: center;
     background: rgba(255, 255, 255, 0.18);
@@ -100,6 +99,8 @@
     flex-direction: column;
     width: 100%;
     transition: all 0.3s ease;
+    flex: 1;
+    min-height: 0;
 }
 
 .recent-questions:hover {
@@ -131,15 +132,18 @@
     flex-direction: column;
     gap: 12px;
     width: 100%;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
 }
 
 .question-item {
-    padding: 16px 20px;
+    padding: 14px 18px;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(5px);
     border-radius: 20px;
     color: white;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     border: 1px solid rgba(255, 255, 255, 0.3);
     transition: all 0.2s ease;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -148,7 +152,8 @@
     font-weight: 500;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
+    flex-shrink: 0;
 }
 
 .question-item:hover {
@@ -159,8 +164,8 @@
 }
 
 .question-icon {
-    font-size: 1.8rem;
-    min-width: 40px;
+    font-size: 1.6rem;
+    min-width: 35px;
     text-align: center;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
@@ -171,16 +176,15 @@
     animation: softGlow 10s ease infinite;
     backdrop-filter: blur(12px);
     border-radius: 28px;
-    padding: 25px;
+    padding: 30px;
     box-shadow: 0 20px 40px rgba(255, 215, 150, 0.15), 0 12px 25px rgba(0,0,0,0.2);
     border: 1px solid rgba(255, 255, 255, 0.4);
     display: flex;
     flex-direction: column;
-    flex: 1;
     width: 100%;
-    min-height: 600px;
-    height: 100%;
     transition: all 0.3s ease;
+    flex: 1;
+    min-height: 0;
 }
 
 .recent-answers:hover {
@@ -194,9 +198,9 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     border-bottom: 2px solid rgba(242, 218, 172, 0.4);
-    padding-bottom: 12px;
+    padding-bottom: 15px;
     flex-shrink: 0;
 }
 
@@ -234,15 +238,15 @@
 .answers-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 20px;
     width: 100%;
     flex: 1;
-    min-height: 0;
     overflow-y: auto;
+    min-height: 0;
 }
 
 .answer-item {
-    padding: 16px 20px;
+    padding: 18px 24px;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(5px);
     border-radius: 20px;
@@ -256,7 +260,7 @@
     font-weight: 500;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 18px;
     flex-shrink: 0;
 }
 
@@ -268,8 +272,8 @@
 }
 
 .avatar {
-    font-size: 1.8rem;
-    min-width: 40px;
+    font-size: 2rem;
+    min-width: 45px;
     text-align: center;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
@@ -313,8 +317,17 @@
     }
 
     .right-column {
-        max-width: 400px;
-        width: 400px;
+        max-width: 500px;
+        width: 500px;
+    }
+
+    .hero-section p {
+        font-size: 1.4rem;
+    }
+
+    .action-btn {
+        padding: 20px 40px;
+        font-size: 1.5rem;
     }
 }
 
@@ -322,7 +335,7 @@
     .main-content {
         flex-direction: column;
         gap: 30px;
-        margin: 30px 5%;
+        margin: 30px 5% 50px 5%;
     }
 
     .right-column {
@@ -335,7 +348,7 @@
     }
 
     .hero-section p {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         max-width: 100%;
     }
 
@@ -344,18 +357,40 @@
     }
 
     .action-btn {
-        padding: 22px 40px;
-        font-size: 1.6rem;
+        padding: 18px 35px;
+        font-size: 1.4rem;
+        gap: 12px;
     }
 
-    .recent-answers {
-        min-height: 500px;
+    .answers-list {
+        gap: 15px;
+    }
+
+    .answer-item {
+        padding: 15px 20px;
+        gap: 15px;
+    }
+
+    .avatar {
+        font-size: 1.8rem;
+        min-width: 40px;
+    }
+
+    .question-item {
+        padding: 12px 16px;
+        font-size: 1rem;
+        gap: 10px;
+    }
+
+    .question-icon {
+        font-size: 1.4rem;
+        min-width: 30px;
     }
 }
 
 @media screen and (max-width: 480px) {
     .main-content {
-        margin: 20px 5%;
+        margin: 20px 5% 40px 5%;
     }
 
     .hero-section h1 {
@@ -363,18 +398,20 @@
     }
 
     .hero-section p {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
     }
 
     .action-btn {
-        padding: 18px 30px;
-        font-size: 1.4rem;
+        padding: 16px 28px;
+        font-size: 1.3rem;
+        gap: 10px;
     }
 
     .header-with-icon {
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
+        margin-bottom: 20px;
     }
 
     .recent-answers h2 {
@@ -384,8 +421,9 @@
     }
 
     .question-item, .answer-item {
-        padding: 14px 18px;
-        font-size: 1.1rem;
+        padding: 12px 16px;
+        font-size: 1rem;
+        gap: 12px;
     }
 
     .question-icon, .avatar {
@@ -398,8 +436,8 @@
         margin-left: 0;
     }
 
-    .recent-answers {
-        min-height: 450px;
+    .answers-list {
+        gap: 12px;
     }
 }
 

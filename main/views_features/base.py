@@ -1,6 +1,14 @@
-from django.shortcuts import render, redirect
+ from django.shortcuts import render, redirect
 from datetime import datetime
 from main.utils.AI.Assistant import Assistant
+
+from main.models import IVAN_DATA
+
+def settings(request):
+    context = {
+        'user_data': IVAN_DATA,
+    }
+    return render(request, 'settings.html', context)
 
 def get_menu():
     return [
@@ -62,6 +70,3 @@ def ask_question(request):
 
 def comments(request):
     return render(request, 'comments.html')
-
-def settings(request):
-    return render(request, 'settings.html')

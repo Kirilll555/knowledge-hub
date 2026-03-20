@@ -3,6 +3,13 @@ from datetime import datetime
 from django.shortcuts import render
 
 
+from main.models import IVAN_DATA
+
+def settings(request):
+    context = {
+        'user_data': IVAN_DATA,
+    }
+    return render(request, 'settings.html', context)
 
 def get_menu():
     return [

@@ -22,26 +22,31 @@
                 <div class="profile-info">
                     <div class="info-item">
                         <span class="info-label">ИМЯ:</span>
+                        <div class="info-value">{{ user_data.name }}</div>
                         <div class="info-line"></div>
                     </div>
 
                     <div class="info-item">
                         <span class="info-label">НИКНЕЙМ:</span>
+                        <div class="info-value">{{ user_data.nickname }}</div>
                         <div class="info-line"></div>
                     </div>
 
                     <div class="info-item">
                         <span class="info-label">КЛАН:</span>
+                        <div class="info-value">{{ user_data.clan }}</div>
                         <div class="info-line"></div>
                     </div>
 
                     <div class="info-item">
                         <span class="info-label">РАНГ:</span>
+                        <div class="info-value">{{ user_data.rank }}</div>
                         <div class="info-line"></div>
                     </div>
 
                     <div class="info-item">
                         <span class="info-label">О СЕБЕ:</span>
+                        <div class="info-value">{{ user_data.bio }}</div>
                         <div class="info-line"></div>
                     </div>
                 </div>
@@ -53,16 +58,19 @@
 
             <div class="info-item" style="margin-bottom: 20px;">
                 <span class="info-label" style="color: white;">ПОЧТА:</span>
+                <div class="info-value" style="color: white;">{{ user_data.email }}</div>
                 <div class="info-line" style="background: rgba(255, 255, 255, 0.3);"></div>
             </div>
 
             <div class="info-item" style="margin-bottom: 20px;">
                 <span class="info-label" style="color: white;">ПАРОЛЬ:</span>
+                <div class="info-value" style="color: white;">{{ user_data.password }}</div>
                 <div class="info-line" style="background: rgba(255, 255, 255, 0.3);"></div>
             </div>
 
             <div class="info-item">
                 <span class="info-label" style="color: white;">ПОВТОР ПАРОЛЯ:</span>
+                <div class="info-value" style="color: white;">{{ user_data.password }}</div>
                 <div class="info-line" style="background: rgba(255, 255, 255, 0.3);"></div>
             </div>
         </div>

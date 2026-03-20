@@ -1,16 +1,16 @@
 from django.urls import path
-from . import views
+from main.views_features.base import *
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('profile/', views.profile, name='profile'),
-    path('about/', views.about, name='about'),
-    path('login/', views.login, name='login'),
-    path('register/', views.register, name='register'),
-    path('questions/', views.questions, name='questions'),
-    path('ask_ai/', views.ask_ai, name='ask_ai'),
-    path('ask/', views.ask_question, name='ask'),
-    path('comments/', views.comments, name='comments'),
-    path('settings/', views.settings, name='settings'),
+    path('', index, name='index'),
+    path('profile/', profile, name='profile'),
+    path('about/', about, name='about'),
+    path('login/', login, name='login'),
+    path('register/', register, name='register'),
+    path('questions/', questions, name='questions'),
+    path('ask_ai/', ask_ai, name='ask_ai'),
+    path('ask/', ask_question, name='ask'),
+    path('comments/', comments, name='comments'),
+    path('settings/', settings, name='settings'),
 ]

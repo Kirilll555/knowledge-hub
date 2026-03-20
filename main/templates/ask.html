@@ -3,10 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Задать вопрос</title>
-    {% include 'styles.html' %}
+    {% include 'base_styles.html' %}
 </head>
 <body>
     {% include 'menu.html' %}
-    <h1>Здесь будет страница для создания вопроса</h1>
+    <h1>Задать новый вопрос</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <p>
+            <label>Заголовок:</label><br>
+            <input type="text" name="title" size="80" required>
+        </p>
+
+        <p>
+            <label>Описание:</label><br>
+            <textarea name="description" rows="10" cols="80" required></textarea>
+        </p>
+
+        <p>
+            <label>Теги (через запятую):</label><br>
+            <input type="text" name="tags" size="80">
+        </p>
+
+        <p>
+            <button type="submit">Опубликовать</button>
+        </p>
+    </form>
 </body>
 </html>

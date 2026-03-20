@@ -1,0 +1,218 @@
+<style>
+.ai-container {
+    width: 70%;
+    max-width: 1500px;
+    margin: 40px auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 150px);
+    flex: 0 0 auto;
+}
+
+.ai-header {
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.ai-header h1 {
+    color: white;
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-shadow: 0 3px 8px rgba(0,0,0,0.4);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+    padding-bottom: 12px;
+}
+
+.chat-container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border-radius: 28px;
+    padding: 35px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 12px 25px rgba(0,0,0,0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 500px;
+    width: 100%;
+}
+
+.messages-area {
+    flex: 1;
+    min-height: 400px;
+    max-height: none;
+    overflow-y: auto;
+    margin-bottom: 25px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message {
+    padding: 18px 25px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    border-radius: 25px;
+    color: white;
+    font-size: 1.15rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    max-width: 90%;
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.message.user {
+    align-self: flex-end;
+    background: rgba(82, 122, 242, 0.4);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.message.bot {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.message-icon {
+    font-size: 2rem;
+    min-width: 45px;
+    text-align: center;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.message-content {
+    flex: 1;
+    word-break: break-word;
+    line-height: 1.5;
+}
+
+.input-group {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 40px;
+    padding: 8px 8px 8px 25px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.input-group:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.input-group:focus-within {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 25px rgba(82, 122, 242, 0.3);
+}
+
+.ai-textarea {
+    flex: 1;
+    padding: 15px 0;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.15rem;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    font-family: inherit;
+    resize: none;
+    min-height: 60px;
+    max-height: 150px;
+    outline: none;
+}
+
+.ai-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.ai-submit-btn {
+    color: white;
+    text-decoration: none;
+    padding: 14px 28px;
+    border-radius: 40px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(82, 122, 242, 0.6);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    text-shadow: 0 3px 8px rgba(0,0,0,0.4);
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+    height: fit-content;
+    flex-shrink: 0;
+}
+
+.ai-submit-btn:hover {
+    background: rgba(82, 122, 242, 0.8);
+    transform: translateY(-2px);
+    border-color: white;
+    box-shadow: 0 8px 20px rgba(82, 122, 242, 0.4);
+    color: white;
+}
+
+.error-message {
+    color: #ff8a8a;
+    margin-top: 15px;
+    padding: 18px 25px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(5px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 138, 138, 0.3);
+    font-size: 1.15rem;
+}
+
+@media (max-width: 768px) {
+    .ai-container {
+        max-width: 90%;
+        margin: 20px auto;
+        min-height: calc(100vh - 100px);
+    }
+
+    .ai-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .input-group {
+        flex-direction: column;
+        padding: 15px;
+        gap: 10px;
+    }
+
+    .ai-textarea {
+        width: 100%;
+        padding: 10px 0;
+    }
+
+    .ai-submit-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+    }
+
+    .message {
+        max-width: 100%;
+        padding: 15px 20px;
+    }
+
+    .messages-area {
+        min-height: 300px;
+        padding: 15px;
+    }
+}
+</style>

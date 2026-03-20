@@ -1,27 +1,20 @@
 from django.shortcuts import render, redirect
 from datetime import datetime
-from django.shortcuts import render
-
-
+from main.utils.AI.Assistant import Assistant
 
 def get_menu():
     return [
         {'name': 'Главная', 'url': '/'},
     ]
 
-
 def home(request):
-    """Главная страница"""
     context = {
         'user': request.user,
     }
     return render(request, '###home.html', context)
 
-
 def about(request):
-    """Страница О нас"""
     return render(request, 'about.html')
-
 
 def index(request):
     today = datetime.now().strftime('%d.%m.%Y')
@@ -40,11 +33,29 @@ def profile(request):
 
 def login(request):
     return render(request, 'login.html')
+
 def questions(request):
     return render(request, 'questions.html')
 
+
 def ask_ai(request):
-    return render(request, 'ask_ai.html')
+    answer = None
+    error = None
+
+    if request.method == 'POST':
+        question = request.POST.get('question', '')
+        if question:
+            assistant = Assistant()
+            result = assistant.ask(question)
+            if result.get('success'):
+                answer = result.get('answer')
+            else:
+                error = result.get('error', 'Ошибка при получении ответа')
+
+    return render(request, 'ask_ai.html', {
+        'answer': answer,
+        'error': error
+    })
 
 def ask_question(request):
     return render(request, 'ask.html')

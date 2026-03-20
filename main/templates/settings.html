@@ -2,11 +2,70 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Настройки</title>
-    {% include 'styles.html' %}
+    <title>Настройки профиля</title>
+    {% include 'base_styles.html' %}
+    {% include 'settings_styles.html' %}
 </head>
 <body>
     {% include 'menu.html' %}
-    <h1>Здесь будут настройки пользователя</h1>
+    
+    <div class="settings-container">
+        <div class="settings-header">
+            <h1>⚙️ Настройки профиля</h1>
+            <button class="theme-btn">🌙</button>
+        </div>
+
+        <div class="settings-block">
+            <div class="profile-row">
+                <div class="avatar-large">👤</div>
+
+                <div class="profile-info">
+                    <div class="info-item">
+                        <span class="info-label">ИМЯ:</span>
+                        <div class="info-line"></div>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">НИКНЕЙМ:</span>
+                        <div class="info-line"></div>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">КЛАН:</span>
+                        <div class="info-line"></div>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">РАНГ:</span>
+                        <div class="info-line"></div>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">О СЕБЕ:</span>
+                        <div class="info-line"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-block" style="margin-top: 30px; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3);">
+            <div class="settings-section-title" style="color: white; border-bottom-color: rgba(255, 255, 255, 0.3);">Безопасность</div>
+
+            <div class="info-item" style="margin-bottom: 20px;">
+                <span class="info-label" style="color: white;">ПОЧТА:</span>
+                <div class="info-line" style="background: rgba(255, 255, 255, 0.3);"></div>
+            </div>
+
+            <div class="info-item" style="margin-bottom: 20px;">
+                <span class="info-label" style="color: white;">ПАРОЛЬ:</span>
+                <div class="info-line" style="background: rgba(255, 255, 255, 0.3);"></div>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label" style="color: white;">ПОВТОР ПАРОЛЯ:</span>
+                <div class="info-line" style="background: rgba(255, 255, 255, 0.3);"></div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

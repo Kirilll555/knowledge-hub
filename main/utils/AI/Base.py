@@ -15,10 +15,8 @@ class BaseAI:
             base_url="https://openrouter.ai/api/v1",
             api_key="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"
         )
-        with open("AIModels.token", "r") as f:
-            self.model = f.readline()
+        self.model = "arcee-ai/trinity-large-preview:free"
         self.identifier = Identifier(self.client, self.model)
-
     def generate(self, prompt: str, system_prompt: str) -> dict:
         messages = []
         if system_prompt:

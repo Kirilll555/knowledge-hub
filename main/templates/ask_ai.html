@@ -3,10 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <title>Спросить ИИ</title>
-    {% include 'styles.html' %}
+    {% include 'base_styles.html' %}
+    {% include 'ask_ai_styles.html' %}
 </head>
 <body>
     {% include 'menu.html' %}
-    <h1>Здесь можно задать вопрос искусственному интеллекту</h1>
+
+    <div class="ai-container">
+        <div class="ai-header">
+            <h1>🤖 Спросить искусственный интеллект</h1>
+        </div>
+
+        <div class="chat-container">
+            <div class="messages-area" id="messagesArea">
+                {% if messages_history %}
+                    {% for message in messages_history %}
+                        <div class="message {% if message.role == 'user' %}user{% else %}bot{% endif %}">
+                            <span class="message-icon">
+                                {% if message.role == 'user' %}👤{% else %}🤖{% endif %}
+                            </span>
+                            <span class="message-content">{{ message.content }}</span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if answer %}
+                    <div class="message bot">
+                        <span class="message-icon">🤖</span>
+                        <span class="message-content">{{ answer }}</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-group">
+                    <textarea name="question" class="ai-textarea" placeholder="Введите ваш вопрос..." required>{% if last_question %}{{ last_question }}{% endif %}</textarea>
+                    <button type="submit" class="ai-submit-btn">📤 Отправить</button>
+                </div>
+            </form>
+
+            {% if error %}
+                <div class="error-message">
+                    <strong>Ошибка:</strong> {{ error }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
 </body>
 </html>

@@ -1,4 +1,4 @@
- from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect
 from datetime import datetime
 from main.utils.AI.Assistant import Assistant
 

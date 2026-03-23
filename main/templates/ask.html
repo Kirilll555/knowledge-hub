@@ -5,32 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Задать вопрос</title>
     {% include 'base_styles.html' %}
+    {% include 'ask_styles.html' %}
 </head>
 <body>
     {% include 'menu.html' %}
-    <h1>Задать новый вопрос</h1>
 
-    <form method="post">
-        {% csrf_token %}
+    <div class="ask-container">
+        <div class="ask-header">
+            <h1>📝 Задать новый вопрос</h1>
+        </div>
 
-        <p>
-            <label>Заголовок:</label><br>
-            <input type="text" name="title" size="80" required>
-        </p>
+        <div class="ask-form">
+            <form method="post">
+                {% csrf_token %}
 
-        <p>
-            <label>Описание:</label><br>
-            <textarea name="description" rows="10" cols="80" required></textarea>
-        </p>
+                <div class="form-group">
+                    <label class="form-label">Заголовок</label>
+                    <input type="text" name="title" class="form-input" placeholder="Кратко опишите суть вопроса" required>
+                </div>
 
-        <p>
-            <label>Теги (через запятую):</label><br>
-            <input type="text" name="tags" size="80">
-        </p>
+                <div class="form-group">
+                    <label class="form-label">Описание</label>
+                    <textarea name="description" class="form-textarea" placeholder="Опишите ваш вопрос." required></textarea>
+                </div>
 
-        <p>
-            <button type="submit">Опубликовать</button>
-        </p>
-    </form>
+
+
+                <button type="submit" class="submit-btn">📤 Опубликовать вопрос</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

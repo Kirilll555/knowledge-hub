@@ -2,7 +2,6 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Главная</title>
     {% include 'base_styles.html' %}
     {% include 'index_styles.html' %}
@@ -25,7 +24,7 @@
             <div class="recent-questions">
                 <h2>Последние вопросы</h2>
                 <div class="questions-list">
-                    <div class="question-item">
+                    <div class="question-item" onclick="window.location.href='/question/'" style="cursor: pointer;">
                         <span class="question-icon">💻</span>
                         <span>Как настроить VPN на iPhone?</span>
                     </div>

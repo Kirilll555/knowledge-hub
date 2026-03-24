@@ -24,6 +24,9 @@ def home(request):
 def about(request):
     return render(request, 'about.html')
 
+def question_detail(request):
+    return render(request, 'question.html')
+
 def index(request):
     today = datetime.now().strftime('%d.%m.%Y')
     context = {

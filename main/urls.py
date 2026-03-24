@@ -13,4 +13,5 @@ urlpatterns = [
     path('ask/', ask_question, name='ask'),
     path('comments/', comments, name='comments'),
     path('settings/', settings, name='settings'),
+    path('question/', question_detail, name='question_detail'),
 ]

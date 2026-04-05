@@ -3,40 +3,39 @@ from datetime import datetime
 from django.shortcuts import render
 
 
-from main.models import IVAN_DATA
-
-def settings(request):
-    context = {
-        'user_data': IVAN_DATA,
-    }
-    return render(request, 'settings.html', context)
-
 def get_menu():
     return [
-        {'name': 'Главная', 'url': '/'},
+        {"name": "Главная", "url": "/"},
     ]
 
 
 def index(request):
-    return render(request, 'index.html')  # просто имя файла
+    return render(request, "index.html")  # просто имя файла
+
 
 def new_question(request):
-    return render(request, 'new_question.html')  # просто имя файла
+    return render(request, "new_question.html")  # просто имя файла
+
 
 def question_detail(request, question_id):
-    return render(request, 'question_detail.html', {'question_id': question_id})
+    return render(request, "question_detail.html", {"question_id": question_id})
+
 
 def profile(request, username):
-    return render(request, 'profile.html', {'username': username})
+    return render(request, "profile.html", {"username": username})
+
 
 def articles(request):
-    return render(request, 'articles.html')
+    return render(request, "articles.html")
+
 
 def moderation(request):
-    return render(request, 'moderation.html')
+    return render(request, "moderation.html")
+
 
 def ratings(request):
-    return render(request, 'ratings.html')
+    return render(request, "ratings.html")
+
 
 def login_page(request):
-    return render(request, 'login.html')
+    return render(request, "login.html")

@@ -5,7 +5,6 @@
     <title>Главная</title>
     {% include 'base_styles.html' %}
 </head>
-
 <body>
     {% include 'menu.html' %}
 
@@ -17,8 +16,8 @@
             </div>
 
             <div class="action-buttons">
-                <a href="#" class="action-btn ask-btn">📝 Задать вопрос</a>
-                <a href="#" class="action-btn ai-btn">🤖 Спросить ИИ</a>
+                <a href="/ask/" class="action-btn">📝 Задать вопрос</a>
+                <a href="/ask_ai/" class="action-btn">🤖 Спросить ИИ</a>
             </div>
 
             <div class="recent-questions">
@@ -55,64 +54,15 @@
                 </div>
             </div>
         </div>
-
-        <div class="right-column">
-            <div class="recent-answers">
-                <div class="header-with-icon">
-                    <h2>
-                        <span>Самые</span>
-                        <span>полезные</span>
-                        <span>ответы</span>
-                    </h2>
-                    <span class="calendar-icon">📅</span>
-                </div>
-                <div class="answers-list">
-                    <div class="answer-item">
-                        <span class="avatar">👤</span>
-                        <span>Для VPN на iPhone лучше всего использовать V2Box или Outline. Они бесплатны и хорошо работают.</span>
-                    </div>
-                    <div class="answer-item">
-                        <span class="avatar">👤</span>
-                        <span>Python проще для старта, синтаксис понятный. JavaScript нужен для веб-разработки.</span>
-                    </div>
-                    <div class="answer-item">
-                        <span class="avatar">👤</span>
-                        <span>Бесплатные курсы: Duolingo, Lingualeo, BBC English. Также полезно смотреть YouTube на английском.</span>
-                    </div>
-                    <div class="answer-item">
-                        <span class="avatar">👤</span>
-                        <span>ChatGPT — языковая модель, может ошибаться. Используйте для идей, но проверяйте факты.</span>
-                    </div>
-                    <div class="answer-item">
-                        <span class="avatar">👤</span>
-                        <span>Начните с Unity Learn и C#. Там есть бесплатные курсы для новичков с практическими заданиями.</span>
-                    </div>
-                    <div class="answer-item">
-                        <span class="avatar">👤</span>
-                        <span>Лучшие приложения: Duolingo (игровая форма), Anki (карточки), Tandem (общение с носителями).</span>
-                    </div>
-                    <div class="answer-item">
-                        <span class="avatar">👤</span>
-                        <span>Используйте двухфакторную аутентификацию, менеджеры паролей (Bitwarden), не переходите по подозрительным ссылкам.</span>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const actionButtons = document.querySelectorAll('.action-buttons a');
-            actionButtons.forEach(function(link) {
-                link.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    const text = this.textContent.trim();
-                    let url = '';
-                    if (text === '📝 Задать вопрос') url = '/ask/';
-                    if (text === '🤖 Спросить ИИ') url = '/ask_ai/';
-                    if (url) {
-                        window.location.href = url;
-                    }
+            const questionItems = document.querySelectorAll('.question-item');
+            questionItems.forEach(function(item, index) {
+                if (index === 0) return;
+                item.addEventListener('click', function() {
+                    alert('Страница вопроса в разработке');
                 });
             });
         });

@@ -581,6 +581,7 @@ body.dark-theme {
     flex-direction: column;
     min-height: 500px;
     width: 100%;
+    max-width: 1300px;
 }
 
 .messages-area {
@@ -631,7 +632,7 @@ body.dark-theme {
     background: var(--item-bg);
     border: 1px solid var(--border);
     border-radius: 40px;
-    padding: 8px 8px 8px 25px;
+    padding: 8px 8px 8px 20px;
     width: 100%;
     transition: all 0.3s ease;
 }
@@ -653,6 +654,7 @@ body.dark-theme {
     min-height: 60px;
     max-height: 150px;
     outline: none;
+    margin-left: 5px;
 }
 
 .ai-submit-btn {
@@ -956,6 +958,9 @@ body.dark-theme {
     .settings-container, .ask-container, .ai-container, .question-container {
         width: 95%;
     }
+    .chat-container {
+        width: 100%;
+    }
 }
 
 @media (max-width: 768px) {
@@ -1011,6 +1016,9 @@ body.dark-theme {
     }
     .answers-title {
         font-size: 1.2rem;
+    }
+    .chat-container {
+        width: 100%;
     }
 }
 

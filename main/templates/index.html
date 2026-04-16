@@ -21,7 +21,7 @@
             <div class="recent-questions">
                 <h2>Последние вопросы</h2>
                 <div class="questions-list">
-                    <div class="question-item" onclick="window.location.href='/question/'" style="cursor: pointer;">
+                    <div class="question-item">
                         <span class="question-icon">💻</span>
                         <span>Как настроить VPN на iPhone?</span>
                     </div>
@@ -76,7 +76,7 @@
                             <span class="user-info-value">{{ user_data.answers_count }}</span>
                         </div>
                     </div>
-                    <a href="/settings/" class="settings-link-btn">⚙️ Настройки профиля</a>
+                    <a href="#" class="settings-link-btn">⚙️ Настройки профиля</a>
                 </div>
             </div>
         </div>
@@ -84,12 +84,22 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const settingsBtn = document.querySelector('.settings-link-btn');
+            if (settingsBtn) {
+                settingsBtn.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    window.location.href = '/settings/';
+                });
+            }
+
             const questionItems = document.querySelectorAll('.question-item');
             questionItems.forEach(function(item, index) {
-                if (index === 0) return;
                 item.addEventListener('click', function() {
-                    alert('Страница вопроса в разработке');
+                    if (index === 0) {
+                        window.location.href = '/question/';
+                    }
                 });
+                item.style.cursor = 'pointer';
             });
         });
     </script>

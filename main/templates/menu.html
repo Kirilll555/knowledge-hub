@@ -4,15 +4,17 @@
             <a href="/" class="site-title" id="site-title">🎓 Knowledge Hub</a>
 
             <div class="search-container">
-                <input type="text" class="search-input" placeholder="Задать вопрос...">
-                <a href="/ask_ai/" class="search-btn">📝</a>
+                <form method="GET" action="/search/" style="display: flex; width: 100%;">
+                    <input type="text" name="q" class="search-input" placeholder="Задать вопрос..." value="{{ request.GET.q }}">
+                    <button type="submit" class="search-btn">📝</button>
+                </form>
             </div>
         </div>
 
         <div class="nav-right">
             <ul class="nav-links">
-                <li><a href="/">Главная</a></li>
-                <li><a href="/settings/">Настройки</a></li>
+                <li><a href="#" class="nav-link">Главная</a></li>
+                <li><a href="#" class="nav-link">Настройки</a></li>
             </ul>
             <button class="theme-btn-nav" id="themeToggle">🌙</button>
         </div>
@@ -21,26 +23,19 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            document.body.classList.add('dark-theme');
-            const themeBtn = document.getElementById('themeToggle');
-            if (themeBtn) themeBtn.textContent = '☀️';
-        }
-
-        const themeToggle = document.getElementById('themeToggle');
-        if (themeToggle) {
-            themeToggle.addEventListener('click', function() {
-                document.body.classList.toggle('dark-theme');
-                if (document.body.classList.contains('dark-theme')) {
-                    localStorage.setItem('theme', 'dark');
-                    themeToggle.textContent = '☀️';
-                } else {
-                    localStorage.setItem('theme', 'light');
-                    themeToggle.textContent = '🌙';
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(function(link) {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const text = this.textContent.trim();
+                let url = '';
+                if (text === 'Главная') url = '/';
+                if (text === 'Настройки') url = '/settings/';
+                if (url) {
+                    window.location.href = url;
                 }
             });
-        }
+        });
 
         const siteTitle = document.getElementById('site-title');
         siteTitle.addEventListener('click', function(event) {
@@ -48,43 +43,18 @@
             window.location.href = '/';
         });
 
-        const navLinks = document.querySelectorAll('.nav-links a');
-        const currentPath = window.location.pathname;
+        const savedTheme = localStorage.getItem('theme');
+        const themeBtn = document.getElementById('themeToggle');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+            themeBtn.textContent = '☀️';
+        }
 
-        navLinks.forEach(function(link) {
-            const href = link.getAttribute('href');
-            if (href === currentPath) {
-                link.classList.add('active');
-            }
+        themeBtn.addEventListener('click', function() {
+            document.body.classList.toggle('dark-theme');
+            const isDark = document.body.classList.contains('dark-theme');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            themeBtn.textContent = isDark ? '☀️' : '🌙';
         });
-
-        const searchInput = document.querySelector('.search-input');
-        const searchBtn = document.querySelector('.search-btn');
-
-        if (searchBtn) {
-            searchBtn.addEventListener('click', function(event) {
-                event.preventDefault();
-                const query = searchInput ? searchInput.value.trim() : '';
-                if (query) {
-                    window.location.href = '/search/?q=' + encodeURIComponent(query);
-                } else {
-                    window.location.href = '/search/';
-                }
-            });
-        }
-
-        if (searchInput) {
-            searchInput.addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    const query = searchInput.value.trim();
-                    if (query) {
-                        window.location.href = '/search/?q=' + encodeURIComponent(query);
-                    } else {
-                        window.location.href = '/search/';
-                    }
-                }
-            });
-        }
     });
 </script>

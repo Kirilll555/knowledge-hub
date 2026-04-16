@@ -33,6 +33,7 @@ def index(request):
         'today_date': today,
         'page_title': 'Промышленное программирование - Занятие 12',
         'menu': get_menu(),
+        'user_data': IVAN_DATA,
     }
     return render(request, 'index.html', context)
 
@@ -47,7 +48,6 @@ def login(request):
 
 def questions(request):
     return render(request, 'questions.html')
-
 
 def ask_ai(request):
     answer = None

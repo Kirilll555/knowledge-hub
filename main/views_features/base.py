@@ -10,17 +10,14 @@ def settings(request):
     }
     return render(request, 'settings.html', context)
 
-def get_menu():
-    return [
-        {'name': 'Главная', 'url': '/'},
-    ]
-
 
 def question_detail(request):
     return render(request, 'question.html')
 
 def index(request):
-    return render(request, 'index.html')
+    today = datetime.now().strftime('%d.%m.%Y')
+    context = {'user_data': IVAN_DATA}
+    return render(request, 'index.html', context)
 
 
 def profile(request):

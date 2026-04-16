@@ -54,6 +54,3 @@ def search_question(request):
         'error': error,
         'question': question
     })
-
-def ask_question(request):
-    return render(request, 'ask.html')

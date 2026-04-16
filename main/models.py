@@ -10,5 +10,7 @@ IVAN_DATA = {
     'rank': 'Новичок',
     'bio': 'Люблю программировать',
     'email': 'ivan@example.com',
-    'password': '••••••••'
+    'password': '••••••••',
+    'questions_count': '12',
+    'answers_count': '34',
 }

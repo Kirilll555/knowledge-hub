@@ -31,7 +31,7 @@ def questions(request):
     return render(request, 'questions.html')
 
 
-def ask_ai(request):
+def search_question(request):
     answer = None
     error = None
     question = None
@@ -49,7 +49,7 @@ def ask_ai(request):
         else:
             error = result.get('error', 'Ошибка при получении ответа')
 
-    return render(request, 'ask_ai.html', {
+    return render(request, 'search_question.html', {
         'answer': answer,
         'error': error,
         'question': question

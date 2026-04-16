@@ -6,7 +6,7 @@ urlpatterns = [
     path("", index, name="index"),
     path("profile/", profile, name="profile"),
     path("question/", question_detail, name="question"),
-    path("ask_ai/", ask_ai, name="ask_ai"),
+    path('search/', search_question, name='search_question'),
     path("ask/", ask_question, name="ask"),
     path("settings/", settings, name="settings"),
 ]

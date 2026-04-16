@@ -66,9 +66,9 @@
                 event.preventDefault();
                 const query = searchInput ? searchInput.value.trim() : '';
                 if (query) {
-                    window.location.href = '/ask_ai/?q=' + encodeURIComponent(query);
+                    window.location.href = '/search/?q=' + encodeURIComponent(query);
                 } else {
-                    window.location.href = '/ask_ai/';
+                    window.location.href = '/search/';
                 }
             });
         }
@@ -79,9 +79,9 @@
                     event.preventDefault();
                     const query = searchInput.value.trim();
                     if (query) {
-                        window.location.href = '/ask_ai/?q=' + encodeURIComponent(query);
+                        window.location.href = '/search/?q=' + encodeURIComponent(query);
                     } else {
-                        window.location.href = '/ask_ai/';
+                        window.location.href = '/search/';
                     }
                 }
             });

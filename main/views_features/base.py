@@ -15,36 +15,17 @@ def get_menu():
         {'name': 'Главная', 'url': '/'},
     ]
 
-def home(request):
-    context = {
-        'user': request.user,
-    }
-    return render(request, '###home.html', context)
-
-def about(request):
-    return render(request, 'about.html')
 
 def question_detail(request):
     return render(request, 'question.html')
 
 def index(request):
-    today = datetime.now().strftime('%d.%m.%Y')
-    context = {
-        'today_date': today,
-        'page_title': 'Промышленное программирование - Занятие 12',
-        'menu': get_menu(),
-        'user_data': IVAN_DATA,
-    }
-    return render(request, 'index.html', context)
+    return render(request, 'index.html')
 
-def register(request):
-    return render(request, 'register.html')
 
 def profile(request):
     return render(request, 'profile.html')
 
-def login(request):
-    return render(request, 'login.html')
 
 def questions(request):
     return render(request, 'questions.html')
@@ -76,6 +57,3 @@ def ask_ai(request):
 
 def ask_question(request):
     return render(request, 'ask.html')
-
-def comments(request):
-    return render(request, 'comments.html')

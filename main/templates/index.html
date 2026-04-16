@@ -9,7 +9,7 @@
     {% include 'menu.html' %}
 
     <div class="main-content">
-        <div class="left-column">
+        <div class="info-buttons-card">
             <div class="hero-section">
                 <h1>Делитесь знаниями и находите ответы</h1>
                 <p>Сообщество экспертов и энтузиастов. Задавайте вопросы, делитесь опытом, помогайте другим.</p>
@@ -19,11 +19,13 @@
                 <a href="/ask/" class="action-btn">📝 Задать вопрос</a>
                 <a href="/ask_ai/" class="action-btn">🤖 Спросить ИИ</a>
             </div>
+        </div>
 
+        <div class="questions-row">
             <div class="recent-questions">
                 <h2>Последние вопросы</h2>
                 <div class="questions-list">
-                    <div class="question-item" onclick="window.location.href='/question/'" style="cursor: pointer;">
+                    <div class="question-item" onclick="window.location.href='/question/1/'" style="cursor: pointer;">
                         <span class="question-icon">💻</span>
                         <span>Как настроить VPN на iPhone?</span>
                     </div>
@@ -51,6 +53,38 @@
                         <span class="question-icon">🔐</span>
                         <span>Как защитить свои данные в интернете?</span>
                     </div>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <div class="user-info-card">
+                    <div class="user-info-header">
+                        <div class="user-avatar">👤</div>
+                        <div class="user-name">{{ user_data.name }}</div>
+                    </div>
+                    <div class="user-info-details">
+                        <div class="user-info-row">
+                            <span class="user-info-label">Никнейм:</span>
+                            <span class="user-info-value">{{ user_data.nickname }}</span>
+                        </div>
+                        <div class="user-info-row">
+                            <span class="user-info-label">Ранг:</span>
+                            <span class="user-info-value">{{ user_data.rank }}</span>
+                        </div>
+                        <div class="user-info-row">
+                            <span class="user-info-label">Вопросов:</span>
+                            <span class="user-info-value">{{ user_data.questions_count }}</span>
+                        </div>
+                        <div class="user-info-row">
+                            <span class="user-info-label">Ответов:</span>
+                            <span class="user-info-value">{{ user_data.answers_count }}</span>
+                        </div>
+                        <div class="user-info-row">
+                            <span class="user-info-label">Репутация:</span>
+                            <span class="user-info-value">{{ user_data.reputation }}</span>
+                        </div>
+                    </div>
+                    <a href="/settings/" class="settings-link-btn">⚙️ Настройки профиля</a>
                 </div>
             </div>
         </div>

@@ -2,53 +2,51 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Спросить ИИ</title>
     {% include 'base_styles.html' %}
+    {% include 'ask_ai_styles.html' %}
 </head>
 <body>
     {% include 'menu.html' %}
 
     <div class="ai-container">
-        <div class="ai-header">
-            <h1>🤖 Спросить искусственный интеллект</h1>
-        </div>
-
-        <div class="chat-container">
-            <div class="messages-area" id="messagesArea">
-                {% if messages_history %}
-                    {% for message in messages_history %}
-                        <div class="message {% if message.role == 'user' %}user{% else %}bot{% endif %}">
-                            <span class="message-icon">
-                                {% if message.role == 'user' %}👤{% else %}🤖{% endif %}
-                            </span>
-                            <span class="message-content">{{ message.content }}</span>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-
+        <div class="ai-response">
+            <div class="response-header">
+                <span class="response-icon">🤖</span>
+                <h3>Ответ ИИ</h3>
+            </div>
+            <div class="response-content">
                 {% if answer %}
-                    <div class="message bot">
-                        <span class="message-icon">🤖</span>
-                        <span class="message-content">{{ answer }}</span>
-                    </div>
+                    <p>{{ answer }}</p>
+                {% else %}
+                    <p class="response-placeholder">Здесь будет ответ искусственного интеллекта</p>
                 {% endif %}
             </div>
+        </div>
 
-            <form method="post">
-                {% csrf_token %}
-                <div class="input-group">
-                    <textarea name="question" class="ai-textarea" placeholder="Введите ваш вопрос..." required>{% if last_question %}{{ last_question }}{% endif %}</textarea>
-                    <button type="submit" class="ai-submit-btn">📤 Отправить</button>
-                </div>
-            </form>
-
-            {% if error %}
-                <div class="error-message">
-                    <strong>Ошибка:</strong> {{ error }}
-                </div>
-            {% endif %}
+        <div class="ai-search-results">
+            <div class="search-results-header">
+                <span class="search-icon">🔍</span>
+                <h3>Результаты поиска</h3>
+            </div>
+            <div class="search-results-list">
+                <div class="search-result-item">Как настроить VPN на iPhone?</div>
+                <div class="search-result-item">Что лучше: Python или JavaScript?</div>
+                <div class="search-result-item">Как работает ChatGPT?</div>
+                <div class="search-result-item">Где найти курсы по английскому?</div>
+                <div class="search-result-item">Как защитить данные в интернете?</div>
+            </div>
         </div>
     </div>
+
+    <script>
+        window.onload = function() {
+            var messagesArea = document.getElementById('messagesArea');
+            if (messagesArea) {
+                messagesArea.scrollTop = messagesArea.scrollHeight;
+            }
+        };
+    </script>
 </body>
 </html>

@@ -5,7 +5,7 @@
 
             <div class="search-container">
                 <input type="text" class="search-input" placeholder="Задать вопрос...">
-                <a href="/ask/" class="search-btn">📝</a>
+                <a href="/ask_ai/" class="search-btn">📝</a>
             </div>
         </div>
 
@@ -64,7 +64,7 @@
         if (searchBtn) {
             searchBtn.addEventListener('click', function(event) {
                 event.preventDefault();
-                window.location.href = '/ask/';
+                window.location.href = '/ask_ai/';
             });
         }
 
@@ -72,7 +72,7 @@
             searchInput.addEventListener('keypress', function(event) {
                 if (event.key === 'Enter') {
                     event.preventDefault();
-                    window.location.href = '/ask/';
+                    window.location.href = '/ask_ai/';
                 }
             });
         }

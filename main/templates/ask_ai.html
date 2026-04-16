@@ -15,6 +15,9 @@
             <div class="response-header">
                 <span class="response-icon">🤖</span>
                 <h3>Ответ ИИ</h3>
+                {% if question %}
+                    <div class="asked-question">Вопрос: {{ question }}</div>
+                {% endif %}
             </div>
             <div class="response-content">
                 {% if answer %}
@@ -23,6 +26,9 @@
                     <p class="response-placeholder">Здесь будет ответ искусственного интеллекта</p>
                 {% endif %}
             </div>
+            {% if error %}
+                <div class="error-message">{{ error }}</div>
+            {% endif %}
         </div>
 
         <div class="ai-search-results">
@@ -39,14 +45,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        window.onload = function() {
-            var messagesArea = document.getElementById('messagesArea');
-            if (messagesArea) {
-                messagesArea.scrollTop = messagesArea.scrollHeight;
-            }
-        };
-    </script>
 </body>
 </html>

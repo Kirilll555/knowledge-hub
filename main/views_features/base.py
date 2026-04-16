@@ -49,23 +49,29 @@ def login(request):
 def questions(request):
     return render(request, 'questions.html')
 
+
 def ask_ai(request):
     answer = None
     error = None
+    question = None
 
-    if request.method == 'POST':
+    if request.method == 'GET':
+        question = request.GET.get('q', '')
+    elif request.method == 'POST':
         question = request.POST.get('question', '')
-        if question:
-            assistant = Assistant()
-            result = assistant.ask(question)
-            if result.get('success'):
-                answer = result.get('answer')
-            else:
-                error = result.get('error', 'Ошибка при получении ответа')
+
+    if question:
+        assistant = Assistant()
+        result = assistant.ask(question)
+        if result.get('success'):
+            answer = result.get('answer')
+        else:
+            error = result.get('error', 'Ошибка при получении ответа')
 
     return render(request, 'ask_ai.html', {
         'answer': answer,
-        'error': error
+        'error': error,
+        'question': question
     })
 
 def ask_question(request):

@@ -4,8 +4,8 @@
             <a href="/" class="site-title" id="site-title">🎓 Knowledge Hub</a>
 
             <div class="search-container">
-                <input type="text" class="search-input" placeholder="Поиск вопросов...">
-                <a href="/questions/" class="search-btn">🔍</a>
+                <input type="text" class="search-input" placeholder="Задать вопрос...">
+                <a href="/ask/" class="search-btn">📝</a>
             </div>
         </div>
 
@@ -57,5 +57,24 @@
                 link.classList.add('active');
             }
         });
+
+        const searchInput = document.querySelector('.search-input');
+        const searchBtn = document.querySelector('.search-btn');
+
+        if (searchBtn) {
+            searchBtn.addEventListener('click', function(event) {
+                event.preventDefault();
+                window.location.href = '/ask/';
+            });
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    window.location.href = '/ask/';
+                }
+            });
+        }
     });
 </script>

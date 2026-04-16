@@ -4,74 +4,234 @@
     <meta charset="UTF-8">
     <title>Настройки профиля</title>
     {% include 'base_styles.html' %}
+    <style>
+        .settings-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .settings-header h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .settings-block {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .dark-theme .settings-block {
+            background: #16213e;
+            color: #eee;
+        }
+        .profile-row {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+        .avatar-large {
+            font-size: 80px;
+            background: #f0f0f0;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+        .profile-info {
+            flex: 1;
+        }
+        .info-item {
+            margin-bottom: 20px;
+        }
+        .info-label {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        .info-value {
+            font-size: 18px;
+            font-weight: 500;
+            padding: 8px 0;
+        }
+        .info-line {
+            height: 1px;
+            background: #ddd;
+            margin-top: 5px;
+        }
+        .dark-theme .info-line {
+            background: #333;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .dark-theme .form-input, .dark-theme .form-select, .dark-theme .form-textarea {
+            background: #0f3460;
+            border-color: #00b4d8;
+            color: #eee;
+        }
+        .submit-btn {
+            background: #0066cc;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .submit-btn:hover {
+            background: #0052a3;
+        }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .guest-message {
+            text-align: center;
+            padding: 50px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .dark-theme .guest-message {
+            background: #16213e;
+        }
+        hr {
+            margin: 30px 0;
+        }
+    </style>
 </head>
 <body>
     {% include 'menu.html' %}
-    
+
     <div class="settings-container">
-        <div class="settings-header">
-            <h1>⚙️ Настройки профиля</h1>
-        </div>
+        {% if user.is_authenticated %}
+            <div class="settings-header">
+                <h1>⚙️ Настройки профиля</h1>
+            </div>
 
-        <div class="settings-block">
-            <div class="profile-row">
-                <div class="avatar-large">👤</div>
+            {% if saved %}
+            <div class="success-message">✅ Настройки успешно сохранены!</div>
+            {% endif %}
 
-                <div class="profile-info">
-                    <div class="info-item">
-                        <span class="info-label">ИМЯ:</span>
-                        <div class="info-value">{{ user_data.name }}</div>
-                        <div class="info-line"></div>
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="settings-block">
+                    <h3>👤 Личная информация</h3>
+
+                    <div class="form-group">
+                        <label class="form-label">Имя пользователя</label>
+                        <input type="text" class="form-input" value="{{ user.username }}" disabled>
+                        <small style="color: #888;">Имя пользователя нельзя изменить</small>
                     </div>
 
-                    <div class="info-item">
-                        <span class="info-label">НИКНЕЙМ:</span>
-                        <div class="info-value">{{ user_data.nickname }}</div>
-                        <div class="info-line"></div>
+                    <div class="form-group">
+                        <label class="form-label">Никнейм</label>
+                        <input type="text" name="nickname" class="form-input" value="{{ profile.nickname|default:'' }}" placeholder="Ваш никнейм">
                     </div>
 
-                    <div class="info-item">
-                        <span class="info-label">КЛАН:</span>
-                        <div class="info-value">{{ user_data.clan }}</div>
-                        <div class="info-line"></div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-input" value="{{ user.email|default:'' }}" placeholder="Ваш email">
                     </div>
 
-                    <div class="info-item">
-                        <span class="info-label">РАНГ:</span>
-                        <div class="info-value">{{ user_data.rank }}</div>
-                        <div class="info-line"></div>
+                    <div class="form-group">
+                        <label class="form-label">Возраст</label>
+                        <input type="number" name="age" class="form-input" value="{{ profile.age|default:'' }}" placeholder="Ваш возраст">
                     </div>
 
-                    <div class="info-item">
-                        <span class="info-label">О СЕБЕ:</span>
-                        <div class="info-value">{{ user_data.bio }}</div>
-                        <div class="info-line"></div>
+                    <div class="form-group">
+                        <label class="form-label">Школа</label>
+                        <input type="text" name="school" class="form-input" value="{{ profile.school|default:'' }}" placeholder="Название школы">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Класс</label>
+                        <input type="text" name="grade" class="form-input" value="{{ profile.grade|default:'' }}" placeholder="Например: 10А">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Любимый предмет</label>
+                        <select name="main_subject" class="form-select">
+                            <option value="math" {% if profile.main_subject == 'math' %}selected{% endif %}>📐 Математика</option>
+                            <option value="physics" {% if profile.main_subject == 'physics' %}selected{% endif %}>⚡ Физика</option>
+                            <option value="chemistry" {% if profile.main_subject == 'chemistry' %}selected{% endif %}>🧪 Химия</option>
+                            <option value="biology" {% if profile.main_subject == 'biology' %}selected{% endif %}>🧬 Биология</option>
+                            <option value="history" {% if profile.main_subject == 'history' %}selected{% endif %}>📜 История</option>
+                            <option value="literature" {% if profile.main_subject == 'literature' %}selected{% endif %}>📖 Литература</option>
+                            <option value="programming" {% if profile.main_subject == 'programming' %}selected{% endif %}>💻 Кодинг</option>
+                            <option value="general" {% if profile.main_subject == 'general' %}selected{% endif %}>📚 Общий</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Хобби</label>
+                        <input type="text" name="hobby" class="form-input" value="{{ profile.hobby|default:'' }}" placeholder="Ваши увлечения">
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="settings-block" style="margin-top: 30px;">
-            <div class="settings-section-title">Безопасность</div>
+                <hr>
 
-            <div class="info-item" style="margin-bottom: 20px;">
-                <span class="info-label">ПОЧТА:</span>
-                <div class="info-value">{{ user_data.email }}</div>
-                <div class="info-line"></div>
-            </div>
+                <div class="settings-block">
+                    <h3>🎨 Внешний вид</h3>
 
-            <div class="info-item" style="margin-bottom: 20px;">
-                <span class="info-label">ПАРОЛЬ:</span>
-                <div class="info-value">{{ user_data.password }}</div>
-                <div class="info-line"></div>
-            </div>
+                    <div class="form-group">
+                        <label class="form-label">Тема оформления</label>
+                        <select name="theme" class="form-select">
+                            <option value="light" {% if settings.theme == 'light' %}selected{% endif %}>☀️ Светлая</option>
+                            <option value="dark" {% if settings.theme == 'dark' %}selected{% endif %}>🌙 Тёмная</option>
+                        </select>
+                    </div>
 
-            <div class="info-item">
-                <span class="info-label">ПОВТОР ПАРОЛЯ:</span>
-                <div class="info-value">{{ user_data.password }}</div>
-                <div class="info-line"></div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" name="notifications" {% if settings.notifications %}checked{% endif %}>
+                            🔔 Получать уведомления
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Язык интерфейса</label>
+                        <select name="language" class="form-select">
+                            <option value="ru" {% if settings.language == 'ru' %}selected{% endif %}>🇷🇺 Русский</option>
+                            <option value="en" {% if settings.language == 'en' %}selected{% endif %}>🇬🇧 English</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">💾 Сохранить настройки</button>
+            </form>
+        {% else %}
+            <div class="guest-message">
+                <div style="font-size: 64px; margin-bottom: 20px;">👋</div>
+                <h2>Вы в режиме гостя</h2>
+                <p style="margin: 20px 0; color: #888;">Чтобы изменить настройки профиля, пожалуйста, войдите в систему</p>
+                <div style="display: flex; gap: 15px; justify-content: center;">
+                    <a href="/login/" class="submit-btn" style="text-decoration: none; display: inline-block;">🔐 Войти</a>
+                    <a href="/register/" class="submit-btn" style="background: #28a745; text-decoration: none; display: inline-block;">📝 Зарегистрироваться</a>
+                </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вопрос</title>
+    <title>{{ question.title }}</title>
     {% include 'base_styles.html' %}
 </head>
 <body>
@@ -11,73 +11,209 @@
 
     <div class="question-container">
         <div class="question-card">
-            <div class="question-title">Как настроить VPN на iPhone?</div>
+            <div class="question-title">{{ question.title }}</div>
+
             <div class="question-meta">
-                <span class="question-meta-item">👤 Иван</span>
-                <span class="question-meta-item">📅 24 марта 2025</span>
-                <span class="question-meta-item">👁️ 156 просмотров</span>
+                <span class="question-meta-item">👤 {{ question.author_name }}</span>
+                <span class="question-meta-item">📅 {{ question.created_at|slice:":10" }}</span>
+                <span class="question-meta-item">👁️ {{ question.views_count|default:0 }} просмотров</span>
             </div>
+
             <div class="question-content">
-                Добрый день! Подскажите, пожалуйста, как правильно настроить VPN на iPhone?
-                Хочу использовать для обхода блокировок. Какие приложения лучше всего работают
-                и как их настроить? Желательно бесплатные варианты. Заранее спасибо!
+                {{ question.content }}
             </div>
         </div>
 
         <div class="answers-section">
-            <div class="answers-title">Ответы (3)</div>
+            <div class="answers-title">Ответы ({{ answers|length }})</div>
+
             <div class="answers-list">
+                {% for answer in answers %}
                 <div class="answer-item">
                     <div class="answer-author">
                         <div class="answer-avatar">👤</div>
-                        <span class="answer-name">Алексей</span>
-                        <span class="answer-date">24 марта 2025, 14:32</span>
+                        <span class="answer-name">{{ answer.author_name }}</span>
+                        <span class="answer-date">{{ answer.created_at }}</span>
                     </div>
                     <div class="answer-text">
-                        Для iPhone лучше всего использовать V2Box или Outline. Оба приложения бесплатны.
-                        V2Box работает через VLESS/VMess протоколы. Нужно скачать приложение из App Store,
-                        затем добавить конфигурацию через QR-код или ссылку. Если есть свой сервер,
-                        можно настроить вручную. Outline еще проще — скачиваете, вводите ключ доступа
-                        и подключаетесь.
+                        {{ answer.content }}
                     </div>
                 </div>
-
+                {% empty %}
                 <div class="answer-item">
-                    <div class="answer-author">
-                        <div class="answer-avatar">👤</div>
-                        <span class="answer-name">Мария</span>
-                        <span class="answer-date">24 марта 2025, 16:15</span>
-                    </div>
-                    <div class="answer-text">
-                        Еще вариант — WireGuard с конфигами от бесплатных провайдеров. Скачиваете WireGuard из App Store,
-                        находите бесплатные конфиги в интернете (например, на VPN Gate), импортируете и подключаетесь.
-                        Работает быстро и стабильно. Только внимательно смотрите, чтобы конфиги были свежие.
-                    </div>
+                    <div class="answer-text">Пока нет ответов. Будьте первым!</div>
                 </div>
-
-                <div class="answer-item">
-                    <div class="answer-author">
-                        <div class="answer-avatar">👤</div>
-                        <span class="answer-name">Дмитрий</span>
-                        <span class="answer-date">24 марта 2025, 18:45</span>
-                    </div>
-                    <div class="answer-text">
-                        Мой совет — попробуйте Proton VPN. У него есть бесплатная версия без ограничений по трафику.
-                        Просто устанавливаете из App Store, регистрируетесь и подключаетесь к бесплатным серверам.
-                        Для обычного использования скорости достаточно. Если нужен доступ к заблокированным сайтам,
-                        бесплатная версия справляется отлично.
-                    </div>
-                </div>
+                {% endfor %}
             </div>
 
+            {% if user.is_authenticated %}
             <div class="answer-form">
                 <form method="post">
                     {% csrf_token %}
-                    <textarea name="answer" class="answer-textarea" placeholder="Напишите свой ответ..." required></textarea>
+                    <textarea name="content" class="answer-textarea" placeholder="Напишите свой ответ..." required></textarea>
                     <button type="submit" class="answer-submit">📤 Отправить ответ</button>
                 </form>
             </div>
+            {% else %}
+            <div class="answer-form">
+                <p style="margin-bottom: 10px; color: #666;">
+                    Чтобы оставить ответ, нужно войти в аккаунт.
+                </p>
+                <a href="/login/" class="answer-submit" style="display: inline-block; text-decoration: none;">
+                    🔐 Войти
+                </a>
+            </div>
+            {% endif %}
         </div>
     </div>
+
+    <style>
+        .question-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .question-card,
+        .answers-section {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .question-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #222;
+        }
+
+        .question-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 18px;
+        }
+
+        .question-meta-item {
+            background: #f5f5f5;
+            padding: 6px 10px;
+            border-radius: 8px;
+        }
+
+        .question-content {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #333;
+            white-space: pre-line;
+        }
+
+        .answers-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #222;
+        }
+
+        .answers-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .answer-item {
+            border: 1px solid #e5e5e5;
+            border-radius: 10px;
+            padding: 16px;
+            background: #fafafa;
+        }
+
+        .answer-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .answer-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e9eef5;
+        }
+
+        .answer-name {
+            font-weight: 600;
+            color: #222;
+        }
+
+        .answer-date {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .answer-text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333;
+            white-space: pre-line;
+        }
+
+        .answer-form {
+            margin-top: 10px;
+        }
+
+        .answer-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            resize: vertical;
+            font-size: 15px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .answer-textarea:focus {
+            border-color: #0066cc;
+        }
+
+        .answer-submit {
+            margin-top: 12px;
+            padding: 12px 18px;
+            background: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .answer-submit:hover {
+            background: #0052a3;
+        }
+
+        @media (max-width: 768px) {
+            .question-title {
+                font-size: 22px;
+            }
+
+            .question-card,
+            .answers-section {
+                padding: 18px;
+            }
+        }
+    </style>
 </body>
 </html>

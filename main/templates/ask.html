@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Задай свой вопрос сообществу</title>
+    {% include 'base_styles.html' %}
+    <style>
+        body {
+            background-color: #f5f7fa;
+        }
+        .settings-container {
+            max-width: 720px;
+            margin: 2rem auto;
+        }
+        .settings-card {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            padding: 2rem 2rem 2.5rem;
+            border: 1px solid #eef0f3;
+        }
+        .settings-header {
+            margin-bottom: 2rem;
+        }
+        .settings-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1e1f22;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.25rem;
+        }
+        .settings-section {
+            margin-bottom: 2.25rem;
+        }
+        .settings-section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e1f22;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .settings-field {
+            margin-bottom: 1.75rem;
+        }
+        .settings-field-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: #6c757d;
+            margin-bottom: 0.5rem;
+        }
+        .settings-field-value {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #1e1f22;
+            background: #f8f9fc;
+            padding: 0.75rem 1rem;
+            border-radius: 14px;
+            border: 1px solid #e2e6ea;
+            word-break: break-word;
+        }
+        .settings-field-hint {
+            font-size: 0.8rem;
+            color: #8a8f99;
+            margin-top: 0.4rem;
+            margin-left: 0.25rem;
+        }
+        .settings-input {
+            background: #ffffff;
+            border: 1.5px solid #d0d5dd;
+            border-radius: 14px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.15s ease;
+            width: 100%;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .settings-input:focus {
+            border-color: #5e6ad2;
+            box-shadow: 0 0 0 3px rgba(94, 106, 210, 0.1);
+            outline: none;
+        }
+        .settings-textarea {
+            background: #ffffff;
+            border: 1.5px solid #d0d5dd;
+            border-radius: 18px;
+            padding: 1rem;
+            font-size: 1rem;
+            transition: all 0.15s ease;
+            width: 100%;
+            resize: vertical;
+            min-height: 140px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .settings-textarea:focus {
+            border-color: #5e6ad2;
+            box-shadow: 0 0 0 3px rgba(94, 106, 210, 0.1);
+            outline: none;
+        }
+        .settings-select {
+            background: #ffffff;
+            border: 1.5px solid #d0d5dd;
+            border-radius: 14px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            width: 100%;
+            cursor: pointer;
+        }
+        .settings-select:focus {
+            border-color: #5e6ad2;
+            box-shadow: 0 0 0 3px rgba(94, 106, 210, 0.1);
+            outline: none;
+        }
+        .divider-light {
+            margin: 1.5rem 0;
+            border-top: 1px solid #eef0f3;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+        .btn-custom-primary {
+            background: #5e6ad2;
+            border: none;
+            color: white;
+            font-weight: 500;
+            padding: 0.7rem 1.8rem;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            transition: background 0.15s;
+            box-shadow: 0 2px 6px rgba(94, 106, 210, 0.2);
+            cursor: pointer;
+        }
+        .btn-custom-primary:hover {
+            background: #4b57c4;
+        }
+        .btn-custom-outline {
+            background: transparent;
+            border: 1.5px solid #d0d5dd;
+            color: #3b3e4a;
+            font-weight: 500;
+            padding: 0.7rem 1.8rem;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            transition: all 0.15s;
+            cursor: pointer;
+        }
+        .btn-custom-outline:hover {
+            background: #f1f3f5;
+            border-color: #b0b8c4;
+        }
+        .error-message {
+            background: #fee;
+            color: #c92a2a;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border: 1px solid #ffc9c9;
+            font-size: 0.9rem;
+        }
+        .mock-profile-field {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+        }
+        .mock-tag {
+            background: #eef0f3;
+            border-radius: 30px;
+            padding: 0.2rem 0.9rem;
+            font-size: 0.8rem;
+            color: #4f5660;
+            margin-left: 0.75rem;
+            font-weight: 400;
+        }
+        /* Стили для CSRF токена (скрытое поле) */
+        .hidden-csrf {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    {% include 'menu.html' %}
+
+    <div class="settings-container">
+        <div class="settings-card">
+
+            <div class="settings-header">
+                <h1>Новый вопрос</h1>
+                <div style="color: #6c757d; font-size: 0.9rem; margin-top: 0.25rem;">
+                    Сформулируйте вопрос, чтобы получить ответ от сообщества
+                </div>
+            </div>
+
+
+            {% if error %}
+            <div class="error-message">
+                ⚠️ {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="POST" action="/ask/">
+                {% csrf_token %}
+
+                <div class="settings-section">
+                    <div class="settings-section-title">
+                        📝 Основное содержание
+                    </div>
+
+                    <div class="settings-field">
+                        <div class="settings-field-label">
+                            Краткое обобщение <span style="color:#fa5252;">*</span>
+                        </div>
+                        <div>
+                            <input type="text"
+                                   class="settings-input"
+                                   name="title"
+                                   id="questionSummary"
+                                   placeholder="Например: Как настроить сервер?"
+                                   value="{{ title|default:'' }}"
+                                   maxlength="200"
+                                   required>
+                        </div>
+                        <div class="settings-field-hint">
+                            Заголовок вопроса. Будет виден в ленте.
+                        </div>
+                    </div>
+
+                    <div class="settings-field">
+                        <div class="settings-field-label">
+                            Подробное описание <span style="color:#fa5252;">*</span>
+                        </div>
+                        <div>
+                            <textarea class="settings-textarea"
+                                      name="content"
+                                      id="questionText"
+                                      placeholder="Опишите ситуацию, приложите код или контекст..."
+                                      required>{{ content|default:'' }}</textarea>
+                        </div>
+                        <div class="settings-field-hint">
+                            Чем больше деталей, тем полезнее ответы.
+                        </div>
+                    </div>
+
+                <div class="action-buttons">
+                    <button type="reset" class="btn-custom-outline">Очистить</button>
+                    <button type="submit" class="btn-custom-primary">Опубликовать вопрос</button>
+                </div>
+            </form>
+
+            <div style="margin-top: 1.8rem; font-size: 0.8rem; color: #868e96; text-align: center; border-top: 1px dashed #dee2e6; padding-top: 1.5rem;">
+                <span>💡 Перед публикацией проверьте поиск — возможно, ответ уже есть.</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    const title = document.querySelector('input[name="title"]');
+                    const content = document.querySelector('textarea[name="content"]');
+
+                    let hasError = false;
+
+                    if (!title.value.trim()) {
+                        title.style.borderColor = '#fa5252';
+                        hasError = true;
+                    } else {
+                        title.style.borderColor = '#d0d5dd';
+                    }
+
+                    if (!content.value.trim()) {
+                        content.style.borderColor = '#fa5252';
+                        hasError = true;
+                    } else {
+                        content.style.borderColor = '#d0d5dd';
+                    }
+
+                    if (hasError) {
+                        e.preventDefault();
+                        alert('Пожалуйста, заполните все обязательные поля (отмечены *)');
+                    }
+                });
+            }
+
+            const resetBtn = document.querySelector('button[type="reset"]');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function() {
+                    document.querySelectorAll('.settings-input, .settings-textarea').forEach(field => {
+                        field.style.borderColor = '#d0d5dd';
+                    });
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

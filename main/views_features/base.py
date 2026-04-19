@@ -78,7 +78,19 @@ def question_detail(request, question_id):
     if not question:
         return render(request, '404.html', {'menu': get_menu(request)}, status=404)
 
-    answers = database.get_answers_for_question(question_id, request.user.id if request.user.is_authenticated else None)
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return redirect('/login/?next=/question/{}/'.format(question_id))
+
+        content = request.POST.get('content', '').strip()
+        if content:
+            database.create_answer(request.user.id, question_id, content)
+            return redirect(f'/question/{question_id}/')
+
+    answers = database.get_answers_for_question(
+        question_id,
+        request.user.id if request.user.is_authenticated else None
+    )
 
     return render(request, 'question.html', {
         'question': question,

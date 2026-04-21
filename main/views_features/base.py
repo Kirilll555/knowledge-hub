@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from datetime import datetime
-from main.utils.AI.Assistant import Assistant
+from main.utils.AI.assistant import Assistant
 
 from main.models import IVAN_DATA
 

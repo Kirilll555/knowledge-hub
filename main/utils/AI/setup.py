@@ -28,7 +28,6 @@ def main():
         local_dir=str(target_dir),
     )
     print(f"Модель сохранена: {target_dir / FILENAME}")
-    print("Подготовка завершена!")
 
 
 if __name__ == "__main__":

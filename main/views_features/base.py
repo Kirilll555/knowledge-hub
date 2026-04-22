@@ -1,4 +1,4 @@
-from main.utils.AI.Assistant import Assistant
+from main.utils.AI.assistant import Assistant
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
 from datetime import datetime

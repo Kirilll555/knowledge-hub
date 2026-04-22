@@ -1,5 +1,5 @@
 """ Классификация по ключевым словам текста, позволяющее уточнять ответ ИИ """
-from keywords import subject_keywords, task_keywords, error_keywords
+from main.utils.AI.keywords import subject_keywords, task_keywords, error_keywords
 
 
 class Identifier:

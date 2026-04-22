@@ -1,7 +1,7 @@
 """ Основная работа (запросы и т.д.) ИИ """
 from pathlib import Path
 from llama_cpp import Llama
-from identifier import Identifier
+from main.utils.AI.identifier import Identifier
 
 
 class BaseAI:

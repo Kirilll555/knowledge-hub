@@ -1,5 +1,5 @@
 """ Агент на основе ИИ, который отвечает на вопросы пользователей """
-from base import BaseAI
+from main.utils.AI.base import BaseAI
 from main.utils.AI.SubjectStrategies import *
 from main.utils.AI.TaskStrategies import *
 

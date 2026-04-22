@@ -333,6 +333,10 @@ fabric.properties
 
 # Pyre type checker
 
+# Ignore downloaded LLM models
+*.gguf
+models/
+
 # pytype static type analyzer
 
 # Cython debug symbols

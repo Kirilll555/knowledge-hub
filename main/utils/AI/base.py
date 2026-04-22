@@ -45,10 +45,9 @@ class BaseAI:
                 self.prompt,
                 max_tokens=512,
                 temperature=0.7,
-                echo=False,
-                stop=["</s>", "[INST]"]
+                echo=False
             )
-            print("responce done")
+
             answer = response["choices"][0]["text"].strip()
 
             self.response = {

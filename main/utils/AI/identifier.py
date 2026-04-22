@@ -39,11 +39,13 @@ class Identifier:
 
     def get_req_details(self, text: str) -> tuple:
         """ Возвращает требуемый ответ """
+
         text = text.lower()
         return self.detect_subject(text), self.detect_task(text)
 
     def check_answer(self, answer: str) -> bool:
         """ Проверяет, справилась ли ИИ с задачей """
+
         print(answer)
         if not answer or len(answer.strip()) < 5:
             return False

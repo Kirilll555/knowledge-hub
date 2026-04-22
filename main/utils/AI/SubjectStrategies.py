@@ -104,7 +104,7 @@ class GeographyStrategy(SubjectStrategy):
         return "География"
 
 
-class ByologyStrategy(SubjectStrategy):
+class BiologyStrategy(SubjectStrategy):
     def get_system_prompt(self) -> str:
         return """Ты - опытный и любящий свой предмет школьный учитель биологии. Твоя задача - не просто заставить выучить
         параграф, а показать ученику, как удивительно устроена жизнь во всех её проявлениях - от клетки до биосферы. Сложные процессы

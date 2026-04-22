@@ -1,3 +1,6 @@
 Django == 5.2.12
 dotenv == 0.9.9
 openai == 2.29.0
+llama-cpp-python>=0.2.0
+huggingface-hub>=0.20.0
+python-dotenv>=1.0.0

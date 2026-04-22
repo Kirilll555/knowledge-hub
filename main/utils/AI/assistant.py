@@ -50,7 +50,3 @@ class Assistant(BaseAI):
         self.prepare(user_input)
         self.generate()
         return self.return_answer()
-
-
-a = Assistant()
-print(a.ask("2+2=?"))

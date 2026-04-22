@@ -46,7 +46,6 @@ class Identifier:
     def check_answer(self, answer: str) -> bool:
         """ Проверяет, справилась ли ИИ с задачей """
 
-        print(answer)
         if not answer or len(answer.strip()) < 5:
             return False
 

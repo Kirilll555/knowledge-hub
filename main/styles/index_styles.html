@@ -31,6 +31,36 @@
     line-height: 1.5;
 }
 
+.action-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.action-btn {
+    flex: 1;
+    text-decoration: none;
+    color: var(--text-main) !important;
+    padding: 18px;
+    border-radius: var(--radius-lg);
+    font-size: 1.2rem;
+    font-weight: 800;
+    background: var(--btn-bg);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.action-btn:hover {
+    background: var(--accent);
+    color: #000 !important;
+    transform: translateY(-3px);
+}
+
+
+
 .questions-row {
     display: flex;
     gap: 40px;

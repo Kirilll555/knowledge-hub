@@ -22,111 +22,104 @@
                 <h2>Последние вопросы</h2>
                 <div class="questions-list">
                     {% for question in questions %}
-                    <a class="question-item" href="{% url 'question_detail' question.id %}">
-                        <span class="question-icon">
-                            {% if question.subject == 'math' %}📐
-                            {% elif question.subject == 'physics' %}⚡
-                            {% elif question.subject == 'chemistry' %}🧪
-                            {% elif question.subject == 'biology' %}🧬
-                            {% elif question.subject == 'history' %}📜
-                            {% elif question.subject == 'literature' %}📖
-                            {% elif question.subject == 'programming' %}💻
-                            {% else %}💬
-                            {% endif %}
-                        </span>
-                        <div style="flex: 1;">
-                            <span>{{ question.title }}</span>
-                            <div style="font-size: 12px; color: var(--text-sub); margin-top: 5px;">
-                                👤 {{ question.author_name }} • 💬 {{ question.answers_count }} ответов • {{ question.created_at|slice:":10" }}
+                        <a class="question-item" href="{% url 'question_detail' question.id %}">
+                            <span class="question-icon">
+                                {% if question.subject == 'math' %}📐
+                                {% elif question.subject == 'physics' %}⚡
+                                {% elif question.subject == 'chemistry' %}🧪
+                                {% elif question.subject == 'biology' %}🧬
+                                {% elif question.subject == 'history' %}📜
+                                {% elif question.subject == 'literature' %}📖
+                                {% elif question.subject == 'programming' %}💻
+                                {% else %}💬
+                                {% endif %}
+                            </span>
+                            <div style="flex: 1;">
+                                <span>{{ question.title }}</span>
+                                <div style="font-size: 12px; color: var(--text-sub); margin-top: 5px;">
+                                    👤 {{ question.author_name }} • 💬 {{ question.answers_count }} ответов • {{ question.created_at|slice:":10" }}
+                                </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
                     {% empty %}
-                    <div class="question-item">Пока нет вопросов. Будьте первым!</div>
+                        <div class="question-item">Пока нет вопросов. Будьте первым!</div>
                     {% endfor %}
                 </div>
             </div>
 
             <div class="right-column">
                 {% if user.is_authenticated %}
-                <div class="user-info-card">
-                    <div class="user-info-header">
-                        <div class="user-avatar">👤</div>
-                        <div class="user-name">{{ profile.nickname|default:user.username }}</div>
+                    <div class="user-info-card">
+                        <div class="user-info-header">
+                            <div class="user-avatar">👤</div>
+                            <div class="user-name">{{ profile.nickname|default:user.username }}</div>
+                        </div>
+                        <div class="user-info-details">
+                            <div class="user-info-row">
+                                <span class="user-info-label">Имя пользователя:</span>
+                                <span class="user-info-value">{{ user.username }}</span>
+                            </div>
+                            <div class="user-info-row">
+                                <span class="user-info-label">Никнейм:</span>
+                                <span class="user-info-value">{{ profile.nickname|default:"Не указан" }}</span>
+                            </div>
+                            <div class="user-info-row">
+                                <span class="user-info-label">Возраст:</span>
+                                <span class="user-info-value">{{ profile.age|default:"Не указан" }}</span>
+                            </div>
+                            <div class="user-info-row">
+                                <span class="user-info-label">Школа:</span>
+                                <span class="user-info-value">{{ profile.school|default:"Не указана" }}</span>
+                            </div>
+                            <div class="user-info-row">
+                                <span class="user-info-label">Класс:</span>
+                                <span class="user-info-value">{{ profile.grade|default:"Не указан" }}</span>
+                            </div>
+                            <div class="user-info-row">
+                                <span class="user-info-label">Любимый предмет:</span>
+                                <span class="user-info-value">
+                                    {% if profile.main_subject == 'math' %}📐 Математика
+                                    {% elif profile.main_subject == 'physics' %}⚡ Физика
+                                    {% elif profile.main_subject == 'chemistry' %}🧪 Химия
+                                    {% elif profile.main_subject == 'biology' %}🧬 Биология
+                                    {% elif profile.main_subject == 'history' %}📜 История
+                                    {% elif profile.main_subject == 'literature' %}📖 Литература
+                                    {% elif profile.main_subject == 'programming' %}💻 Кодинг
+                                    {% else %}📚 Общий
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="user-info-row">
+                                <span class="user-info-label">Хобби:</span>
+                                <span class="user-info-value">{{ profile.hobby|default:"Не указано" }}</span>
+                            </div>
+                        </div>
+                        <div class="user-stats">
+                            <div class="stat-item">
+                                <span class="stat-number">{{ questions_count|default:0 }}</span>
+                                <span class="stat-label">Вопросов</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">{{ answers_count|default:0 }}</span>
+                                <span class="stat-label">Ответов</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">{{ ratings_received|default:0 }}</span>
+                                <span class="stat-label">Оценок</span>
+                            </div>
+                        </div>
+                        <a href="/settings/" class="settings-link-btn">⚙️ Настройки профиля</a>
                     </div>
-                    <div class="user-info-details">
-                        <div class="user-info-row">
-                            <span class="user-info-label">Имя пользователя:</span>
-                            <span class="user-info-value">{{ user.username }}</span>
-                        </div>
-                        <div class="user-info-row">
-                            <span class="user-info-label">Никнейм:</span>
-                            <span class="user-info-value">{{ profile.nickname|default:"Не указан" }}</span>
-                        </div>
-                        <div class="user-info-row">
-                            <span class="user-info-label">Возраст:</span>
-                            <span class="user-info-value">{{ profile.age|default:"Не указан" }}</span>
-                        </div>
-                        <div class="user-info-row">
-                            <span class="user-info-label">Школа:</span>
-                            <span class="user-info-value">{{ profile.school|default:"Не указана" }}</span>
-                        </div>
-                        <div class="user-info-row">
-                            <span class="user-info-label">Класс:</span>
-                            <span class="user-info-value">{{ profile.grade|default:"Не указан" }}</span>
-                        </div>
-                        <div class="user-info-row">
-                            <span class="user-info-label">Любимый предмет:</span>
-                            <span class="user-info-value">
-                                {% if profile.main_subject == 'math' %}📐 Математика
-                                {% elif profile.main_subject == 'physics' %}⚡ Физика
-                                {% elif profile.main_subject == 'chemistry' %}🧪 Химия
-                                {% elif profile.main_subject == 'biology' %}🧬 Биология
-                                {% elif profile.main_subject == 'history' %}📜 История
-                                {% elif profile.main_subject == 'literature' %}📖 Литература
-                                {% elif profile.main_subject == 'programming' %}💻 Кодинг
-                                {% else %}📚 Общий
-                                {% endif %}
-                            </span>
-                        </div>
-                        <div class="user-info-row">
-                            <span class="user-info-label">Хобби:</span>
-                            <span class="user-info-value">{{ profile.hobby|default:"Не указано" }}</span>
-                        </div>
-                    </div>
-                    <div class="user-stats">
-                        <div class="stat-item">
-                            <span class="stat-number">{{ questions_count|default:0 }}</span>
-                            <span class="stat-label">Вопросов</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-number">{{ answers_count|default:0 }}</span>
-                            <span class="stat-label">Ответов</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-number">{{ ratings_received|default:0 }}</span>
-                            <span class="stat-label">Оценок</span>
-                        </div>
-                    </div>
-                    <a href="/settings/" class="settings-link-btn">⚙️ Настройки профиля</a>
-                </div>
                 {% else %}
-                <div class="user-info-card guest-card">
-                    <div class="user-info-header">
-                        <div class="user-avatar">👋</div>
-                        <div class="user-name">Гость</div>
+                    <div class="guest-card">
+                        <div class="guest-avatar">👋</div>
+                        <h2>Вы в режиме гостя</h2>
+                        <p>Войдите или зарегистрируйтесь, чтобы задавать вопросы и отвечать.</p>
+                        <div class="guest-buttons">
+                            <a href="/login/" class="btn-guest">🔐 Войти</a>
+                            <a href="/register/" class="btn-guest">📝 Регистрация</a>
+                        </div>
                     </div>
-                    <div class="user-info-details">
-                        <p style="text-align: center; margin: 15px 0; color: var(--text-sub);">
-                            Вы в режиме гостя.<br>
-                            Войдите или зарегистрируйтесь, чтобы задавать вопросы и отвечать.
-                        </p>
-                    </div>
-                    <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <a href="/login/" class="settings-link-btn login-btn">🔐 Войти</a>
-                        <a href="/register/" class="settings-link-btn register-btn">📝 Регистрация</a>
-                    </div>
-                </div>
                 {% endif %}
             </div>
         </div>

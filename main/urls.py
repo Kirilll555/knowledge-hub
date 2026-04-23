@@ -1,6 +1,13 @@
+"""
+Взаимодействие страниц
+"""
+
 from django.urls import path
-from main.views_features.base import *
 from django.contrib.auth import views as auth_views
+from main.views_features.base import (index, profile, question_detail, search_question,
+                                      register, login_view, logout_view, ask_question,
+                                      add_answer, rate_answer, submit_complaint, moderation_panel,
+                                      resolve_complaint)
 from main.views_features.base import settings
 
 urlpatterns = [
@@ -11,6 +18,7 @@ urlpatterns = [
     path("question/", question_detail, name="question"),
     path('search/', search_question, name='search_question'),
     path("settings/", settings, name="settings"),
+    path('rate-answer/<int:answer_id>/', rate_answer, name='rate_answer'),
 
     # АУТЕНТИФИКАЦИЯ
     path("register/", register, name="register"),
@@ -23,7 +31,6 @@ urlpatterns = [
 
     # API для AJAX
     path("api/answer/<int:question_id>/", add_answer, name="add_answer"),
-    path("api/rate/<int:answer_id>/", rate_answer, name="rate_answer"),
     path("api/complaint/", submit_complaint, name="submit_complaint"),
 
     # МОДЕРАЦИЯ

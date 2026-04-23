@@ -35,8 +35,18 @@
                         <span class="answer-name">{{ answer.author_name }}</span>
                         <span class="answer-date">{{ answer.created_at }}</span>
                     </div>
+
                     <div class="answer-text">
                         {{ answer.content }}
+                    </div>
+
+                    <div class="answer-rating">
+                        <button class="rating-btn like-btn" data-answer-id="{{ answer.id }}" data-rating="like">
+                            👍 <span id="likes-{{ answer.id }}">{{ answer.likes|default:0 }}</span>
+                        </button>
+                        <button class="rating-btn dislike-btn" data-answer-id="{{ answer.id }}" data-rating="dislike">
+                            👎 <span id="dislikes-{{ answer.id }}">{{ answer.dislikes|default:0 }}</span>
+                        </button>
                     </div>
                 </div>
                 {% empty %}
@@ -168,6 +178,40 @@
             white-space: pre-line;
         }
 
+        .answer-rating {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .rating-btn {
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .like-btn {
+            background: #e7f5ff;
+            color: #0066cc;
+        }
+
+        .like-btn:hover {
+            background: #d0ebff;
+        }
+
+        .dislike-btn {
+            background: #fff5f5;
+            color: #d63333;
+        }
+
+        .dislike-btn:hover {
+            background: #ffe3e3;
+        }
+
         .answer-form {
             margin-top: 10px;
         }
@@ -215,5 +259,32 @@
             }
         }
     </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.rating-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const answerId = this.dataset.answerId;
+                    const rating = this.dataset.rating;
+
+                    fetch(`/rate-answer/${answerId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({ rating: rating })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById(`likes-${answerId}`).textContent = data.likes;
+                            document.getElementById(`dislikes-${answerId}`).textContent = data.dislikes;
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>

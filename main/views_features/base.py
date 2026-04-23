@@ -1,14 +1,13 @@
+import sqlite3
+import json
 from main.utils.AI.assistant import Assistant
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
-from datetime import datetime
-from main.models import IVAN_DATA
 from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-import json
-import sqlite3
+from datetime import datetime
 from main import database
 
 
@@ -344,14 +343,12 @@ def add_answer(request, question_id):
 @login_required
 @csrf_exempt
 def rate_answer(request, answer_id):
-    """Оценка ответа (👍/👎)"""
     if request.method == 'POST':
         data = json.loads(request.body)
         rating = data.get('rating')
         rating_value = 1 if rating == 'like' else 0
         action = database.rate_answer(request.user.id, answer_id, rating_value)
 
-        # Получаем обновленные счетчики
         conn = sqlite3.connect(database.DB_PATH)
         cursor = conn.cursor()
         cursor.execute("""

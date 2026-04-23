@@ -52,19 +52,6 @@
                             <input type="number" name="age" class="field-input {% if errors.age %}field-error{% endif %}" value="{% if form_data.age %}{{ form_data.age }}{% else %}{{ profile.age|default:'' }}{% endif %}" placeholder="Ваш возраст " min="1">
                             {% if errors.age %}<div class="error-message">❌ {{ errors.age }}</div>{% endif %}
                         </div>
-
-                        <div class="field-group">
-                            <div class="field-label">Школа</div>
-                            <input type="text" name="school" class="field-input" value="{{ profile.school|default:'' }}" placeholder="Название школы">
-                        </div>
-
-                        <div class="field-group">
-                            <div class="field-label">Класс</div>
-                            <input type="text" name="grade" class="field-input {% if errors.grade %}field-error{% endif %}" value="{% if form_data.grade %}{{ form_data.grade }}{% else %}{{ profile.grade|default:'' }}{% endif %}" placeholder="Класс" pattern="[0-9]+">
-                            {% if errors.grade %}<div class="error-message">❌ {{ errors.grade }}</div>{% endif %}
-                            <div class="field-hint">Введите номер класса: 1, 2, 3... 11</div>
-                        </div>
-
                         <div class="field-group">
                             <div class="field-label">Любимый предмет</div>
                             <select name="main_subject" class="field-select">
@@ -86,29 +73,9 @@
                     </div>
 
                     <div class="settings-group">
-                        <div class="settings-group-title">
-                            🎨 Внешний вид
-                        </div>
-
-                        <div class="field-group">
-                            <div class="field-label">Тема оформления</div>
-                            <select name="theme" class="field-select">
-                                <option value="light" {% if settings.theme == 'light' %}selected{% endif %}>☀️ Светлая</option>
-                                <option value="dark" {% if settings.theme == 'dark' %}selected{% endif %}>🌙 Тёмная</option>
-                            </select>
-                        </div>
-
                         <div class="field-group checkbox-group">
                             <input type="checkbox" name="notifications" {% if settings.notifications %}checked{% endif %} id="notifCheck">
                             <label for="notifCheck">🔔 Получать уведомления</label>
-                        </div>
-
-                        <div class="field-group">
-                            <div class="field-label">Язык интерфейса</div>
-                            <select name="language" class="field-select">
-                                <option value="ru" {% if settings.language == 'ru' %}selected{% endif %}>🇷🇺 Русский</option>
-                                <option value="en" {% if settings.language == 'en' %}selected{% endif %}>🇬🇧 English</option>
-                            </select>
                         </div>
                     </div>
 

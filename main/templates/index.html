@@ -74,14 +74,6 @@
                                 <span class="user-info-value">{{ profile.age|default:"Не указан" }}</span>
                             </div>
                             <div class="user-info-row">
-                                <span class="user-info-label">Школа:</span>
-                                <span class="user-info-value">{{ profile.school|default:"Не указана" }}</span>
-                            </div>
-                            <div class="user-info-row">
-                                <span class="user-info-label">Класс:</span>
-                                <span class="user-info-value">{{ profile.grade|default:"Не указан" }}</span>
-                            </div>
-                            <div class="user-info-row">
                                 <span class="user-info-label">Любимый предмет:</span>
                                 <span class="user-info-value">
                                     {% if profile.main_subject == 'math' %}📐 Математика

@@ -1,486 +1,429 @@
-import sqlite3
-import os
-from django.conf import settings
-from django.core.checks import database
-from django.shortcuts import render, redirect
 
-DB_PATH = os.path.join(settings.BASE_DIR, "db.sqlite3")
+from django.db import models
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 
-
-# ========== ТАБЛИЦА ПРОФИЛЕЙ ==========
-
-def init_profiles_table():
-    """Создание таблицы profiles"""
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS profiles (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER UNIQUE NOT NULL,
-            username TEXT NOT NULL,
-            nickname TEXT,
-            age INTEGER,
-            school TEXT,
-            grade TEXT,
-            main_subject TEXT DEFAULT 'physics',
-            hobby TEXT,
-            is_guest INTEGER DEFAULT 0,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-    conn.commit()
-    conn.close()
-    print("Таблица profiles создана")
-
-
-def save_profile(user_id, username, data):
-    """Сохранение или обновление профиля"""
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-
-    cursor.execute("SELECT id FROM profiles WHERE user_id = ?", (user_id,))
-    existing = cursor.fetchone()
-
-    if existing:
-        cursor.execute("""
-            UPDATE profiles 
-            SET nickname = ?, age = ?, school = ?, grade = ?, 
-                main_subject = ?, hobby = ?, updated_at = CURRENT_TIMESTAMP
-            WHERE user_id = ?
-        """, (data.get("nickname", ""), data.get("age"), data.get("school", ""),
-              data.get("grade", ""), data.get("main_subject", "physics"),
-              data.get("hobby", ""), user_id))
-    else:
-        cursor.execute("""
-            INSERT INTO profiles (user_id, username, nickname, age, school, 
-            grade, main_subject, hobby, is_guest)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (user_id, username, data.get("nickname", ""), data.get("age"),
-              data.get("school", ""), data.get("grade", ""),
-              data.get("main_subject", "physics"), data.get("hobby", ""),
-              data.get("is_guest", 0)))
-
-    conn.commit()
-    conn.close()
-    return True
+def get_or_create_profile(user):
+    """Получить или создать профиль пользователя"""
+    profile, created = Profile.objects.get_or_create(user=user)
+    return profile
 
 
 def get_profile(user_id):
-    """Получение профиля пользователя"""
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT username, nickname, age, school, grade, main_subject, hobby, is_guest
-        FROM profiles WHERE user_id = ?
-    """, (user_id,))
-    row = cursor.fetchone()
-    conn.close()
+    """Получение профиля пользователя через ORM"""
+    from django.contrib.auth.models import User
 
-    if row:
+    try:
+        user = User.objects.get(id=user_id)
+        profile, created = Profile.objects.get_or_create(user=user)
+
         return {
-            "username": row[0],
-            "nickname": row[1] or "",
-            "age": row[2],
-            "school": row[3] or "",
-            "grade": row[4] or "",
-            "main_subject": row[5] or "physics",
-            "hobby": row[6] or "",
-            "is_guest": row[7] == 1 if len(row) > 7 else False,
+            'username': user.username,
+            'nickname': profile.nickname or '',
+            'age': profile.age,
+            'school': profile.school or '',
+            'grade': profile.grade or '',
+            'main_subject': profile.main_subject,
+            'hobby': profile.hobby or '',
+            'avatar': profile.avatar.url if profile.avatar else None,
+            'is_guest': profile.is_guest,
         }
-    return None
+    except User.DoesNotExist:
+        return None
+
+def save_profile(user_id, username, data):
+    """Сохранить профиль"""
+    user = get_object_or_404(User, id=user_id)
+    profile, created = Profile.objects.get_or_create(user=user)
+
+    profile.nickname = data.get('nickname', '')
+    profile.age = data.get('age')
+    profile.school = data.get('school', '')
+    profile.grade = data.get('grade', '')
+    profile.main_subject = data.get('main_subject', 'physics')
+    profile.hobby = data.get('hobby', '')
+    if data.get('avatar'):
+        profile.avatar = data.get('avatar')
+    profile.save()
+    return True
 
 
-# Запускаем создание таблицы profiles
-init_profiles_table()
-
-def init_qa_tables():
-    """Создание таблиц для вопросов, ответов, оценок и т.д."""
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-
-    # Таблица вопросов
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS questions (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            title TEXT NOT NULL,
-            content TEXT NOT NULL,
-            subject TEXT DEFAULT 'general',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            is_deleted INTEGER DEFAULT 0
-        )
-    """)
-
-    # Таблица ответов
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS answers (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            question_id INTEGER NOT NULL,
-            user_id INTEGER NOT NULL,
-            content TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            is_deleted INTEGER DEFAULT 0
-        )
-    """)
-
-    # Таблица оценок
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS answer_ratings (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            answer_id INTEGER NOT NULL,
-            rating INTEGER NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            UNIQUE(user_id, answer_id)
-        )
-    """)
-
-    # Таблица жалоб
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS complaints (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            complaint_type TEXT NOT NULL,
-            question_id INTEGER,
-            answer_id INTEGER,
-            reason TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            is_resolved INTEGER DEFAULT 0
-        )
-    """)
-
-    # Таблица истории ИИ
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS ai_chat_history (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            question TEXT NOT NULL,
-            answer TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-
-    # Таблица активности
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS user_activities (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            activity_type TEXT NOT NULL,
-            question_id INTEGER,
-            answer_id INTEGER,
-            metadata TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-
-    # Таблица настроек
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS user_settings (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER UNIQUE NOT NULL,
-            theme TEXT DEFAULT 'light',
-            notifications INTEGER DEFAULT 1,
-            language TEXT DEFAULT 'ru',
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-
-    conn.commit()
-    conn.close()
-    print("Таблицы для Q&A созданы")
-
-
-# ========== ФУНКЦИИ ДЛЯ РАБОТЫ С ВОПРОСАМИ ==========
+# ========== ВОПРОСЫ ==========
 
 def create_question(user_id, title, content, subject='general'):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO questions (user_id, title, content, subject)
-        VALUES (?, ?, ?, ?)
-    """, (user_id, title, content, subject))
-    question_id = cursor.lastrowid
-    conn.commit()
-    conn.close()
-    return question_id
+    user = get_object_or_404(User, id=user_id)
+    question = Question.objects.create(
+        user=user,
+        title=title,
+        content=content,
+        subject=subject
+    )
+    # Добавляем активность
+    UserActivity.objects.create(
+        user=user,
+        activity_type='ask_question',
+        question=question
+    )
+    return question.id
 
 
 def get_recent_questions(limit=10):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT q.id, q.title, q.content, q.subject, q.created_at, 
-               q.user_id, p.username, p.nickname,
-               (SELECT COUNT(*) FROM answers WHERE question_id = q.id AND is_deleted = 0) as answers_count
-        FROM questions q
-        LEFT JOIN profiles p ON q.user_id = p.user_id
-        WHERE q.is_deleted = 0
-        ORDER BY q.created_at DESC
-        LIMIT ?
-    """, (limit,))
-
-    questions = []
-    for row in cursor.fetchall():
-        questions.append({
-            'id': row[0],
-            'title': row[1],
-            'content': row[2],
-            'subject': row[3],
-            'created_at': row[4],
-            'user_id': row[5],
-            'author_name': row[7] or row[6],
-            'answers_count': row[8]
+    questions = Question.objects.filter(is_deleted=False).order_by('-created_at')[:limit]
+    result = []
+    for q in questions:
+        result.append({
+            'id': q.id,
+            'title': q.title,
+            'content': q.content,
+            'subject': q.subject,
+            'created_at': q.created_at,
+            'user_id': q.user.id,
+            'author_name': q.author_name(),
+            'answers_count': q.answers_count()
         })
-    conn.close()
-    return questions
+    return result
 
 
 def get_question_by_id(question_id):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT q.id, q.title, q.content, q.subject, q.created_at, 
-               q.user_id, p.username, p.nickname
-        FROM questions q
-        LEFT JOIN profiles p ON q.user_id = p.user_id
-        WHERE q.id = ? AND q.is_deleted = 0
-    """, (question_id,))
-    row = cursor.fetchone()
-    conn.close()
-
-    if row:
+    try:
+        q = Question.objects.get(id=question_id, is_deleted=False)
         return {
-            'id': row[0],
-            'title': row[1],
-            'content': row[2],
-            'subject': row[3],
-            'created_at': row[4],
-            'user_id': row[5],
-            'author_name': row[7] or row[6]
+            'id': q.id,
+            'title': q.title,
+            'content': q.content,
+            'subject': q.subject,
+            'created_at': q.created_at,
+            'user_id': q.user.id,
+            'author_name': q.author_name()
         }
-    return None
+    except Question.DoesNotExist:
+        return None
 
+
+# ========== ОТВЕТЫ ==========
 
 def create_answer(user_id, question_id, content):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO answers (user_id, question_id, content)
-        VALUES (?, ?, ?)
-    """, (user_id, question_id, content))
-    answer_id = cursor.lastrowid
-    conn.commit()
-    conn.close()
-    return answer_id
+    user = get_object_or_404(User, id=user_id)
+    question = get_object_or_404(Question, id=question_id)
+    answer = Answer.objects.create(
+        user=user,
+        question=question,
+        content=content
+    )
+    # Добавляем активность
+    UserActivity.objects.create(
+        user=user,
+        activity_type='answer_question',
+        question=question,
+        answer=answer
+    )
+    return answer.id
 
 
 def get_answers_for_question(question_id, user_id=None):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT a.id, a.content, a.created_at, a.user_id,
-               p.username, p.nickname
-        FROM answers a
-        LEFT JOIN profiles p ON a.user_id = p.user_id
-        WHERE a.question_id = ? AND a.is_deleted = 0
-        ORDER BY a.created_at ASC
-    """, (question_id,))
-
-    answers = []
-    for row in cursor.fetchall():
-        # Получаем оценки
-        cursor.execute("""
-            SELECT COUNT(CASE WHEN rating = 1 THEN 1 END) as likes,
-                   COUNT(CASE WHEN rating = 0 THEN 1 END) as dislikes
-            FROM answer_ratings WHERE answer_id = ?
-        """, (row[0],))
-        likes, dislikes = cursor.fetchone()
-
-        answer = {
-            'id': row[0],
-            'content': row[1],
-            'created_at': row[2],
-            'user_id': row[3],
-            'author_name': row[5] or row[4],
-            'likes': likes or 0,
-            'dislikes': dislikes or 0,
+    answers = Answer.objects.filter(question_id=question_id, is_deleted=False).order_by('created_at')
+    result = []
+    for a in answers:
+        answer_data = {
+            'id': a.id,
+            'content': a.content,
+            'created_at': a.created_at,
+            'user_id': a.user.id,
+            'author_name': a.author_name(),
+            'likes': a.likes_count(),
+            'dislikes': a.dislikes_count(),
             'user_rating': None
         }
 
         if user_id:
-            cursor.execute("SELECT rating FROM answer_ratings WHERE user_id = ? AND answer_id = ?",
-                           (user_id, answer['id']))
-            rating_row = cursor.fetchone()
-            if rating_row:
-                answer['user_rating'] = 'like' if rating_row[0] == 1 else 'dislike'
+            try:
+                rating = AnswerRating.objects.get(user_id=user_id, answer_id=a.id)
+                answer_data['user_rating'] = 'like' if rating.rating == 1 else 'dislike'
+            except AnswerRating.DoesNotExist:
+                pass
 
-        answers.append(answer)
-
-    conn.close()
-    return answers
+        result.append(answer_data)
+    return result
 
 
 def rate_answer(user_id, answer_id, rating):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("SELECT id, rating FROM answer_ratings WHERE user_id = ? AND answer_id = ?",
-                   (user_id, answer_id))
-    existing = cursor.fetchone()
+    user = get_object_or_404(User, id=user_id)
+    answer = get_object_or_404(Answer, id=answer_id)
 
-    if existing:
-        if existing[1] == rating:
-            cursor.execute("DELETE FROM answer_ratings WHERE id = ?", (existing[0],))
+    rating_obj, created = AnswerRating.objects.get_or_create(
+        user=user,
+        answer=answer,
+        defaults={'rating': rating}
+    )
+
+    if not created:
+        if rating_obj.rating == rating:
+            rating_obj.delete()
         else:
-            cursor.execute("UPDATE answer_ratings SET rating = ? WHERE id = ?", (rating, existing[0]))
-    else:
-        cursor.execute("INSERT INTO answer_ratings (user_id, answer_id, rating) VALUES (?, ?, ?)",
-                       (user_id, answer_id, rating))
+            rating_obj.rating = rating
+            rating_obj.save()
 
-    conn.commit()
-    conn.close()
+    # Добавляем активность
+    UserActivity.objects.create(
+        user=user,
+        activity_type='rate_answer',
+        answer=answer
+    )
     return True
 
 
-# ========== ФУНКЦИИ ДЛЯ АКТИВНОСТИ ==========
-
-def add_activity(user_id, activity_type, question_id=None, answer_id=None, metadata=None):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO user_activities (user_id, activity_type, question_id, answer_id, metadata)
-        VALUES (?, ?, ?, ?, ?)
-    """, (user_id, activity_type, question_id, answer_id, metadata))
-    conn.commit()
-    conn.close()
-
-
-def get_user_activities(user_id, limit=50):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT id, activity_type, question_id, answer_id, metadata, created_at
-        FROM user_activities
-        WHERE user_id = ?
-        ORDER BY created_at DESC
-        LIMIT ?
-    """, (user_id, limit))
-
-    activities = []
-    for row in cursor.fetchall():
-        activity = {
-            'id': row[0],
-            'activity_type': row[1],
-            'question_id': row[2],
-            'answer_id': row[3],
-            'metadata': row[4],
-            'created_at': row[5]
-        }
-
-        if row[2]:
-            conn2 = sqlite3.connect(DB_PATH)
-            cursor2 = conn2.cursor()
-            cursor2.execute("SELECT title FROM questions WHERE id = ?", (row[2],))
-            q_row = cursor2.fetchone()
-            if q_row:
-                activity['question_title'] = q_row[0]
-            conn2.close()
-
-        activities.append(activity)
-
-    conn.close()
-    return activities
-
-
-def get_user_settings(user_id):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("SELECT theme, notifications, language FROM user_settings WHERE user_id = ?", (user_id,))
-    row = cursor.fetchone()
-    conn.close()
-
-    if row:
-        return {'theme': row[0], 'notifications': bool(row[1]), 'language': row[2]}
-    return {'theme': 'light', 'notifications': True, 'language': 'ru'}
-
-
-def update_user_settings(user_id, settings):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO user_settings (user_id, theme, notifications, language, updated_at)
-        VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
-        ON CONFLICT(user_id) DO UPDATE SET
-            theme = excluded.theme,
-            notifications = excluded.notifications,
-            language = excluded.language,
-            updated_at = CURRENT_TIMESTAMP
-    """, (user_id, settings.get('theme', 'light'),
-          1 if settings.get('notifications', True) else 0,
-          settings.get('language', 'ru')))
-    conn.commit()
-    conn.close()
-
+# ========== ЖАЛОБЫ ==========
 
 def create_complaint(user_id, complaint_type, reason, question_id=None, answer_id=None):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO complaints (user_id, complaint_type, question_id, answer_id, reason)
-        VALUES (?, ?, ?, ?, ?)
-    """, (user_id, complaint_type, question_id, answer_id, reason))
-    conn.commit()
-    conn.close()
+    user = get_object_or_404(User, id=user_id)
+    complaint = Complaint.objects.create(
+        user=user,
+        complaint_type=complaint_type,
+        reason=reason
+    )
+    if question_id:
+        complaint.question_id = question_id
+    if answer_id:
+        complaint.answer_id = answer_id
+    complaint.save()
+
+    # Добавляем активность
+    UserActivity.objects.create(
+        user=user,
+        activity_type='complaint',
+        question_id=question_id,
+        answer_id=answer_id,
+        metadata=complaint_type
+    )
+    return complaint.id
 
 
 def get_all_complaints(resolved=False):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT id, user_id, complaint_type, question_id, answer_id, reason, created_at, is_resolved
-        FROM complaints WHERE is_resolved = ?
-        ORDER BY created_at DESC
-    """, (1 if resolved else 0,))
-    complaints = cursor.fetchall()
-    conn.close()
-    return complaints
+    return Complaint.objects.filter(is_resolved=resolved).order_by('-created_at')
 
 
-def resolve_complaint(complaint_id, resolved_by):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("UPDATE complaints SET is_resolved = 1 WHERE id = ?", (complaint_id,))
-    conn.commit()
-    conn.close()
+def resolve_complaint(complaint_id, moderator_id):
+    Complaint.objects.filter(id=complaint_id).update(is_resolved=True)
 
+
+# ========== АКТИВНОСТЬ ==========
+
+def add_activity(user_id, activity_type, question_id=None, answer_id=None, metadata=None):
+    user = get_object_or_404(User, id=user_id)
+    UserActivity.objects.create(
+        user=user,
+        activity_type=activity_type,
+        question_id=question_id,
+        answer_id=answer_id,
+        metadata=metadata
+    )
+
+
+def get_user_activities(user_id, limit=50):
+    return UserActivity.objects.filter(user_id=user_id).order_by('-created_at')[:limit]
+
+
+# ========== НАСТРОЙКИ ==========
+
+def get_user_settings(user_id):
+    user = get_object_or_404(User, id=user_id)
+    settings, created = UserSettings.objects.get_or_create(user=user)
+    return {
+        'theme': settings.theme,
+        'notifications': settings.notifications,
+        'language': settings.language
+    }
+
+
+def update_user_settings(user_id, settings):
+    user = get_object_or_404(User, id=user_id)
+    user_settings, created = UserSettings.objects.get_or_create(user=user)
+    user_settings.theme = settings.get('theme', 'light')
+    user_settings.notifications = settings.get('notifications', True)
+    user_settings.language = settings.get('language', 'ru')
+    user_settings.save()
+
+
+# ========== ИИ ЧАТ ==========
+
+def save_ai_chat(user_id, question, answer):
+    user = get_object_or_404(User, id=user_id)
+    AIChatHistory.objects.create(
+        user=user,
+        question=question,
+        answer=answer
+    )
+
+
+# ========== УДАЛЕНИЕ ==========
 
 def delete_question(question_id, moderator_id):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("UPDATE questions SET is_deleted = 1 WHERE id = ?", (question_id,))
-    conn.commit()
-    conn.close()
+    Question.objects.filter(id=question_id).update(is_deleted=True)
 
 
 def delete_answer(answer_id, moderator_id):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("UPDATE answers SET is_deleted = 1 WHERE id = ?", (answer_id,))
-    conn.commit()
-    conn.close()
+    Answer.objects.filter(id=answer_id).update(is_deleted=True)
+
+class Profile(models.Model):
+    """Профиль пользователя"""
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    nickname = models.CharField(max_length=100, blank=True, null=True)
+    age = models.IntegerField(blank=True, null=True)
+    school = models.CharField(max_length=200, blank=True, null=True)
+    grade = models.CharField(max_length=20, blank=True, null=True)
+
+    SUBJECT_CHOICES = [
+        ('math', '📐 Математика'),
+        ('physics', '⚡ Физика'),
+        ('chemistry', '🧪 Химия'),
+        ('biology', '🧬 Биология'),
+        ('history', '📜 История'),
+        ('literature', '📖 Литература'),
+        ('programming', '💻 Кодинг'),
+        ('general', '📚 Общий'),
+    ]
+    main_subject = models.CharField(max_length=50, choices=SUBJECT_CHOICES, default='physics')
+    hobby = models.CharField(max_length=200, blank=True, null=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    is_guest = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.nickname or self.user.username
 
 
-def save_ai_chat(user_id, question, answer):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO ai_chat_history (user_id, question, answer)
-        VALUES (?, ?, ?)
-    """, (user_id, question, answer))
-    conn.commit()
-    conn.close()
+class Question(models.Model):
+    """Вопрос пользователя"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='questions')
+    title = models.CharField(max_length=200)
+    content = models.TextField()
 
-# Запускаем создание таблиц
-init_qa_tables()
+    SUBJECT_CHOICES = [
+        ('math', '📐 Математика'),
+        ('physics', '⚡ Физика'),
+        ('chemistry', '🧪 Химия'),
+        ('biology', '🧬 Биология'),
+        ('history', '📜 История'),
+        ('literature', '📖 Литература'),
+        ('programming', '💻 Программирование'),
+        ('general', '💬 Общий'),
+    ]
+    subject = models.CharField(max_length=50, choices=SUBJECT_CHOICES, default='general')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
+
+    def answers_count(self):
+        return self.answers.filter(is_deleted=False).count()
+
+    def author_name(self):
+        if hasattr(self.user, 'profile') and self.user.profile.nickname:
+            return self.user.profile.nickname
+        return self.user.username
+
+
+class Answer(models.Model):
+    """Ответ на вопрос"""
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='answers')
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Ответ на {self.question.title}"
+
+    def author_name(self):
+        if hasattr(self.user, 'profile') and self.user.profile.nickname:
+            return self.user.profile.nickname
+        return self.user.username
+
+    def likes_count(self):
+        return self.ratings.filter(rating=1).count()
+
+    def dislikes_count(self):
+        return self.ratings.filter(rating=0).count()
+
+
+class AnswerRating(models.Model):
+    """Оценка ответа"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='answer_ratings')
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='ratings')
+    rating = models.IntegerField(choices=[(1, 'Like'), (0, 'Dislike')])
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['user', 'answer']
+
+    def __str__(self):
+        return f"{self.user.username} оценил ответ {self.answer.id}"
+
+
+class Complaint(models.Model):
+    """Жалоба на вопрос или ответ"""
+    COMPLAINT_TYPES = [
+        ('spam', 'Спам'),
+        ('offensive', 'Оскорбительное содержание'),
+        ('incorrect', 'Неверная информация'),
+        ('other', 'Другое'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='complaints')
+    complaint_type = models.CharField(max_length=50, choices=COMPLAINT_TYPES)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True, blank=True, related_name='complaints')
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, null=True, blank=True, related_name='complaints')
+    reason = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_resolved = models.BooleanField(default=False)
+
+    def __str__(self):
+        target = self.question if self.question else self.answer
+        return f"Жалоба от {self.user.username} на {target}"
+
+
+class AIChatHistory(models.Model):
+    """История чата с ИИ"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ai_chats')
+    question = models.TextField()
+    answer = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Чат с ИИ: {self.user.username} - {self.created_at}"
+
+
+class UserActivity(models.Model):
+    """Активность пользователя"""
+    ACTIVITY_TYPES = [
+        ('ask_question', 'Задал вопрос'),
+        ('answer_question', 'Ответил на вопрос'),
+        ('rate_answer', 'Оценил ответ'),
+        ('complaint', 'Пожаловался'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='activities')
+    activity_type = models.CharField(max_length=50, choices=ACTIVITY_TYPES)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True, blank=True)
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, null=True, blank=True)
+    metadata = models.TextField(blank=True, null=True)  # JSON поле для доп. данных
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username}: {self.activity_type}"
+
+
+class UserSettings(models.Model):
+    """Настройки пользователя"""
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='settings')
+    theme = models.CharField(max_length=20, choices=[('light', 'Светлая'), ('dark', 'Тёмная')], default='light')
+    notifications = models.BooleanField(default=True)
+    language = models.CharField(max_length=10, choices=[('ru', 'Русский'), ('en', 'English')], default='ru')
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Настройки {self.user.username}"

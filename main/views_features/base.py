@@ -5,8 +5,10 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
+from django.db import connection
 from django.shortcuts import render, redirect
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from main import database
 
@@ -149,23 +151,22 @@ def index(request):
 
     if request.user.is_authenticated:
         profile = database.get_profile(request.user.id)
-        print("Profile data:", profile)  # Для отладки - посмотри в терминале
+        print("Profile data:", profile)  # Для отладки
 
-        conn = sqlite3.connect(database.DB_PATH)
-        cursor = conn.cursor()
-        cursor.execute("SELECT COUNT(*) FROM questions WHERE user_id = ? AND is_deleted = 0", (request.user.id,))
-        questions_count = cursor.fetchone()[0]
+        # Используем прямые SQL запросы через connection
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT COUNT(*) FROM questions WHERE user_id = %s AND is_deleted = 0", [request.user.id])
+            questions_count = cursor.fetchone()[0]
 
-        cursor.execute("SELECT COUNT(*) FROM answers WHERE user_id = ? AND is_deleted = 0", (request.user.id,))
-        answers_count = cursor.fetchone()[0]
+            cursor.execute("SELECT COUNT(*) FROM answers WHERE user_id = %s AND is_deleted = 0", [request.user.id])
+            answers_count = cursor.fetchone()[0]
 
-        cursor.execute("""
-            SELECT COUNT(*) FROM answer_ratings ar
-            JOIN answers a ON ar.answer_id = a.id
-            WHERE a.user_id = ?
-        """, (request.user.id,))
-        ratings_received = cursor.fetchone()[0]
-        conn.close()
+            cursor.execute("""
+                SELECT COUNT(*) FROM answer_ratings ar
+                JOIN answers a ON ar.answer_id = a.id
+                WHERE a.user_id = %s
+            """, [request.user.id])
+            ratings_received = cursor.fetchone()[0]
 
     context = {
         'today_date': today,
@@ -173,13 +174,12 @@ def index(request):
         'questions': recent_questions,
         'menu': get_menu(request),
         'user': request.user,
-        'profile': profile,  # <-- ВАЖНО: передаём как 'profile'
+        'profile': profile,
         'questions_count': questions_count,
         'answers_count': answers_count,
         'ratings_received': ratings_received
     }
     return render(request, 'index.html', context)
-
 
 def profile(request, username):
     try:

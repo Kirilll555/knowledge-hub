@@ -306,14 +306,12 @@ def add_answer(request, question_id):
 @login_required
 @csrf_exempt
 def rate_answer(request, answer_id):
-    """Оценка ответа (👍/👎)"""
     if request.method == 'POST':
         data = json.loads(request.body)
         rating = data.get('rating')
         rating_value = 1 if rating == 'like' else 0
         action = database.rate_answer(request.user.id, answer_id, rating_value)
 
-        # Получаем обновленные счетчики
         conn = sqlite3.connect(database.DB_PATH)
         cursor = conn.cursor()
         cursor.execute("""

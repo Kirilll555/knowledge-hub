@@ -1,14 +1,13 @@
-from main.utils.AI.Assistant import Assistant
+import sqlite3
+import json
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.models import User
-from datetime import datetime
-from main.models import IVAN_DATA
 from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-import json
-import sqlite3
+from datetime import datetime
+from main.utils.AI.Assistant import Assistant
 from main import database
 
 

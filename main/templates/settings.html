@@ -49,7 +49,8 @@
 
                         <div class="field-group">
                             <div class="field-label">Возраст</div>
-                            <input type="number" name="age" class="field-input" value="{{ profile.age|default:'' }}" placeholder="Ваш возраст">
+                            <input type="number" name="age" class="field-input {% if errors.age %}field-error{% endif %}" value="{% if form_data.age %}{{ form_data.age }}{% else %}{{ profile.age|default:'' }}{% endif %}" placeholder="Ваш возраст " min="1">
+                            {% if errors.age %}<div class="error-message">❌ {{ errors.age }}</div>{% endif %}
                         </div>
 
                         <div class="field-group">
@@ -59,7 +60,9 @@
 
                         <div class="field-group">
                             <div class="field-label">Класс</div>
-                            <input type="text" name="grade" class="field-input" value="{{ profile.grade|default:'' }}" placeholder="Например: 10А">
+                            <input type="text" name="grade" class="field-input {% if errors.grade %}field-error{% endif %}" value="{% if form_data.grade %}{{ form_data.grade }}{% else %}{{ profile.grade|default:'' }}{% endif %}" placeholder="Класс" pattern="[0-9]+">
+                            {% if errors.grade %}<div class="error-message">❌ {{ errors.grade }}</div>{% endif %}
+                            <div class="field-hint">Введите номер класса: 1, 2, 3... 11</div>
                         </div>
 
                         <div class="field-group">

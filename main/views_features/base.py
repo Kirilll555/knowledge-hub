@@ -12,6 +12,20 @@ import sqlite3
 from main import database
 
 
+def validate_positive_integer(value, field_name):
+    """Валидация поля на положительное целое число"""
+    if not value or value == '':
+        return None, None
+    
+    try:
+        num = int(value)
+        if num <= 0:
+            return None, f"{field_name} должен быть положительным числом"
+        return num, None
+    except (ValueError, TypeError):
+        return None, f"{field_name} должен быть целым числом"
+
+
 def settings(request):
     """Страница настроек пользователя"""
     if not request.user.is_authenticated:
@@ -19,8 +33,31 @@ def settings(request):
 
     settings_data = database.get_user_settings(request.user.id)
     profile_data = database.get_profile(request.user.id)
+    errors = {}
 
     if request.method == 'POST':
+        # Валидация возраста
+        age_value = request.POST.get('age', '').strip()
+        age, age_error = validate_positive_integer(age_value, 'Возраст')
+        if age_error:
+            errors['age'] = age_error
+        
+        # Валидация класса
+        grade_value = request.POST.get('grade', '').strip()
+        grade, grade_error = validate_positive_integer(grade_value, 'Класс')
+        if grade_error:
+            errors['grade'] = grade_error
+        
+        # Если есть ошибки валидации, возвращаем форму с ошибками
+        if errors:
+            return render(request, 'settings.html', {
+                'settings': settings_data,
+                'profile': profile_data,
+                'user': request.user,
+                'errors': errors,
+                'form_data': request.POST
+            })
+        
         # Обновляем настройки
         new_settings = {
             'theme': request.POST.get('theme', 'light'),
@@ -32,16 +69,16 @@ def settings(request):
         # Обновляем профиль
         profile_update = {
             'nickname': request.POST.get('nickname', ''),
-            'age': request.POST.get('age'),
+            'age': age,
             'school': request.POST.get('school', ''),
-            'grade': request.POST.get('grade', ''),
+            'grade': grade,
             'main_subject': request.POST.get('main_subject', 'physics'),
             'hobby': request.POST.get('hobby', ''),
         }
         database.save_profile(request.user.id, request.user.username, profile_update)
 
         # Обновляем email пользователя
-        email = request.POST.get('email', '')
+        email = request.POST.get('email', '').strip()
         if email and email != request.user.email:
             request.user.email = email
             request.user.save()
@@ -52,7 +89,8 @@ def settings(request):
         'settings': settings_data,
         'profile': profile_data,
         'user': request.user,
-        'saved': request.GET.get('saved')
+        'saved': request.GET.get('saved'),
+        'errors': errors
     })
 
 def get_menu(request):

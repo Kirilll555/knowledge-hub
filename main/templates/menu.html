@@ -14,17 +14,15 @@
         <div class="nav-right">
             <ul class="nav-links">
                 <li><a href="/" class="nav-link">Главная</a></li>
-                <li><a href="/ask/" class="nav-link">Задать вопрос</a></li>
-                <li><a href="/search/" class="nav-link">Спросить ИИ</a></li>
 
                 {% if user.is_authenticated %}
                     <!-- <li><a href="/profile/{{ user.username }}/" class="nav-link">👤 {{ user.username }}</a></li> -->
                     <!-- <li><a href="/settings/{{ user.username }}/" class="nav-link">👤 Настройки аккаунта {{ user.username }}</a></li> -->
-                    <li><a href="/settings/" class="nav-link">👤 Аккаунт {{ user.username }}</a></li>
-                    <li><a href="/logout/" class="nav-link">🚪 Выйти</a></li>
+                    <li><a href="/settings/" class="nav-link">Аккаунт: {{ user.username }}</a></li>
+                    <li><a href="/logout/" class="nav-link">Выйти</a></li>
                 {% else %}
-                    <li><a href="/login/" class="nav-link">🔐 Войти</a></li>
-                    <li><a href="/register/" class="nav-link">📝 Регистрация</a></li>
+                    <li><a href="/login/" class="nav-link">Войти</a></li>
+                    <li><a href="/register/" class="nav-link">Регистрация</a></li>
                 {% endif %}
             </ul>
             <button class="theme-btn-nav" id="themeToggle">🌙</button>

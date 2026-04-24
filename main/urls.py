@@ -4,7 +4,7 @@
 
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from main.views_features.base import (index, profile, question_detail, search_question,
+from main.views_features.base import (index, profile, question_detail, ask_ai, search_question,
                                       register, login_view, logout_view, ask_question,
                                       add_answer, rate_answer, submit_complaint, moderation_panel,
                                       resolve_complaint)
@@ -27,7 +27,7 @@ urlpatterns = [
 
     # ВОПРОСЫ
     path("ask/", ask_question, name="ask"),
-    path("ask_ai/", search_question, name="ask_ai"),
+    path("ask_ai/", ask_ai, name="ask_ai"),
 
     # API для AJAX
     path("api/answer/<int:question_id>/", add_answer, name="add_answer"),

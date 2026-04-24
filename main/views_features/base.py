@@ -203,6 +203,33 @@ def questions(request):
     return render(request, 'questions.html', {'menu': get_menu(request)})
 
 
+def ask_ai(request):
+    answer = None
+    error = None
+    question = None
+
+    if request.method == 'GET':
+        question = request.GET.get('q', '')
+    elif request.method == 'POST':
+        question = request.POST.get('question', '')
+
+    if question:
+        assistant = Assistant()
+        result = assistant.ask(question)
+        if result.get('success'):
+            answer = result.get('answer')
+        else:
+            error = result.get('error', 'Ошибка при получении ответа')
+
+    return render(request, 'ask_ai.html', {
+        'answer': answer,
+        'error': error,
+        'question': question,
+        'menu': get_menu(request),
+        'user': request.user
+    })
+
+
 def search_question(request):
     answer = None
     error = None

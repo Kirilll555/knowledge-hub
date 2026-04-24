@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Ответ ИИ</title>
+    {% include 'base_styles.html' %}
+    {% include 'ask_ai_styles.html' %}
+</head>
+<body>
+    {% include 'menu.html' %}
+
+    <div class="ai-container">
+        <div class="ai-card">
+            <div class="ai-header">
+                <span class="ai-icon">🤖</span>
+                <h1>Ответ искусственного интеллекта</h1>
+            </div>
+
+            {% if question %}
+                <div class="asked-question">
+                    <span class="q-label">Ваш вопрос:</span>
+                    <span class="q-text">{{ question }}</span>
+                </div>
+            {% endif %}
+
+            <div class="ai-answer">
+                {% if answer %}
+                    <div class="answer-text">{{ answer|linebreaks }}</div>
+                {% else %}
+                    <div class="placeholder-text">
+                        <p>Здесь появится ответ после того, как вы зададите вопрос через поиск.</p>
+                        <p class="hint">Введите вопрос в строку поиска в верхней панели.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if error %}
+                <div class="error-message">
+                    ⚠️ {{ error }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

@@ -208,10 +208,10 @@ def ask_ai(request):
     error = None
     question = None
 
-    if request.method == 'GET':
-        question = request.GET.get('q', '')
-    elif request.method == 'POST':
+    if request.method == 'POST':
         question = request.POST.get('question', '')
+    elif request.method == 'GET':
+        question = request.GET.get('q', '')
 
     if question:
         assistant = Assistant()
@@ -225,8 +225,6 @@ def ask_ai(request):
         'answer': answer,
         'error': error,
         'question': question,
-        'menu': get_menu(request),
-        'user': request.user
     })
 
 

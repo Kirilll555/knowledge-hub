@@ -4,8 +4,8 @@
             <a href="/" class="site-title" id="site-title">🎓 Knowledge Hub</a>
 
             <div class="search-container">
-                <form method="GET" action="/search/" style="display: flex; width: 100%;">
-                    <input type="text" name="q" class="search-input" placeholder="Найти..." value="{{ request.GET.q }}">
+                <form method="GET" action="/search/" id="searchForm" style="display: flex; width: 100%;">
+                    <input type="text" name="q" class="search-input" id="searchInput" placeholder="Найти..." value="{{ request.GET.q }}">
                     <button type="submit" class="search-btn">📝</button>
                 </form>
             </div>
@@ -16,8 +16,6 @@
                 <li><a href="/" class="nav-link">Главная</a></li>
 
                 {% if user.is_authenticated %}
-                    <!-- <li><a href="/profile/{{ user.username }}/" class="nav-link">👤 {{ user.username }}</a></li> -->
-                    <!-- <li><a href="/settings/{{ user.username }}/" class="nav-link">👤 Настройки аккаунта {{ user.username }}</a></li> -->
                     <li><a href="/settings/" class="nav-link">Аккаунт: {{ user.username }}</a></li>
                     <li><a href="/logout/" class="nav-link">Выйти</a></li>
                 {% else %}
@@ -45,5 +43,10 @@
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
             themeBtn.textContent = isDark ? '☀️' : '🌙';
         });
+
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput && window.location.pathname === '/search/' && window.location.search.includes('q=')) {
+            searchInput.value = '';
+        }
     });
 </script>

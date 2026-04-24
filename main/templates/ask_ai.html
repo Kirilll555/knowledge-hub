@@ -2,7 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Ответ ИИ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чат с ИИ</title>
     {% include 'base_styles.html' %}
     {% include 'ask_ai_styles.html' %}
 </head>
@@ -10,36 +11,58 @@
     {% include 'menu.html' %}
 
     <div class="ai-container">
-        <div class="ai-card">
-            <div class="ai-header">
-                <span class="ai-icon">🤖</span>
-                <h1>Ответ искусственного интеллекта</h1>
+        <div class="chat-card">
+            <div class="chat-header">
+                <span class="chat-icon">🤖</span>
+                <h2>Чат с искусственным интеллектом</h2>
             </div>
 
-            {% if question %}
-                <div class="asked-question">
-                    <span class="q-label">Ваш вопрос:</span>
-                    <span class="q-text">{{ question }}</span>
-                </div>
-            {% endif %}
-
-            <div class="ai-answer">
-                {% if answer %}
-                    <div class="answer-text">{{ answer|linebreaks }}</div>
-                {% else %}
-                    <div class="placeholder-text">
-                        <p>Здесь появится ответ после того, как вы зададите вопрос через поиск.</p>
-                        <p class="hint">Введите вопрос в строку поиска в верхней панели.</p>
+            <div class="chat-messages" id="chatMessages">
+                {% if question %}
+                    <div class="message user-message">
+                        <div class="message-avatar">👤</div>
+                        <div class="message-bubble">{{ question }}</div>
                     </div>
+                {% endif %}
+
+                {% if answer %}
+                    <div class="message bot-message">
+                        <div class="message-avatar">🤖</div>
+                        <div class="message-bubble">{{ answer|linebreaks }}</div>
+                    </div>
+                {% else %}
+                    <div class="message bot-message">
+                        <div class="message-avatar">🤖</div>
+                        <div class="message-bubble placeholder">
+                            Задайте вопрос в поле ниже
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if error %}
+                    <div class="error-message">{{ error }}</div>
                 {% endif %}
             </div>
 
-            {% if error %}
-                <div class="error-message">
-                    ⚠️ {{ error }}
-                </div>
-            {% endif %}
+            <div class="chat-input-area">
+                <form method="post" class="chat-form" id="chatForm">
+                    {% csrf_token %}
+                    <textarea name="question" class="chat-textarea" id="questionInput" placeholder="Введите ваш вопрос..." required></textarea>
+                    <button type="submit" class="chat-submit">📤 Отправить</button>
+                </form>
+            </div>
         </div>
     </div>
+
+    <script>
+        const form = document.getElementById('chatForm');
+        const input = document.getElementById('questionInput');
+
+        form.addEventListener('submit', function() {
+            setTimeout(() => {
+                input.value = '';
+            }, 10);
+        });
+    </script>
 </body>
 </html>

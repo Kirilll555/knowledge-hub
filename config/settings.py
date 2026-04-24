@@ -120,7 +120,7 @@ LOGGING = {
             'style': '{',
         },
         'moderation': {
-            'format': '{levelname} {asctime} | User:{user} | Action:{action} | Target:{target} | IP:{ip} | Reason:{reason} | {message}',
+            'format': '{levelname} {asctime} | User:{user} | Action:{action} | Target:{target} | Reason:{reason} | {message}',
             'style': '{',
         },
     },

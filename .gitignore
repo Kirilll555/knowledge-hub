@@ -333,10 +333,6 @@ fabric.properties
 
 # Pyre type checker
 
-# Ignore downloaded LLM models
-*.gguf
-models/
-
 # pytype static type analyzer
 
 # Cython debug symbols
@@ -375,5 +371,17 @@ pyrightconfig.json
 # Ignore all local history of files
 .history
 .ionide
+
+# LLM Models (GGUF files)
+*.gguf
+main/utils/AI/models/
+models/
+
+# Logs directory
+logs/
+*.log
+
+# Static collected
+static_collected/
 
 # End of https://www.toptal.com/developers/gitignore/api/django,dotenv,python,pycharm+all,visualstudiocode

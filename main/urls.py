@@ -21,6 +21,7 @@ urlpatterns = [
     path('question/<int:question_id>/', question_detail, name='question_detail'),
     path('add_answer/<int:question_id>/', add_answer, name='add_answer'),
     path('rate/<int:answer_id>/', rate_answer_view, name='rate_answer'),
+    path('search/', search_question, name='search'),
     path('search_question/', search_question, name='search_question'),
     path('ask_ai/', ask_ai, name='ask_ai'),
     path('ask_ai/<int:session_id>/', ask_ai, name='ask_ai_session'),

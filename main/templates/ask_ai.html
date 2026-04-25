@@ -158,6 +158,7 @@
             userMsg.className = 'message user-message';
             userMsg.innerHTML = `<div class="message-avatar">👤</div><div class="message-bubble">${formatText(escapeHtml(question))}</div>`;
             messagesContainer.appendChild(userMsg);
+            scrollToBottom();
 
             const loading = document.createElement('div');
             loading.className = 'message bot-message';
@@ -192,6 +193,7 @@
                 errMsg.className = 'message bot-message';
                 errMsg.innerHTML = `<div class="message-avatar">⚠️</div><div class="message-bubble">Ошибка соединения</div>`;
                 messagesContainer.appendChild(errMsg);
+                scrollToBottom();
             })
             .finally(() => {
                 submitBtn.disabled = false;

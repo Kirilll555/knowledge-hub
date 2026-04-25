@@ -30,7 +30,7 @@
                 <div class="error-message">{{ error }}</div>
             {% endif %}
             <div class="response-footer">
-                <a href="/ask_ai/?q={{ question|urlencode }}" class="chat-link">💬 Перейти в чат</a>
+                <a href="/ask_ai/{{ session_id }}/" class="chat-link">💬 Перейти в чат</a>
             </div>
         </div>
 

@@ -1,6 +1,7 @@
 Django == 5.2.12
 dotenv == 0.9.9
-openai == 2.29.0
-llama-cpp-python>=0.2.0
+#llama-cpp-python>=0.2.0
+#Больше не работает, но можно скачать командой ниже:
+#pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
 huggingface-hub>=0.20.0
 python-dotenv>=1.0.0

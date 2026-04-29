@@ -11,47 +11,39 @@ from main.utils.logger import log_ai, log_error
 from .helpers import get_menu
 import json
 
+
 def search_question(request):
-    answer = None
-    error = None
-    question = None
+    question = request.GET.get('q', '')
     session_id = None
 
-    if request.method == 'GET':
-        question = request.GET.get('q', '')
-    elif request.method == 'POST':
-        question = request.POST.get('question', '')
-
     if question and request.user.is_authenticated:
-        session = ChatSession.objects.create(
-            user_id=request.user.id,
-            title=question[:50]
-        )
+        session = ChatSession.objects.create(user_id=request.user.id, title=question[:50])
         session_id = session.id
         save_message(session.id, 'user', question)
 
-        try:
-            assistant = Assistant()
-            result = assistant.ask(question)
-            if result.get('success'):
-                answer = result.get('answer')
-                save_message(session.id, 'assistant', answer)
-                log_ai(request.user, question, answer, success=True)
-            else:
-                error = result.get('error', 'Ошибка при получении ответа')
-                log_ai(request.user, question, '', success=False, error=error)
-        except Exception as e:
-            error = str(e)
-            log_error(e, 'search_question', request.user)
-
     return render(request, 'search_question.html', {
-        'answer': answer,
-        'error': error,
         'question': question,
         'session_id': session_id,
         'menu': get_menu(request),
         'user': request.user
     })
+
+
+@csrf_exempt
+def search_question_api(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        question = data.get('question')
+        session_id = data.get('session_id')
+
+        assistant = Assistant()
+        result = assistant.ask(question)
+
+        if result.get('success'):
+            save_message(session_id, 'assistant', result['answer'])
+            return JsonResponse({'answer': result['answer']})
+        return JsonResponse({'error': 'no answer'})
+    return JsonResponse({'error': 'method'})
 
 
 @login_required

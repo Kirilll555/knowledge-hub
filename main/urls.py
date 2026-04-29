@@ -2,7 +2,7 @@ from django.urls import path
 from main.views_features import (
     index, register, login_view, logout_view, profile, settings,
     ask_question, question_detail, add_answer, rate_answer_view,
-    search_question, ask_ai, create_ai_session, delete_ai_session, rename_ai_session,
+    search_question, search_question_api, ask_ai, create_ai_session, delete_ai_session, rename_ai_session,
     submit_complaint,
     moderation_panel, moderate_resolve_complaint,
     moderate_delete_question, moderate_delete_answer,
@@ -22,7 +22,7 @@ urlpatterns = [
     path('add_answer/<int:question_id>/', add_answer, name='add_answer'),
     path('rate/<int:answer_id>/', rate_answer_view, name='rate_answer'),
     path('search/', search_question, name='search'),
-    path('search_question/', search_question, name='search_question'),
+    path('search/api/', search_question_api, name='search_question_api'),
     path('ask_ai/', ask_ai, name='ask_ai'),
     path('ask_ai/<int:session_id>/', ask_ai, name='ask_ai'),
     path('ask_ai/create/', create_ai_session, name='create_ai_session'),

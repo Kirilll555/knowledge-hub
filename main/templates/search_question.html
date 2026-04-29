@@ -6,6 +6,7 @@
     <title>Поиск вопроса</title>
     {% include 'base_styles.html' %}
     {% include 'search_question_styles.html' %}
+    {% include 'animations.html' %}
 </head>
 <body>
     {% include 'menu.html' %}
@@ -19,9 +20,9 @@
                     <div class="asked-question">Вопрос: {{ question }}</div>
                 {% endif %}
             </div>
-            <div class="response-content">
+            <div class="response-content" id="responseContent">
                 {% if answer %}
-                    <p>{{ answer }}</p>
+                    <p>{{ answer|linebreaksbr }}</p>
                 {% else %}
                     <p class="response-placeholder">Здесь будет ответ искусственного интеллекта</p>
                 {% endif %}
@@ -29,7 +30,7 @@
             {% if error %}
                 <div class="error-message">{{ error }}</div>
             {% endif %}
-            <div class="response-footer">
+            <div class="response-footer" id="responseFooter">
                 <a href="/ask_ai/{{ session_id }}/" class="chat-link">💬 Перейти в чат</a>
             </div>
         </div>
@@ -48,5 +49,37 @@
             </div>
         </div>
     </div>
+
+    <script>
+        (function() {
+            const q = new URLSearchParams(window.location.search).get('q');
+            const sessionId = '{{ session_id }}';
+            const content = document.getElementById('responseContent');
+            const footer = document.getElementById('responseFooter');
+
+            if (q && sessionId && content && !content.innerHTML.includes('<p>')) {
+                content.innerHTML = '<div class="thinking-dots"><span></span><span></span><span></span></div>';
+                if (footer) footer.innerHTML = '';
+
+                fetch('/search/api/', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({question: q, session_id: sessionId})
+                })
+                .then(r => r.json())
+                .then(d => {
+                    if (d.answer) {
+                        content.innerHTML = '<p>' + d.answer.replace(/\n/g, '<br>') + '</p>';
+                        footer.innerHTML = '<a href="/ask_ai/' + sessionId + '/" class="chat-link">💬 Перейти в чат</a>';
+                    } else {
+                        content.innerHTML = '<div class="error-message">' + (d.error || 'Ошибка') + '</div>';
+                    }
+                })
+                .catch(() => {
+                    content.innerHTML = '<div class="error-message">Ошибка соединения</div>';
+                });
+            }
+        })();
+    </script>
 </body>
 </html>

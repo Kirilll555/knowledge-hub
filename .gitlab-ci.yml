@@ -12,7 +12,7 @@ pylint:
   stage: style
   script:
   - pylint --fail-under=6 --ignore-paths="docs/*" **/*.py 
-  - echo "Pylint complete.
+  - echo "Pylint complete."
   artifacts:
     when: on_success
     expire_in: 30 days

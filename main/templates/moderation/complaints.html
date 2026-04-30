@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Модерация - Жалобы</title>
+    {% include 'base_styles.html' %}
+    <style>
+        .complaints-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .complaints-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 28px;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .complaint-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.2s;
+        }
+        
+        .complaint-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .complaint-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .complaint-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .type-spam { background: #ffd93d; color: #000; }
+        .type-offensive { background: #fa5252; color: white; }
+        .type-incorrect { background: #4dabf7; color: white; }
+        .type-other { background: #868e96; color: white; }
+        
+        .status-pending { color: #ffd93d; }
+        .status-approved { color: #51cf66; }
+        .status-rejected { color: #fa5252; }
+        
+        .complaint-content {
+            margin: 15px 0;
+            padding: 15px;
+            background: var(--item-bg);
+            border-radius: 12px;
+        }
+        
+        .complaint-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn-approve {
+            background: #51cf66;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        .btn-reject {
+            background: #fa5252;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        .badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .question-link {
+            color: var(--accent);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    {% include 'menu.html' %}
+    
+    <div class="complaints-container">
+        <div class="complaints-header">
+            <h1>🚩 Модерация жалоб</h1>
+            <p>Всего жалоб: {{ complaints|length }}</p>
+        </div>
+        
+        {% for complaint in complaints %}
+        <div class="complaint-card" id="complaint-{{ complaint.id }}">
+            <div class="complaint-header">
+                <div>
+                    <span class="complaint-type type-{{ complaint.complaint_type }}">
+                        {% if complaint.complaint_type == 'spam' %}📧 Спам
+                        {% elif complaint.complaint_type == 'offensive' %}🤬 Оскорбление
+                        {% elif complaint.complaint_type == 'incorrect' %}❌ Неверная информация
+                        {% else %}📝 Другое
+                        {% endif %}
+                    </span>
+                    <span class="badge status-{{ complaint.status }}">
+                        {% if complaint.status == 'pending' %}⏳ На рассмотрении
+                        {% elif complaint.status == 'approved' %}✅ Одобрена
+                        {% else %}❌ Отклонена
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="complaint-date">📅 {{ complaint.created_at|date:"d.m.Y H:i" }}</div>
+            </div>
+            
+            <div class="complaint-content">
+                <p><strong>👤 Жалоба от:</strong> {{ complaint.user.username }}</p>
+                <p><strong>📝 Описание:</strong> {{ complaint.description|default:"Не указано" }}</p>
+                <p><strong>🔗 Объект жалобы:</strong> 
+                    {% if complaint.question %}
+                    <a href="/question/{{ complaint.question.id }}/" class="question-link">Вопрос #{{ complaint.question.id }}: {{ complaint.question.title|truncatechars:50 }}</a>
+                    {% else %}
+                    <a href="/question/{{ complaint.answer.question.id }}/" class="question-link">Ответ к вопросу #{{ complaint.answer.question.id }}</a>
+                    {% endif %}
+                </p>
+            </div>
+            
+            {% if complaint.status == 'pending' %}
+            <div class="complaint-actions">
+                <button class="btn-approve" onclick="resolveComplaint({{ complaint.id }}, 'approve')">✅ Одобрить</button>
+                <button class="btn-reject" onclick="resolveComplaint({{ complaint.id }}, 'reject')">❌ Отклонить</button>
+            </div>
+            {% endif %}
+        </div>
+        {% empty %}
+        <div class="complaint-card">
+            <p style="text-align: center; color: var(--text-sub);">📭 Нет жалоб для рассмотрения</p>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        function resolveComplaint(complaintId, action) {
+            const formData = new FormData();
+            formData.append('action', action);
+            
+            fetch(`/moderation/complaints/${complaintId}/resolve/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Ошибка: ' + data.error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

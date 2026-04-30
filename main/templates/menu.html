@@ -14,7 +14,9 @@
         <div class="nav-right">
             <ul class="nav-links">
                 <li><a href="/" class="nav-link">Главная</a></li>
-
+                {% if user.is_authenticated and user.is_superuser %}
+                    <li><a href="/moderation/complaints/" class="nav-link">🚩 Модерация</a></li>
+                {% endif %}
                 {% if user.is_authenticated %}
                     <li><a href="/settings/" class="nav-link">Аккаунт: {{ user.username }}</a></li>
                     <li><a href="/logout/" class="nav-link">Выйти</a></li>

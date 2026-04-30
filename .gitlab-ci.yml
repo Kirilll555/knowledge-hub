@@ -21,8 +21,8 @@ cache:
 before_script:
   - python --version ; pip --version  # For debugging
   - pip install virtualenv
-  - virtualenv venv
-  - source venv/bin/activate
+  - virtualenv .venv
+  - source .venv/bin/activate
 
 test:
   script:
@@ -63,4 +63,4 @@ pylint-check:
   before_script:
     - pip install pylint
   script:
-    - pylint --fail-under=8.0 $(find . -name "*.py" -not -path "./venv/*")
+    - pylint --fail-under=8.0 $(find . -name "*.py" -not -path "./.venv/*")

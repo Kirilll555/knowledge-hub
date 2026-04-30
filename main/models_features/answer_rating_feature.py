@@ -1,7 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.db.models import Count, Q
 from .question_feature import Question
+from main.utils.email_notifications import send_answer_notification
+from django.contrib.auth.models import User
 
 
 class Answer(models.Model):
@@ -27,12 +28,31 @@ class AnswerRating(models.Model):
 
 
 def create_answer(user_id, question_id, content):
-    return Answer.objects.create(
+    from main.models_features.question_feature import get_question_by_id
+
+    answer_id = Answer.objects.create(
         user_id=user_id,
         question_id=question_id,
         content=content
     ).id
 
+    # Отправка уведомления
+    try:
+        question = get_question_by_id(question_id)
+        if question and question['user_id'] != user_id:
+            answer_author = User.objects.get(id=user_id)
+            author_name = answer_author.profile.nickname or answer_author.username
+
+            send_answer_notification(
+                question_author_id=question['user_id'],
+                answer_author_name=author_name,
+                question_title=question['title'],
+                question_id=question_id
+            )
+    except Exception as e:
+        print(f"[NOTIFICATION ERROR] {e}")
+
+    return answer_id
 
 def get_answers_for_question(question_id, user_id=None):
     answers = Answer.objects.filter(

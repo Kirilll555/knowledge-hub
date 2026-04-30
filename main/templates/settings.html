@@ -81,14 +81,6 @@
                             <input type="checkbox" name="notifications" {% if settings.notifications %}checked{% endif %} id="notifCheck">
                             <label for="notifCheck">🔔 Получать уведомления</label>
                         </div>
-
-                        <div class="field-group">
-                            <div class="field-label">Язык интерфейса</div>
-                            <select name="language" class="field-select">
-                                <option value="ru" {% if settings.language == 'ru' %}selected{% endif %}>🇷🇺 Русский</option>
-                                <option value="en" {% if settings.language == 'en' %}selected{% endif %}>🇬🇧 English</option>
-                            </select>
-                        </div>
                     </div>
 
                     <div class="settings-actions">

@@ -1,0 +1,31 @@
+image: python:3.13.3-alpine3.20
+
+before_script:
+  - python3 -m venv .venv
+  - . .venv/bin/activate
+  - pip install -r requirements-dev.txt
+
+stages:
+  - style
+
+pylint:
+  stage: style
+  script:
+    - pylint --fail-under=6 --ignore-paths="docs/*" **/*.py 
+    - echo "Pylint complete."
+  artifacts:
+    untracked: false
+    when: on_success
+    expire_in: 30 days
+
+pycodestyle:
+    stage: style
+    script:
+        - pycodestyle --max-line-length=120 main.py
+        - echo "Pycodestyle complete."
+    artifacts:
+        untracked: false
+        when: on_failure
+        expire_in: 30 days
+
+

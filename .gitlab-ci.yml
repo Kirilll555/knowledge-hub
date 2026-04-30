@@ -11,9 +11,8 @@ stages:
 pylint:
   stage: style
   script:
-    - FILES=$(find . -name "*.py")
-    - pylint --fail-under=6 --ignore=docs $FILES
-    - echo "Pylint complete."
+  - pylint --fail-under=6 --ignore-paths="docs/*" **/*.py 
+  - echo "Pylint complete.
   artifacts:
     when: on_success
     expire_in: 30 days
@@ -21,9 +20,8 @@ pylint:
 pycodestyle:
   stage: style
   script:
-    - FILES=$(find . -name "*.py")
-    - pycodestyle --max-line-length=120 $FILES
-    - echo "Pycodestyle complete."
+  - pycodestyle --max-line-length=120 **/*.py
+  - echo "Pycodestyle complete."
   artifacts:
     when: on_failure
     expire_in: 30 days

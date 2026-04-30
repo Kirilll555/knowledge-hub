@@ -8,7 +8,7 @@ from main.models_features.answer_rating_feature import Answer
 from django.db.models import Count, Q
 from main.models_features import (
     create_question, get_question_by_id, create_answer, get_answers_for_question,
-    rate_answer, add_activity
+    rate_answer, add_activity, Question,
 )
 from .helpers import get_menu
 

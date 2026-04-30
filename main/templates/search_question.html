@@ -19,6 +19,7 @@
                     <div class="asked-question">Вопрос: {{ question }}</div>
                 {% endif %}
             </div>
+
             <div class="response-content">
                 {% if answer %}
                     <p>{{ answer }}</p>
@@ -26,9 +27,11 @@
                     <p class="response-placeholder">Здесь будет ответ искусственного интеллекта</p>
                 {% endif %}
             </div>
+
             {% if error %}
                 <div class="error-message">{{ error }}</div>
             {% endif %}
+
             <div class="response-footer">
                 <a href="/ask_ai/{{ session_id }}/" class="chat-link">💬 Перейти в чат</a>
             </div>
@@ -39,12 +42,23 @@
                 <span class="search-icon">🔍</span>
                 <h3>Результаты поиска</h3>
             </div>
+
             <div class="search-results-list">
-                <div class="search-result-item">Как настроить VPN на iPhone?</div>
-                <div class="search-result-item">Что лучше: Python или JavaScript?</div>
-                <div class="search-result-item">Как работает ChatGPT?</div>
-                <div class="search-result-item">Где найти курсы по английскому?</div>
-                <div class="search-result-item">Как защитить данные в интернете?</div>
+                {% if results %}
+                    {% for item in results %}
+                        <div class="search-result-item">
+                            <div class="search-result-title">{{ item.title }}</div>
+                            <div class="search-result-subject">Тема: {{ item.subject }}</div>
+                            <div class="search-result-content">{{ item.content|truncatechars:140 }}</div>
+                            <div class="search-result-meta">
+                                <span>Автор: {{ item.author_name }}</span>
+                                <span>Ответов: {{ item.answers_count }}</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="search-result-item">Ничего не найдено</div>
+                {% endif %}
             </div>
         </div>
     </div>

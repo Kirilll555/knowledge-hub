@@ -1,0 +1,838 @@
+[
+{
+    "model": "auth.permission",
+    "pk": 1,
+    "fields": {
+        "name": "Can add log entry",
+        "content_type": 1,
+        "codename": "add_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 2,
+    "fields": {
+        "name": "Can change log entry",
+        "content_type": 1,
+        "codename": "change_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 3,
+    "fields": {
+        "name": "Can delete log entry",
+        "content_type": 1,
+        "codename": "delete_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 4,
+    "fields": {
+        "name": "Can view log entry",
+        "content_type": 1,
+        "codename": "view_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 5,
+    "fields": {
+        "name": "Can add permission",
+        "content_type": 2,
+        "codename": "add_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 6,
+    "fields": {
+        "name": "Can change permission",
+        "content_type": 2,
+        "codename": "change_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 7,
+    "fields": {
+        "name": "Can delete permission",
+        "content_type": 2,
+        "codename": "delete_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 8,
+    "fields": {
+        "name": "Can view permission",
+        "content_type": 2,
+        "codename": "view_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 9,
+    "fields": {
+        "name": "Can add group",
+        "content_type": 3,
+        "codename": "add_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 10,
+    "fields": {
+        "name": "Can change group",
+        "content_type": 3,
+        "codename": "change_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 11,
+    "fields": {
+        "name": "Can delete group",
+        "content_type": 3,
+        "codename": "delete_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 12,
+    "fields": {
+        "name": "Can view group",
+        "content_type": 3,
+        "codename": "view_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 13,
+    "fields": {
+        "name": "Can add user",
+        "content_type": 4,
+        "codename": "add_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 14,
+    "fields": {
+        "name": "Can change user",
+        "content_type": 4,
+        "codename": "change_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 15,
+    "fields": {
+        "name": "Can delete user",
+        "content_type": 4,
+        "codename": "delete_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 16,
+    "fields": {
+        "name": "Can view user",
+        "content_type": 4,
+        "codename": "view_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 17,
+    "fields": {
+        "name": "Can add content type",
+        "content_type": 5,
+        "codename": "add_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 18,
+    "fields": {
+        "name": "Can change content type",
+        "content_type": 5,
+        "codename": "change_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 19,
+    "fields": {
+        "name": "Can delete content type",
+        "content_type": 5,
+        "codename": "delete_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 20,
+    "fields": {
+        "name": "Can view content type",
+        "content_type": 5,
+        "codename": "view_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 21,
+    "fields": {
+        "name": "Can add session",
+        "content_type": 6,
+        "codename": "add_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 22,
+    "fields": {
+        "name": "Can change session",
+        "content_type": 6,
+        "codename": "change_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 23,
+    "fields": {
+        "name": "Can delete session",
+        "content_type": 6,
+        "codename": "delete_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 24,
+    "fields": {
+        "name": "Can view session",
+        "content_type": 6,
+        "codename": "view_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 25,
+    "fields": {
+        "name": "Can add answer",
+        "content_type": 7,
+        "codename": "add_answer"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 26,
+    "fields": {
+        "name": "Can change answer",
+        "content_type": 7,
+        "codename": "change_answer"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 27,
+    "fields": {
+        "name": "Can delete answer",
+        "content_type": 7,
+        "codename": "delete_answer"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 28,
+    "fields": {
+        "name": "Can view answer",
+        "content_type": 7,
+        "codename": "view_answer"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 29,
+    "fields": {
+        "name": "Can add question",
+        "content_type": 8,
+        "codename": "add_question"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 30,
+    "fields": {
+        "name": "Can change question",
+        "content_type": 8,
+        "codename": "change_question"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 31,
+    "fields": {
+        "name": "Can delete question",
+        "content_type": 8,
+        "codename": "delete_question"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 32,
+    "fields": {
+        "name": "Can view question",
+        "content_type": 8,
+        "codename": "view_question"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 33,
+    "fields": {
+        "name": "Can add user settings",
+        "content_type": 9,
+        "codename": "add_usersettings"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 34,
+    "fields": {
+        "name": "Can change user settings",
+        "content_type": 9,
+        "codename": "change_usersettings"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 35,
+    "fields": {
+        "name": "Can delete user settings",
+        "content_type": 9,
+        "codename": "delete_usersettings"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 36,
+    "fields": {
+        "name": "Can view user settings",
+        "content_type": 9,
+        "codename": "view_usersettings"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 37,
+    "fields": {
+        "name": "Can add user activity",
+        "content_type": 10,
+        "codename": "add_useractivity"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 38,
+    "fields": {
+        "name": "Can change user activity",
+        "content_type": 10,
+        "codename": "change_useractivity"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 39,
+    "fields": {
+        "name": "Can delete user activity",
+        "content_type": 10,
+        "codename": "delete_useractivity"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 40,
+    "fields": {
+        "name": "Can view user activity",
+        "content_type": 10,
+        "codename": "view_useractivity"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 41,
+    "fields": {
+        "name": "Can add profile",
+        "content_type": 11,
+        "codename": "add_profile"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 42,
+    "fields": {
+        "name": "Can change profile",
+        "content_type": 11,
+        "codename": "change_profile"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 43,
+    "fields": {
+        "name": "Can delete profile",
+        "content_type": 11,
+        "codename": "delete_profile"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 44,
+    "fields": {
+        "name": "Can view profile",
+        "content_type": 11,
+        "codename": "view_profile"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 45,
+    "fields": {
+        "name": "Can add moderation log",
+        "content_type": 12,
+        "codename": "add_moderationlog"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 46,
+    "fields": {
+        "name": "Can change moderation log",
+        "content_type": 12,
+        "codename": "change_moderationlog"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 47,
+    "fields": {
+        "name": "Can delete moderation log",
+        "content_type": 12,
+        "codename": "delete_moderationlog"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 48,
+    "fields": {
+        "name": "Can view moderation log",
+        "content_type": 12,
+        "codename": "view_moderationlog"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 49,
+    "fields": {
+        "name": "Can add complaint",
+        "content_type": 13,
+        "codename": "add_complaint"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 50,
+    "fields": {
+        "name": "Can change complaint",
+        "content_type": 13,
+        "codename": "change_complaint"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 51,
+    "fields": {
+        "name": "Can delete complaint",
+        "content_type": 13,
+        "codename": "delete_complaint"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 52,
+    "fields": {
+        "name": "Can view complaint",
+        "content_type": 13,
+        "codename": "view_complaint"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 53,
+    "fields": {
+        "name": "Can add chat session",
+        "content_type": 14,
+        "codename": "add_chatsession"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 54,
+    "fields": {
+        "name": "Can change chat session",
+        "content_type": 14,
+        "codename": "change_chatsession"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 55,
+    "fields": {
+        "name": "Can delete chat session",
+        "content_type": 14,
+        "codename": "delete_chatsession"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 56,
+    "fields": {
+        "name": "Can view chat session",
+        "content_type": 14,
+        "codename": "view_chatsession"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 57,
+    "fields": {
+        "name": "Can add chat message",
+        "content_type": 15,
+        "codename": "add_chatmessage"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 58,
+    "fields": {
+        "name": "Can change chat message",
+        "content_type": 15,
+        "codename": "change_chatmessage"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 59,
+    "fields": {
+        "name": "Can delete chat message",
+        "content_type": 15,
+        "codename": "delete_chatmessage"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 60,
+    "fields": {
+        "name": "Can view chat message",
+        "content_type": 15,
+        "codename": "view_chatmessage"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 61,
+    "fields": {
+        "name": "Can add answer rating",
+        "content_type": 16,
+        "codename": "add_answerrating"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 62,
+    "fields": {
+        "name": "Can change answer rating",
+        "content_type": 16,
+        "codename": "change_answerrating"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 63,
+    "fields": {
+        "name": "Can delete answer rating",
+        "content_type": 16,
+        "codename": "delete_answerrating"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 64,
+    "fields": {
+        "name": "Can view answer rating",
+        "content_type": 16,
+        "codename": "view_answerrating"
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$wqxDWRvLE6sGigv8vaVIw6$tjguUnCjLbIs4X55rX0Iqpu0qmtzTFQFVomjEiT4Y6I=",
+        "last_login": "2026-04-29T16:24:13.046Z",
+        "is_superuser": false,
+        "username": "REF",
+        "first_name": "",
+        "last_name": "",
+        "email": "il_ppop@mail.ru",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-04-29T16:24:12.704Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 1,
+    "fields": {
+        "app_label": "admin",
+        "model": "logentry"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 2,
+    "fields": {
+        "app_label": "auth",
+        "model": "permission"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 3,
+    "fields": {
+        "app_label": "auth",
+        "model": "group"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 4,
+    "fields": {
+        "app_label": "auth",
+        "model": "user"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 5,
+    "fields": {
+        "app_label": "contenttypes",
+        "model": "contenttype"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 6,
+    "fields": {
+        "app_label": "sessions",
+        "model": "session"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 7,
+    "fields": {
+        "app_label": "main",
+        "model": "answer"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 8,
+    "fields": {
+        "app_label": "main",
+        "model": "question"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 9,
+    "fields": {
+        "app_label": "main",
+        "model": "usersettings"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 10,
+    "fields": {
+        "app_label": "main",
+        "model": "useractivity"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 11,
+    "fields": {
+        "app_label": "main",
+        "model": "profile"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 12,
+    "fields": {
+        "app_label": "main",
+        "model": "moderationlog"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 13,
+    "fields": {
+        "app_label": "main",
+        "model": "complaint"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 14,
+    "fields": {
+        "app_label": "main",
+        "model": "chatsession"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 15,
+    "fields": {
+        "app_label": "main",
+        "model": "chatmessage"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 16,
+    "fields": {
+        "app_label": "main",
+        "model": "answerrating"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "k2qxaluo5ro0a0wkls74mhu0sfxubmku",
+    "fields": {
+        "session_data": ".eJxVjEEOwiAQRe_C2pAWMsC4dO8ZyDCAVA0kpV013t2QdKHb_977h_C0b8XvPa1-ieIqZnH53QLxK9UB4pPqo0ludVuXIIciT9rlvcX0vp3u30GhXkadnEIFRNbmQBHJOEgaEK0Omtg5BjBWZbYuo4oJA6kpR6NxNjAxi88X8bM4Jg:1wI7ht:x8yLXJK2DUjzEvisBQq-AcRDG5OytJZ94sElAtIa0-A",
+        "expire_date": "2026-05-13T16:24:13.050Z"
+    }
+},
+{
+    "model": "main.profile",
+    "pk": 1,
+    "fields": {
+        "user": 1,
+        "nickname": "REF",
+        "age": null,
+        "hobby": "",
+        "main_subject": "physics",
+        "role": "admin",
+        "is_banned": false,
+        "ban_reason": "",
+        "banned_at": null,
+        "created_at": "2026-04-29T16:24:13.031Z",
+        "updated_at": "2026-04-29T16:24:13.037Z"
+    }
+},
+{
+    "model": "main.question",
+    "pk": 1,
+    "fields": {
+        "user": 1,
+        "title": "rrrrrr",
+        "content": "rrrrr",
+        "subject": "general",
+        "is_deleted": false,
+        "created_at": "2026-04-29T16:25:34.902Z",
+        "updated_at": "2026-04-29T16:25:34.902Z"
+    }
+},
+{
+    "model": "main.answer",
+    "pk": 1,
+    "fields": {
+        "question": 1,
+        "user": 1,
+        "content": "HHHHH",
+        "is_deleted": false,
+        "created_at": "2026-04-29T16:25:41.059Z",
+        "updated_at": "2026-04-29T16:25:41.059Z"
+    }
+},
+{
+    "model": "main.chatsession",
+    "pk": 1,
+    "fields": {
+        "user": 1,
+        "title": "rrrrr",
+        "created_at": "2026-04-29T16:25:56.776Z",
+        "updated_at": "2026-04-29T16:25:56.776Z"
+    }
+},
+{
+    "model": "main.chatsession",
+    "pk": 2,
+    "fields": {
+        "user": 1,
+        "title": "Сколько всего в мире стран",
+        "created_at": "2026-04-29T16:27:21.238Z",
+        "updated_at": "2026-04-29T16:27:21.238Z"
+    }
+},
+{
+    "model": "main.chatmessage",
+    "pk": 1,
+    "fields": {
+        "session": 1,
+        "role": "user",
+        "content": "rrrrr",
+        "created_at": "2026-04-29T16:25:56.796Z"
+    }
+},
+{
+    "model": "main.chatmessage",
+    "pk": 2,
+    "fields": {
+        "session": 2,
+        "role": "user",
+        "content": "Сколько всего в мире стран",
+        "created_at": "2026-04-29T16:27:21.342Z"
+    }
+},
+{
+    "model": "main.useractivity",
+    "pk": 1,
+    "fields": {
+        "user": 1,
+        "activity_type": "ask_question",
+        "question": 1,
+        "answer": null,
+        "metadata": "",
+        "created_at": "2026-04-29T16:25:34.917Z"
+    }
+},
+{
+    "model": "main.useractivity",
+    "pk": 2,
+    "fields": {
+        "user": 1,
+        "activity_type": "answer_question",
+        "question": 1,
+        "answer": null,
+        "metadata": "",
+        "created_at": "2026-04-29T16:25:41.074Z"
+    }
+}
+]

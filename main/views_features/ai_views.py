@@ -234,3 +234,7 @@ def rename_ai_session(request, session_id):
         except Exception:
             return JsonResponse({'success': False})
     return JsonResponse({'success': False})
+
+
+def regenerate_answer():
+    return None

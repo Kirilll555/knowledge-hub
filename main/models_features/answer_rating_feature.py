@@ -1,8 +1,9 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.db.models import Count, Q
 from .question_feature import Question
 from main.utils.email_notifications import send_answer_notification
-from django.contrib.auth.models import User
+from main.models_features.notification_feature import create_notification
 
 
 class Answer(models.Model):
@@ -29,7 +30,6 @@ class AnswerRating(models.Model):
 
 def create_answer(user_id, question_id, content):
     from main.models_features.question_feature import get_question_by_id
-    from main.models_features.notification_feature import create_notification
 
     answer_id = Answer.objects.create(
         user_id=user_id,
@@ -37,14 +37,12 @@ def create_answer(user_id, question_id, content):
         content=content
     ).id
 
-    # Отправка уведомления
     try:
         question = get_question_by_id(question_id)
         if question and question['user_id'] != user_id:
             answer_author = User.objects.get(id=user_id)
             author_name = answer_author.profile.nickname or answer_author.username
 
-            # Отправка email
             send_answer_notification(
                 question_author_id=question['user_id'],
                 answer_author_name=author_name,
@@ -52,7 +50,6 @@ def create_answer(user_id, question_id, content):
                 question_id=question_id
             )
 
-            # Создание уведомления в базе данных
             create_notification(
                 user_id=question['user_id'],
                 notification_type='answer',
@@ -65,11 +62,12 @@ def create_answer(user_id, question_id, content):
 
     return answer_id
 
+
 def get_answers_for_question(question_id, user_id=None):
     answers = Answer.objects.filter(
         question_id=question_id,
         is_deleted=False
-    ).select_related('user__profile').order_by('created_at')
+    ).select_related('user', 'user__profile').order_by('created_at')
 
     result = []
     for a in answers:
@@ -84,6 +82,7 @@ def get_answers_for_question(question_id, user_id=None):
             'created_at': a.created_at,
             'user_id': a.user.id,
             'author_name': a.user.profile.nickname or a.user.username,
+            'author_username': a.user.username,
             'likes': ratings['likes'],
             'dislikes': ratings['dislikes'],
             'user_rating': None

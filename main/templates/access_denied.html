@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Доступ запрещен</title>
+    {% include 'base_styles.html' %}
+</head>
+<body>
+    {% include 'menu.html' %}
+    <div style="text-align: center; padding: 100px 20px;">
+        <h1>🔒 Доступ запрещен</h1>
+        <p>{{ error|default:"У вас нет прав для просмотра этой страницы" }}</p>
+        <a href="/" class="btn-primary" style="display: inline-block; padding: 10px 20px; margin-top: 20px;">На главную</a>
+    </div>
+</body>
+</html>

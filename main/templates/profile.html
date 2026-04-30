@@ -2,52 +2,160 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Профиль</title>
+    <title>Профиль {{ profile_user.username }}</title>
     {% include 'base_styles.html' %}
+    {% include 'profile_styles.html' %}
 </head>
 <body>
     {% include 'menu.html' %}
-    <h1>Профиль пользователя: {{ username }}</h1>
 
-    <table>
-        <tr>
-            <td>Репутация:</td>
-            <td><strong>2,547</strong></td>
-        </tr>
-        <tr>
-            <td>Ответов:</td>
-            <td>156</td>
-        </tr>
-        <tr>
-            <td>Вопросов:</td>
-            <td>43</td>
-        </tr>
-        <tr>
-            <td>Статей:</td>
-            <td>89</td>
-        </tr>
-    </table>
+    <div class="profile-container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-avatar">👤</div>
+                <div class="profile-name">{{ profile_user.profile.nickname|default:profile_user.username }}</div>
+                <div class="profile-username">@{{ profile_user.username }}</div>
+            </div>
 
-    <hr>
+            <div class="profile-stats">
+                <div class="stat">
+                    <div class="stat-number">{{ questions_count|default:0 }}</div>
+                    <div class="stat-label">Вопросов</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">{{ answers_count|default:0 }}</div>
+                    <div class="stat-label">Ответов</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">{{ rating|default:0 }}</div>
+                    <div class="stat-label">Репутация</div>
+                </div>
+            </div>
 
-    <h2>Активность</h2>
+            <div class="profile-info">
+                <div class="info-row">
+                    <div class="info-label">🎂 Возраст</div>
+                    <div class="info-value">{{ profile_user.profile.age|default:"Не указан" }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">🎯 Любимый предмет</div>
+                    <div class="info-value">{{ profile_user.profile.main_subject|default:"Не указан" }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">💭 Хобби</div>
+                    <div class="info-value">{{ profile_user.profile.hobby|default:"Не указано" }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">📅 Дата регистрации</div>
+                    <div class="info-value">{{ profile_user.date_joined|date:"d.m.Y" }}</div>
+                </div>
+            </div>
 
-    <ul>
-        <li>
-            <a>
-                Ответ на вопрос "Как работает замыкание в JS?"
-            </a> - 2 часа назад (+15)
-        </li>
-        <li>
-            <a>
-                Опубликована статья "Полное руководство по React Hooks"
-            </a> - вчера (+50)
-        </li>
-        <li>
-            <a>
-                Лучший ответ на вопрос "Что такое Docker?"
-            </a> - 3 дня назад (+100)
-        </li>
-    </ul>
+            {% if user.is_authenticated and user.id != profile_user.id %}
+            <button class="complaint-btn" id="complaintUserBtn">
+                🚩 Пожаловаться на пользователя
+            </button>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="modal" id="complaintModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🚩 Жалоба на пользователя</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label>Тип жалобы:</label>
+                <select id="complaintType" class="complaint-select">
+                    <option value="spam">📧 Спам</option>
+                    <option value="offensive">🤬 Оскорбление</option>
+                    <option value="user_behavior">👎 Плохое поведение</option>
+                    <option value="other">📝 Другое</option>
+                </select>
+
+                <label>Подробное описание:</label>
+                <textarea id="complaintDescription" rows="4" class="complaint-textarea" placeholder="Опишите, что вас не устраивает в поведении пользователя..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal()">Отмена</button>
+                <button class="btn-submit" onclick="submitComplaint()">Отправить жалобу</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function openModal() {
+            document.getElementById('complaintModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('complaintModal').classList.remove('show');
+        }
+
+        function submitComplaint() {
+            const complaintType = document.getElementById('complaintType').value;
+            const description = document.getElementById('complaintDescription').value;
+
+            if (!description.trim()) {
+                alert('Пожалуйста, опишите причину жалобы');
+                return;
+            }
+
+            const data = {
+                target_type: 'user',
+                target_id: {{ profile_user.id }},
+                complaint_type: complaintType,
+                description: description,
+                reason: complaintType
+            };
+
+            fetch('/api/complaints/create/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Жалоба отправлена. Спасибо за помощь!');
+                    closeModal();
+                } else {
+                    alert('❌ Ошибка: ' + (data.error || 'Не удалось отправить жалобу'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Ошибка при отправке жалобы');
+            });
+        }
+
+        document.getElementById('complaintUserBtn')?.addEventListener('click', openModal);
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('complaintModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
 </body>
 </html>

@@ -1,16 +1,9 @@
-from django.db import models
-
-# Create your models here.
-
-
-IVAN_DATA = {
-    'name': 'Иван',
-    'nickname': 'Ivan',
-    'clan': '',
-    'rank': 'Новичок',
-    'bio': 'Люблю программировать',
-    'email': 'ivan@example.com',
-    'password': '••••••••',
-    'questions_count': '12',
-    'answers_count': '34',
-}
+from main.models_features.activity_feature import UserActivity
+from main.models_features.answer_rating_feature import Answer, AnswerRating
+from main.models_features.chat_feature import ChatSession, ChatMessage
+from main.models_features.complaint_feature import Complaint
+from main.models_features.moderation_feature import ModerationLog
+from main.models_features.profile_feature import Profile
+from main.models_features.question_feature import Question
+from main.models_features.settings_feature import UserSettings
+from main.models_features.notification_feature import Notification

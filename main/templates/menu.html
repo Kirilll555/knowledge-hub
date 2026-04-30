@@ -24,29 +24,290 @@
                 {% endif %}
             </ul>
             <button class="theme-btn-nav" id="themeToggle">🌙</button>
+            <button class="notif-btn-nav" id="notifToggle">
+                🔔
+                <span class="notif-badge" id="notifBadge" style="display: none;">0</span>
+            </button>
         </div>
     </div>
 </nav>
 
+<!-- Стили для уведомлений -->
+<style>
+.notif-btn-nav {
+    position: relative;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    background: var(--item-bg);
+    border: 1px solid var(--border);
+}
+
+.notif-btn-nav:hover {
+    background: var(--accent);
+    transform: translateY(-2px);
+}
+
+.notif-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #fa5252;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+}
+
+.notif-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 350px;
+    max-height: 450px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: none;
+    overflow: hidden;
+}
+
+.notif-dropdown.show {
+    display: block;
+}
+
+.notif-header {
+    padding: 15px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notif-header h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.mark-all-read {
+    background: none;
+    border: none;
+    color: #667eea;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.notif-list {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.notif-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.notif-item:hover {
+    background: var(--item-bg);
+}
+
+.notif-item.unread {
+    background: rgba(102, 126, 234, 0.05);
+    border-left: 3px solid #667eea;
+}
+
+.notif-title {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.notif-message {
+    font-size: 12px;
+    color: var(--text-sub);
+    margin-bottom: 4px;
+}
+
+.notif-time {
+    font-size: 10px;
+    color: var(--text-sub);
+}
+
+.empty-notifications {
+    padding: 40px;
+    text-align: center;
+    color: var(--text-sub);
+}
+
+@media (max-width: 768px) {
+    .notif-dropdown {
+        width: 300px;
+        right: -50px;
+    }
+}
+</style>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const savedTheme = localStorage.getItem('theme');
-        const themeBtn = document.getElementById('themeToggle');
-        if (savedTheme === 'dark') {
-            document.body.classList.add('dark-theme');
-            themeBtn.textContent = '☀️';
-        }
+document.addEventListener('DOMContentLoaded', function() {
+    // Тема
+    const savedTheme = localStorage.getItem('theme');
+    const themeBtn = document.getElementById('themeToggle');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+        themeBtn.textContent = '☀️';
+    }
 
-        themeBtn.addEventListener('click', function() {
-            document.body.classList.toggle('dark-theme');
-            const isDark = document.body.classList.contains('dark-theme');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            themeBtn.textContent = isDark ? '☀️' : '🌙';
+    themeBtn.addEventListener('click', function() {
+        document.body.classList.toggle('dark-theme');
+        const isDark = document.body.classList.contains('dark-theme');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        themeBtn.textContent = isDark ? '☀️' : '🌙';
+    });
+
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput && window.location.pathname === '/search/' && window.location.search.includes('q=')) {
+        searchInput.value = '';
+    }
+
+    // Уведомления (только если пользователь авторизован)
+    {% if user.is_authenticated %}
+    const notifToggle = document.getElementById('notifToggle');
+
+    const dropdownHtml = `
+        <div class="notif-dropdown" id="notifDropdown">
+            <div class="notif-header">
+                <h3>🔔 Уведомления</h3>
+                <button class="mark-all-read" id="markAllReadBtn">Все прочитано</button>
+            </div>
+            <div class="notif-list" id="notifList">
+                <div class="empty-notifications">Загрузка...</div>
+            </div>
+        </div>
+    `;
+    notifToggle.insertAdjacentHTML('afterend', dropdownHtml);
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function loadNotifications() {
+        fetch('/api/notifications/')
+            .then(response => response.json())
+            .then(data => {
+                const badge = document.getElementById('notifBadge');
+                if (data.unread_count > 0) {
+                    badge.textContent = data.unread_count > 99 ? '99+' : data.unread_count;
+                    badge.style.display = 'inline-block';
+                } else {
+                    badge.style.display = 'none';
+                }
+
+                const notifList = document.getElementById('notifList');
+                if (!notifList) return;
+
+                if (data.notifications.length === 0) {
+                    notifList.innerHTML = '<div class="empty-notifications">Нет уведомлений</div>';
+                    return;
+                }
+
+                notifList.innerHTML = data.notifications.map(notif => `
+                    <div class="notif-item ${!notif.is_read ? 'unread' : ''}" data-id="${notif.id}" data-link="${notif.link}">
+                        <div class="notif-title">${escapeHtml(notif.title)}</div>
+                        <div class="notif-message">${escapeHtml(notif.message)}</div>
+                        <div class="notif-time">${notif.created_at}</div>
+                    </div>
+                `).join('');
+
+                document.querySelectorAll('.notif-item').forEach(item => {
+                    item.addEventListener('click', function(e) {
+                        const id = this.dataset.id;
+                        const link = this.dataset.link;
+
+                        fetch(`/api/notifications/mark-read/${id}/`, { method: 'POST' })
+                            .then(() => {
+                                if (link && link !== '') {
+                                    window.location.href = link;
+                                } else {
+                                    loadNotifications();
+                                }
+                            })
+                            .catch(() => loadNotifications());
+                    });
+                });
+            })
+            .catch(error => console.error('Error loading notifications:', error));
+    }
+
+    const markAllBtn = document.getElementById('markAllReadBtn');
+    if (markAllBtn) {
+        markAllBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            fetch('/api/notifications/mark-all-read/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(() => {
+                loadNotifications();
+            })
+            .catch(error => console.error('Error:', error));
         });
+    }
 
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput && window.location.pathname === '/search/' && window.location.search.includes('q=')) {
-            searchInput.value = '';
+    // Функция для получения CSRF токена
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    notifToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const dropdown = document.getElementById('notifDropdown');
+        dropdown.classList.toggle('show');
+        if (dropdown.classList.contains('show')) {
+            loadNotifications();
         }
     });
+
+    document.addEventListener('click', function(e) {
+        const dropdown = document.getElementById('notifDropdown');
+        if (!notifToggle.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.remove('show');
+        }
+    });
+
+    loadNotifications();
+    setInterval(loadNotifications, 30000);
+    {% endif %}
+});
 </script>

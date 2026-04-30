@@ -29,6 +29,7 @@ class AnswerRating(models.Model):
 
 def create_answer(user_id, question_id, content):
     from main.models_features.question_feature import get_question_by_id
+    from main.models_features.notification_feature import create_notification
 
     answer_id = Answer.objects.create(
         user_id=user_id,
@@ -43,11 +44,21 @@ def create_answer(user_id, question_id, content):
             answer_author = User.objects.get(id=user_id)
             author_name = answer_author.profile.nickname or answer_author.username
 
+            # Отправка email
             send_answer_notification(
                 question_author_id=question['user_id'],
                 answer_author_name=author_name,
                 question_title=question['title'],
                 question_id=question_id
+            )
+
+            # Создание уведомления в базе данных
+            create_notification(
+                user_id=question['user_id'],
+                notification_type='answer',
+                title=f'Новый ответ от {author_name}',
+                message=f'на вопрос: {question["title"][:50]}',
+                link=f'/question/{question_id}/'
             )
     except Exception as e:
         print(f"[NOTIFICATION ERROR] {e}")

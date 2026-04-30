@@ -1,4 +1,5 @@
 from django.urls import path
+from main.views_features.notification_views import get_notifications, mark_read, mark_all_read
 from main.views_features import (
     index, register, login_view, logout_view, profile, settings,
     ask_question, question_detail, add_answer, rate_answer_view,
@@ -37,4 +38,7 @@ urlpatterns = [
     path('moderation/unban_user/', moderate_unban_user, name='moderate_unban_user'),
     path('moderation/set_moderator/', moderate_set_moderator, name='moderate_set_moderator'),
     path('moderation/remove_moderator/', moderate_remove_moderator, name='moderate_remove_moderator'),
+    path('api/notifications/', get_notifications, name='get_notifications'),
+    path('api/notifications/mark-read/<int:notification_id>/', mark_read, name='mark_read'),
+    path('api/notifications/mark-all-read/', mark_all_read, name='mark_all_read'),
 ]

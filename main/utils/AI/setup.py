@@ -3,11 +3,9 @@ from pathlib import Path
 from huggingface_hub import hf_hub_download, login
 
 
-"""
-Если нужно скачать модель и нужна авторизация
-HF_TOKEN = "ваш_ключ"
+
+HF_TOKEN = "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"
 login(token=HF_TOKEN)
-"""
 
 REPO_ID = "Qwen/Qwen2.5-1.5B-Instruct-GGUF"
 FILENAME = "qwen2.5-1.5b-instruct-q4_k_m.gguf"

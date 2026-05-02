@@ -20,7 +20,7 @@ pylint:
 pycodestyle:
   stage: style
   script:
-  - pycodestyle --max-line-length=120 **/*.py
+  - pycodestyle --max-line-length=120 *.py
   - echo "Pycodestyle complete."
   artifacts:
     when: on_failure

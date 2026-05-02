@@ -1,3 +1,7 @@
+"""
+Тесты для создания вопросов
+"""
+
 from unittest.mock import patch
 
 from django.test import TestCase, Client
@@ -123,4 +127,3 @@ class ProfileViewTests(TestCase):
             reverse("profile", kwargs={"username": "missing-user"})
         )
         self.assertTemplateUsed(response, "404.html")
-

@@ -1,3 +1,7 @@
+"""
+Код для тиестирования AI взаимодействий
+"""
+
 import json
 
 from django.test import TestCase, Client
@@ -8,6 +12,9 @@ from django.urls import reverse
 User = get_user_model()
 
 class AiSessionActionsTests(TestCase):
+    """
+    Класс для ai  тестов
+    """
     fixtures = ['db.json']
 
     def setUp(self):

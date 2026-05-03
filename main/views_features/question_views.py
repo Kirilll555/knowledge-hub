@@ -14,8 +14,6 @@ from .helpers import get_menu
 
 
 def ask_question(request):
-    """ Страница создания вопроса """
-
     if not request.user.is_authenticated:
         return redirect('/login/')
 
@@ -35,8 +33,6 @@ def ask_question(request):
 
 
 def question_detail(request, question_id):
-    """ Страница вопроса и ответов """
-
     question = get_question_by_id(question_id)
     if not question:
         return render(request, '404.html', {'menu': get_menu(request)}, status=404)
@@ -67,8 +63,6 @@ def question_detail(request, question_id):
 @login_required
 @csrf_exempt
 def add_answer(request, question_id):
-    """ Добавление ответа """
-
     if request.method == 'POST':
         content = request.POST.get('content', '').strip()
         if content:
@@ -87,8 +81,6 @@ def add_answer(request, question_id):
 @login_required
 @csrf_exempt
 def rate_answer_view(request, answer_id):
-    """ Оценка ответа """
-
     if request.method == 'POST':
         data = json.loads(request.body)
         rating = data.get('rating')

@@ -9,7 +9,14 @@ class Complaint(models.Model):
         ('spam', 'Спам'),
         ('offensive', 'Оскорбление'),
         ('incorrect', 'Неверная информация'),
+        ('user_behavior', 'Плохое поведение пользователя'),
         ('other', 'Другое'),
+    ]
+    
+    TARGET_TYPES = [
+        ('question', 'Вопрос'),
+        ('answer', 'Ответ'),
+        ('user', 'Пользователь'),
     ]
     
     STATUS_CHOICES = [
@@ -19,7 +26,9 @@ class Complaint(models.Model):
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='complaints')
+    target_type = models.CharField(max_length=20, choices=TARGET_TYPES, default='question')
     complaint_type = models.CharField(max_length=20, choices=COMPLAINT_TYPES)
+    target_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='complaints_against')
     question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True, blank=True)
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE, null=True, blank=True)
     reason = models.TextField()
@@ -29,15 +38,21 @@ class Complaint(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        target = f"Вопрос #{self.question_id}" if self.question else f"Ответ #{self.answer_id}"
-        return f"Жалоба от {self.user.username} на {target}"
+        if self.target_type == 'user':
+            return f"Жалоба от {self.user.username} на пользователя {self.target_user.username}"
+        elif self.question:
+            return f"Жалоба от {self.user.username} на вопрос #{self.question_id}"
+        else:
+            return f"Жалоба от {self.user.username} на ответ #{self.answer_id}"
 
 
-def create_complaint(user_id, complaint_type, reason, description='', question_id=None, answer_id=None):
+def create_complaint(user_id, complaint_type, reason, description='', target_type='question', target_user_id=None, question_id=None, answer_id=None):
     """Создаёт жалобу"""
     return Complaint.objects.create(
         user_id=user_id,
+        target_type=target_type,
         complaint_type=complaint_type,
+        target_user_id=target_user_id,
         question_id=question_id,
         answer_id=answer_id,
         reason=reason,

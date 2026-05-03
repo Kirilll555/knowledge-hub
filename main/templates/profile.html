@@ -2,52 +2,366 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Профиль</title>
+    <title>Профиль {{ profile_user.username }}</title>
     {% include 'base_styles.html' %}
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .profile-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            overflow: hidden;
+        }
+        
+        .profile-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            text-align: center;
+            color: white;
+        }
+        
+        .profile-avatar {
+            font-size: 80px;
+            margin-bottom: 15px;
+        }
+        
+        .profile-name {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .profile-username {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-sub);
+        }
+        
+        .profile-info {
+            padding: 20px;
+        }
+        
+        .info-row {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .info-label {
+            width: 120px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .info-value {
+            flex: 1;
+            color: var(--text-sub);
+        }
+        
+        .complaint-btn {
+            margin: 20px;
+            background: linear-gradient(135deg, #fa5252 0%, #c92a2a 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 14px;
+            width: calc(100% - 40px);
+            transition: all 0.2s;
+        }
+        
+        .complaint-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(250, 82, 82, 0.4);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 0;
+            width: 90%;
+            max-width: 500px;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: var(--text);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .complaint-select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg);
+            color: var(--text);
+            margin-bottom: 15px;
+        }
+
+        .complaint-textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg);
+            color: var(--text);
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #fa5252 0%, #c92a2a 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+        }
+
+        .btn-cancel {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+            padding: 10px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     {% include 'menu.html' %}
-    <h1>Профиль пользователя: {{ username }}</h1>
 
-    <table>
-        <tr>
-            <td>Репутация:</td>
-            <td><strong>2,547</strong></td>
-        </tr>
-        <tr>
-            <td>Ответов:</td>
-            <td>156</td>
-        </tr>
-        <tr>
-            <td>Вопросов:</td>
-            <td>43</td>
-        </tr>
-        <tr>
-            <td>Статей:</td>
-            <td>89</td>
-        </tr>
-    </table>
+    <div class="profile-container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-avatar">👤</div>
+                <div class="profile-name">{{ profile_user.profile.nickname|default:profile_user.username }}</div>
+                <div class="profile-username">@{{ profile_user.username }}</div>
+            </div>
 
-    <hr>
+            <div class="profile-stats">
+                <div class="stat">
+                    <div class="stat-number">{{ questions_count|default:0 }}</div>
+                    <div class="stat-label">Вопросов</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">{{ answers_count|default:0 }}</div>
+                    <div class="stat-label">Ответов</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">{{ rating|default:0 }}</div>
+                    <div class="stat-label">Репутация</div>
+                </div>
+            </div>
 
-    <h2>Активность</h2>
+            <div class="profile-info">
+                <div class="info-row">
+                    <div class="info-label">🎂 Возраст</div>
+                    <div class="info-value">{{ profile_user.profile.age|default:"Не указан" }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">🎯 Любимый предмет</div>
+                    <div class="info-value">{{ profile_user.profile.main_subject|default:"Не указан" }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">💭 Хобби</div>
+                    <div class="info-value">{{ profile_user.profile.hobby|default:"Не указано" }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">📅 Дата регистрации</div>
+                    <div class="info-value">{{ profile_user.date_joined|date:"d.m.Y" }}</div>
+                </div>
+            </div>
 
-    <ul>
-        <li>
-            <a>
-                Ответ на вопрос "Как работает замыкание в JS?"
-            </a> - 2 часа назад (+15)
-        </li>
-        <li>
-            <a>
-                Опубликована статья "Полное руководство по React Hooks"
-            </a> - вчера (+50)
-        </li>
-        <li>
-            <a>
-                Лучший ответ на вопрос "Что такое Docker?"
-            </a> - 3 дня назад (+100)
-        </li>
-    </ul>
+            {% if user.is_authenticated and user.id != profile_user.id %}
+            <button class="complaint-btn" id="complaintUserBtn">
+                🚩 Пожаловаться на пользователя
+            </button>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="modal" id="complaintModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🚩 Жалоба на пользователя</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label>Тип жалобы:</label>
+                <select id="complaintType" class="complaint-select">
+                    <option value="spam">📧 Спам</option>
+                    <option value="offensive">🤬 Оскорбление</option>
+                    <option value="user_behavior">👎 Плохое поведение</option>
+                    <option value="other">📝 Другое</option>
+                </select>
+
+                <label>Подробное описание:</label>
+                <textarea id="complaintDescription" rows="4" class="complaint-textarea" placeholder="Опишите, что вас не устраивает в поведении пользователя..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal()">Отмена</button>
+                <button class="btn-submit" onclick="submitComplaint()">Отправить жалобу</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function openModal() {
+            document.getElementById('complaintModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('complaintModal').classList.remove('show');
+        }
+
+        function submitComplaint() {
+            const complaintType = document.getElementById('complaintType').value;
+            const description = document.getElementById('complaintDescription').value;
+
+            if (!description.trim()) {
+                alert('Пожалуйста, опишите причину жалобы');
+                return;
+            }
+
+            const data = {
+                target_type: 'user',
+                target_id: {{ profile_user.id }},
+                complaint_type: complaintType,
+                description: description,
+                reason: complaintType
+            };
+
+            fetch('/api/complaints/create/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Жалоба отправлена. Спасибо за помощь!');
+                    closeModal();
+                } else {
+                    alert('❌ Ошибка: ' + (data.error || 'Не удалось отправить жалобу'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Ошибка при отправке жалобы');
+            });
+        }
+
+        document.getElementById('complaintUserBtn')?.addEventListener('click', openModal);
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('complaintModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
 </body>
 </html>

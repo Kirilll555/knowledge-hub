@@ -15,7 +15,7 @@
             <div class="question-title">{{ question.title }}</div>
 
             <div class="question-meta">
-                <span class="question-meta-item">👤 {{ question.author_name }}</span>
+                <span class="question-meta-item">👤 <a href="/profile/{{ question.author_username }}/">{{ question.author_name }}</a></span>
                 <span class="question-meta-item">📅 {{ question.created_at|slice:":10" }}</span>
                 <span class="question-meta-item">👁️ {{ question.views_count|default:0 }} просмотров</span>
                 {% if user.is_authenticated and user.id != question.user_id %}
@@ -36,8 +36,8 @@
                 <div class="answer-item">
                     <div class="answer-author">
                         <div class="answer-avatar">👤</div>
-                        <span class="answer-name">{{ answer.author_name }}</span>
-                        <span class="answer-date">{{ answer.created_at }}</span>
+                        <span class="answer-name"><a href="/profile/{{ answer.author_username }}/">{{ answer.author_name }}</a></span>
+                        <span class="answer-date">{{ answer.created_at|date:"d.m.Y H:i" }}</span>
                         {% if user.is_authenticated and user.id != answer.user_id %}
                         <button class="flag-btn" data-type="answer" data-id="{{ answer.id }}" title="Пожаловаться">🚩</button>
                         {% endif %}
@@ -82,7 +82,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно для жалобы -->
     <div class="modal" id="complaintModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -92,7 +91,6 @@
             <div class="modal-body">
                 <input type="hidden" id="complaintTargetType" value="">
                 <input type="hidden" id="complaintTargetId" value="">
-
                 <label>Тип жалобы:</label>
                 <select id="complaintType" class="complaint-select">
                     <option value="spam">📧 Спам</option>
@@ -100,170 +98,69 @@
                     <option value="incorrect">❌ Неверная информация</option>
                     <option value="other">📝 Другое</option>
                 </select>
-
                 <label>Подробное описание:</label>
-                <textarea id="complaintDescription" rows="4" class="complaint-textarea" placeholder="Опишите подробнее, что вас не устраивает..."></textarea>
+                <textarea id="complaintDescription" rows="4" class="complaint-textarea" placeholder="Опишите подробнее..."></textarea>
             </div>
             <div class="modal-footer">
                 <button class="btn-cancel" onclick="closeModal()">Отмена</button>
-                <button class="btn-submit-complaint" onclick="submitComplaint()">Отправить жалобу</button>
+                <button class="btn-submit-complaint" onclick="submitComplaint()">Отправить</button>
             </div>
         </div>
     </div>
 
     <style>
-        /* Кнопка флага (жалоба) */
         .flag-btn {
-            background: none;
-            border: none;
-            font-size: 1.1rem;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 8px;
-            transition: all 0.2s;
-            margin-left: 10px;
-            opacity: 0.6;
+            background: none; border: none; font-size: 1.1rem; cursor: pointer;
+            padding: 4px 8px; border-radius: 8px; transition: all 0.2s;
+            margin-left: 10px; opacity: 0.6;
         }
-
-        .flag-btn:hover {
-            opacity: 1;
-            transform: scale(1.1);
-            background: rgba(250, 82, 82, 0.1);
-        }
-
-        /* Модальное окно для жалобы */
+        .flag-btn:hover { opacity: 1; transform: scale(1.1); background: rgba(250,82,82,0.1); }
         .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+            z-index: 2000; justify-content: center; align-items: center;
         }
-
-        .modal.show {
-            display: flex;
-        }
-
+        .modal.show { display: flex; }
         .modal-content {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 0;
-            width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow: hidden;
-            animation: modalSlideIn 0.3s ease;
+            background: var(--card-bg); border-radius: 24px; padding: 0;
+            width: 90%; max-width: 500px; animation: modalSlideIn 0.3s ease;
         }
-
         @keyframes modalSlideIn {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
-
-        .modal-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-header h3 {
-            margin: 0;
-            color: var(--text);
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text);
-        }
-
-        .modal-body {
-            padding: 20px;
-        }
-
-        .modal-footer {
-            padding: 20px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        .complaint-select {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            background: var(--bg);
-            color: var(--text);
+        .modal-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+        .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; }
+        .modal-body { padding: 20px; }
+        .modal-footer { padding: 20px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+        .complaint-select, .complaint-textarea {
+            width: 100%; padding: 10px; border: 2px solid var(--border);
+            border-radius: 12px; background: var(--bg); color: var(--text);
             margin-bottom: 15px;
         }
-
-        .complaint-textarea {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            background: var(--bg);
-            color: var(--text);
-            resize: vertical;
-            font-family: inherit;
-        }
-
+        .complaint-textarea { resize: vertical; font-family: inherit; }
         .btn-submit-complaint {
             background: linear-gradient(135deg, #fa5252 0%, #c92a2a 100%);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: all 0.2s;
+            color: white; border: none; padding: 10px 20px; border-radius: 40px;
+            cursor: pointer; transition: all 0.2s;
         }
-
-        .btn-submit-complaint:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(250, 82, 82, 0.4);
-        }
-
+        .btn-submit-complaint:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(250,82,82,0.4); }
         .btn-cancel {
-            background: transparent;
-            border: 2px solid var(--border);
-            color: var(--text);
-            padding: 10px 20px;
-            border-radius: 40px;
-            cursor: pointer;
+            background: transparent; border: 2px solid var(--border);
+            color: var(--text); padding: 10px 20px; border-radius: 40px; cursor: pointer;
         }
+        .question-meta-item a:hover, .answer-name a:hover { text-decoration: underline; opacity: 0.8; }
     </style>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Рейтинг ответов
             document.querySelectorAll('.rating-btn').forEach(button => {
                 button.addEventListener('click', function () {
                     const answerId = this.dataset.answerId;
                     const rating = this.dataset.rating;
-
-                    fetch(`/rate-answer/${answerId}/`, {
+                    fetch(`/rate/${answerId}/`, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': '{{ csrf_token }}'
-                        },
+                        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
                         body: JSON.stringify({ rating: rating })
                     })
                     .then(response => response.json())
@@ -275,34 +172,21 @@
                     });
                 });
             });
-
-            // Кнопки жалоб
             document.querySelectorAll('.flag-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const type = this.dataset.type;
-                    const id = this.dataset.id;
-                    openModal(type, id);
+                    e.preventDefault(); e.stopPropagation();
+                    openModal(this.dataset.type, this.dataset.id);
                 });
             });
         });
-
         let currentComplaintData = {};
-
         function openModal(type, id) {
             currentComplaintData = { type: type, id: id };
             document.getElementById('complaintTargetType').value = type;
             document.getElementById('complaintTargetId').value = id;
-            document.getElementById('complaintType').value = 'spam';
-            document.getElementById('complaintDescription').value = '';
             document.getElementById('complaintModal').classList.add('show');
         }
-
-        function closeModal() {
-            document.getElementById('complaintModal').classList.remove('show');
-        }
-
+        function closeModal() { document.getElementById('complaintModal').classList.remove('show'); }
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -317,52 +201,28 @@
             }
             return cookieValue;
         }
-
         function submitComplaint() {
-            const complaintType = document.getElementById('complaintType').value;
             const description = document.getElementById('complaintDescription').value;
-
-            if (!description.trim()) {
-                alert('Пожалуйста, опишите причину жалобы');
-                return;
-            }
-
-            const data = {
-                target_type: currentComplaintData.type,
-                target_id: currentComplaintData.id,
-                complaint_type: complaintType,
-                description: description
-            };
-
+            if (!description.trim()) { alert('Опишите причину жалобы'); return; }
             fetch('/api/complaints/create/', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                body: JSON.stringify(data)
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+                body: JSON.stringify({
+                    target_type: currentComplaintData.type,
+                    target_id: currentComplaintData.id,
+                    complaint_type: document.getElementById('complaintType').value,
+                    description: description
+                })
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    alert('✅ Жалоба отправлена. Спасибо за помощь!');
-                    closeModal();
-                } else {
-                    alert('❌ Ошибка: ' + (data.error || 'Не удалось отправить жалобу'));
-                }
+                if (data.success) { alert('✅ Жалоба отправлена'); closeModal(); }
+                else { alert('❌ Ошибка: ' + (data.error || 'Не удалось отправить')); }
             })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('❌ Ошибка при отправке жалобы');
-            });
+            .catch(() => alert('❌ Ошибка при отправке'));
         }
-
-        // Закрытие модального окна по клику вне его
         window.onclick = function(event) {
-            const modal = document.getElementById('complaintModal');
-            if (event.target === modal) {
-                closeModal();
-            }
+            if (event.target === document.getElementById('complaintModal')) closeModal();
         }
     </script>
 </body>

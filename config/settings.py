@@ -2,9 +2,11 @@
 Django settings for config project.
 """
 import os
+from dotenv import load_dotenv
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv()
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/profile/'
@@ -25,6 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
 ]
+
+STATIC_URL = '/static/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -85,23 +89,6 @@ LANGUAGE_CODE = 'ru-ru'
 TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 USE_TZ = True
-
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = 'static/'
-'''
-# ========== STATIC FILES ==========
-STATIC_URL = '/static/'
-
-# STATICFILES_DIRS — только для разработки (не используется в production)
-STATICFILES_DIRS = [
-    BASE_DIR / 'main' / 'static',
-]
-'''
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# STATIC_ROOT — куда собираются файлы при collectstatic
-# Используем другую папку, чтобы не было конфликта
-STATIC_ROOT = BASE_DIR / 'static_collected'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -218,6 +205,8 @@ LOGGING = {
     },
 }
 
-# ========== EMAIL CONFIGURATION ==========
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'noreply@knowledgehub.local'
+
+AI_SERVER_URL = "http://157.22.200.226:8080"
+AI_API_KEY = os.getenv("AI_API_KEY")

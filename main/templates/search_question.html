@@ -7,6 +7,7 @@
     {% include 'base_styles.html' %}
     {% include 'search_question_styles.html' %}
     {% include 'animations.html' %}
+    {% include 'format_styles.html' %}
 </head>
 <body>
     {% include 'menu.html' %}
@@ -20,18 +21,14 @@
                     <div class="asked-question">Вопрос: {{ question }}</div>
                 {% endif %}
             </div>
-            <div class="response-content">
+            <div class="response-content" id="responseContent">
                 {% if answer %}
                     <p>{{ answer|linebreaksbr }}</p>
                 {% else %}
-                    <p class="response-placeholder">Здесь будет ответ искусственного интеллекта</p>
+                    <p class="response-placeholder">Здесь будет ответ</p>
                 {% endif %}
             </div>
-
-            {% if error %}
-                <div class="error-message">{{ error }}</div>
-            {% endif %}
-            <div class="response-footer">
+            <div class="response-footer" id="responseFooter">
                 <a href="/ask_ai/{{ session_id }}/" class="chat-link">💬 Перейти в чат</a>
             </div>
         </div>
@@ -41,57 +38,80 @@
                 <span class="search-icon">🔍</span>
                 <h3>Результаты поиска</h3>
             </div>
-
             <div class="search-results-list">
-                {% if results %}
-                    {% for item in results %}
-                        <div class="search-result-item">
-                            <div class="search-result-title">{{ item.title }}</div>
-                            <div class="search-result-subject">Тема: {{ item.subject }}</div>
-                            <div class="search-result-content">{{ item.content|truncatechars:140 }}</div>
-                            <div class="search-result-meta">
-                                <span>Автор: {{ item.author_name }}</span>
-                                <span>Ответов: {{ item.answers_count }}</span>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="search-result-item">Ничего не найдено</div>
-                {% endif %}
+                <div class="search-result-item">Как настроить VPN на iPhone?</div>
+                <div class="search-result-item">Что лучше: Python или JavaScript?</div>
+                <div class="search-result-item">Как работает ChatGPT?</div>
+                <div class="search-result-item">Где найти курсы по английскому?</div>
+                <div class="search-result-item">Как защитить данные в интернете?</div>
             </div>
         </div>
     </div>
 
     <script>
-        (function() {
-            const q = new URLSearchParams(window.location.search).get('q');
-            const sessionId = '{{ session_id }}';
-            const content = document.getElementById('responseContent');
-            const footer = document.getElementById('responseFooter');
+        const csrftoken = document.cookie.split('; ').find(row => row.startsWith('csrftoken=')).split('=')[1];
+        const q = new URLSearchParams(window.location.search).get('q');
+        const sessionId = '{{ session_id }}';
+        const content = document.getElementById('responseContent');
+        const footer = document.getElementById('responseFooter');
+        let currentAnswer = '';
 
-            if (q && sessionId && content && !content.innerHTML.includes('<p>')) {
-                content.innerHTML = '<div class="thinking-dots"><span></span><span></span><span></span></div>';
-                if (footer) footer.innerHTML = '';
+        function copyAnswer() {
+            navigator.clipboard.writeText(currentAnswer);
+            alert('Скопировано');
+        }
 
-                fetch('/search/api/', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({question: q, session_id: sessionId})
-                })
-                .then(r => r.json())
-                .then(d => {
-                    if (d.answer) {
-                        content.innerHTML = '<p>' + d.answer.replace(/\n/g, '<br>') + '</p>';
-                        footer.innerHTML = '<a href="/ask_ai/' + sessionId + '/" class="chat-link">💬 Перейти в чат</a>';
-                    } else {
-                        content.innerHTML = '<div class="error-message">' + (d.error || 'Ошибка') + '</div>';
-                    }
-                })
-                .catch(() => {
-                    content.innerHTML = '<div class="error-message">Ошибка соединения</div>';
-                });
-            }
-        })();
+        function regenerateAnswer() {
+            content.innerHTML = '<div class="thinking-dots"><span></span><span></span><span></span></div>';
+            footer.innerHTML = '';
+
+            fetch('/regenerate/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json', 'X-CSRFToken': csrftoken},
+                body: JSON.stringify({question: q, session_id: sessionId, old_answer: currentAnswer})
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    currentAnswer = data.answer;
+                    content.innerHTML = '<p>' + data.answer.replace(/\n/g, '<br>') + '</p>';
+                    footer.innerHTML = `
+                        <div class="response-actions">
+                            <button class="action-btn copy-btn" onclick="copyAnswer()">📋 Копировать</button>
+                            <button class="action-btn" onclick="regenerateAnswer()">🔄 Не понравился ответ</button>
+                            <a href="/ask_ai/${sessionId}/" class="chat-link">💬 В чат</a>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        if (q && sessionId) {
+            content.innerHTML = '<div class="thinking-dots"><span></span><span></span><span></span></div>';
+            footer.innerHTML = '';
+
+            fetch('/search/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json', 'X-CSRFToken': csrftoken},
+                body: JSON.stringify({question: q, session_id: sessionId})
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    currentAnswer = data.answer;
+                    content.innerHTML = '<p>' + data.answer.replace(/\n/g, '<br>') + '</p>';
+                    footer.innerHTML = `
+                        <div class="response-actions">
+                            <button class="action-btn copy-btn" onclick="copyAnswer()">📋 Копировать</button>
+                            <button class="action-btn" onclick="regenerateAnswer()">🔄 Не понравился ответ</button>
+                            <a href="/ask_ai/${sessionId}/" class="chat-link">💬 В чат</a>
+                        </div>
+                    `;
+                } else {
+                    content.innerHTML = '<div class="error-message">Ошибка</div>';
+                }
+            });
+        }
     </script>
 </body>
 </html>

@@ -6,6 +6,8 @@
     <title>Чат с ИИ</title>
     {% include 'base_styles.html' %}
     {% include 'ask_ai_styles.html' %}
+    {% include 'animations.html' %}
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 <body>
     {% include 'menu.html' %}
@@ -18,11 +20,11 @@
                 </div>
                 <div class="sessions-list">
                     {% for s in sessions %}
-                    <div class="session-item {% if s.id == current_session.id %}active{% endif %}" data-session-id="{{ s.id }}">
-                        <span class="session-title" id="title-{{ s.id }}">{{ s.title|truncatechars:30 }}</span>
+                    <div class="session-item {% if s.id == current_session.id %}active{% endif %}" onclick="switchSession({{ s.id }})">
+                        <span class="session-title">{{ s.title|truncatechars:30 }}</span>
                         <div class="session-actions">
-                            <span class="edit-session" onclick="editSession({{ s.id }})">✏️</span>
-                            <span class="delete-session" onclick="deleteSession({{ s.id }})">🗑️</span>
+                            <span class="edit-session" onclick="event.stopPropagation(); editSession({{ s.id }})">✏️</span>
+                            <span class="delete-session" onclick="event.stopPropagation(); deleteSession({{ s.id }})">🗑️</span>
                         </div>
                     </div>
                     {% empty %}
@@ -44,20 +46,26 @@
                         <div class="message {% if msg.role == 'user' %}user-message{% else %}bot-message{% endif %}">
                             <div class="message-avatar">{% if msg.role == 'user' %}👤{% else %}🤖{% endif %}</div>
                             <div class="message-bubble">{{ msg.content|linebreaksbr }}</div>
+                            {% if msg.role == 'assistant' %}
+                            <div class="response-actions">
+                                <button class="action-btn copy-btn" onclick="copyAnswer(this, '{{ msg.content|escapejs }}')">📋 Копировать</button>
+                                <button class="action-btn" onclick="regenerateAnswer(this)">🔄 Не нравится</button>
+                            </div>
+                            {% endif %}
                         </div>
                     {% empty %}
                         <div class="message bot-message">
                             <div class="message-avatar">🤖</div>
-                            <div class="message-bubble placeholder">Задайте вопрос в поле ниже</div>
+                            <div class="message-bubble placeholder">Задайте вопрос</div>
                         </div>
                     {% endfor %}
                 </div>
 
                 <div class="chat-input-area">
-                    <form method="post" class="chat-form" id="chatForm" data-session-id="{{ current_session.id }}">
+                    <form method="post" class="chat-form" id="chatForm">
                         {% csrf_token %}
-                        <textarea name="question" class="chat-textarea" id="questionInput" placeholder="Введите ваш вопрос..." required></textarea>
-                        <button type="submit" class="chat-submit" id="submitBtn">📤 Отправить</button>
+                        <textarea name="question" class="chat-textarea" id="questionInput" placeholder="Введите вопрос..." rows="1"></textarea>
+                        <button type="submit" class="chat-submit">📤 Отправить</button>
                     </form>
                 </div>
             </div>
@@ -65,152 +73,116 @@
     </div>
 
     <script>
-        const form = document.getElementById('chatForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const questionInput = document.getElementById('questionInput');
-        const messagesContainer = document.getElementById('chatMessages');
-        const sessionId = form.dataset.sessionId;
-
-        function formatText(text) {
-            return text.replace(/\n/g, '<br>');
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
+        const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const messages = document.getElementById('chatMessages');
+        const input = document.getElementById('questionInput');
+        const sessionId = {{ current_session.id }};
 
         function scrollToBottom() {
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function switchSession(id) {
+            window.location.href = `/ask_ai/${id}/`;
         }
 
         function createNewSession() {
             fetch('/ask_ai/create/', {
                 method: 'POST',
-                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+                headers: { 'X-CSRFToken': csrf }
             })
             .then(r => r.json())
-            .then(data => {
-                if (data.session_id) window.location.href = `/ask_ai/${data.session_id}/`;
-            });
+            .then(d => { if (d.session_id) location.href = `/ask_ai/${d.session_id}/`; });
         }
 
-        function switchSession(sessionId) {
-            window.location.href = `/ask_ai/${sessionId}/`;
-        }
-
-        function editSession(sessionId) {
-            const titleSpan = document.getElementById(`title-${sessionId}`);
-            const newTitle = prompt('Введите новое название диалога:', titleSpan.textContent);
-            if (newTitle && newTitle.trim()) {
-                fetch(`/ask_ai/rename/${sessionId}/`, {
+        function editSession(id) {
+            const title = prompt('Новое название:');
+            if (title) {
+                fetch(`/ask_ai/rename/${id}/`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken')
-                    },
-                    body: JSON.stringify({ title: newTitle.trim() })
-                })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.success) {
-                        titleSpan.textContent = newTitle.trim();
-                        if (parseInt(sessionId) === parseInt('{{ current_session.id }}')) {
-                            document.querySelector('.chat-header h2').textContent = newTitle.trim();
-                        }
-                    }
-                });
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf },
+                    body: JSON.stringify({ title })
+                }).then(() => location.reload());
             }
         }
 
-        function deleteSession(sessionId) {
-            if (!confirm('Удалить этот диалог?')) return;
-            fetch(`/ask_ai/delete/${sessionId}/`, {
+        function deleteSession(id) {
+            if (confirm('Удалить диалог?')) {
+                fetch(`/ask_ai/delete/${id}/`, {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': csrf }
+                }).then(() => location.href = '/ask_ai/');
+            }
+        }
+
+        function copyAnswer(btn, text) {
+            navigator.clipboard.writeText(text);
+            btn.textContent = '✅';
+            setTimeout(() => btn.textContent = '📋 Копировать', 2000);
+        }
+
+        function regenerateAnswer(btn) {
+            const msgDiv = btn.closest('.message');
+            const oldText = msgDiv.querySelector('.message-bubble').innerText;
+            msgDiv.querySelector('.message-bubble').innerHTML = '<div class="thinking-dots"><span></span><span></span><span></span></div>';
+            btn.disabled = true;
+
+            fetch('/regenerate/', {
                 method: 'POST',
-                headers: { 'X-CSRFToken': getCookie('csrftoken') }
-            }).then(() => {
-                window.location.href = '/ask_ai/';
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf },
+                body: JSON.stringify({ session_id: sessionId, old_answer: oldText })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.answer) {
+                    msgDiv.querySelector('.message-bubble').innerHTML = data.answer.replace(/\n/g, '<br>');
+                    MathJax.typesetPromise();
+                }
+                btn.disabled = false;
             });
         }
 
-        form.addEventListener('submit', function(e) {
+        document.getElementById('chatForm').onsubmit = (e) => {
             e.preventDefault();
-            const question = questionInput.value.trim();
+            const question = input.value.trim();
             if (!question) return;
 
-            const userMsg = document.createElement('div');
-            userMsg.className = 'message user-message';
-            userMsg.innerHTML = `<div class="message-avatar">👤</div><div class="message-bubble">${formatText(escapeHtml(question))}</div>`;
-            messagesContainer.appendChild(userMsg);
+            messages.innerHTML += `<div class="message user-message"><div class="message-avatar">👤</div><div class="message-bubble">${question.replace(/\n/g, '<br>')}</div></div>`;
+            const loadId = 'load_' + Date.now();
+            messages.innerHTML += `<div class="message bot-message" id="${loadId}">
+            <div class="message-avatar">🤖</div>
+            <div class="thinking-dots"><span></span><span></span><span></span></div>
+            </div>`;
             scrollToBottom();
-
-            const loading = document.createElement('div');
-            loading.className = 'message bot-message';
-            loading.id = 'loadingMsg';
-            loading.innerHTML = `<div class="message-avatar">🤖</div><div class="message-bubble thinking-dots"><span></span><span></span><span></span></div>`;
-            messagesContainer.appendChild(loading);
-            scrollToBottom();
-
-            questionInput.value = '';
-            submitBtn.disabled = true;
+            input.value = '';
 
             fetch(window.location.href, {
                 method: 'POST',
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken'),
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
+                headers: { 'X-CSRFToken': csrf },
                 body: new URLSearchParams({ 'question': question })
             })
             .then(r => r.json())
             .then(data => {
-                document.getElementById('loadingMsg')?.remove();
-                const botMsg = document.createElement('div');
-                botMsg.className = 'message bot-message';
-                botMsg.innerHTML = `<div class="message-avatar">🤖</div><div class="message-bubble">${formatText(escapeHtml(data.answer))}</div>`;
-                messagesContainer.appendChild(botMsg);
-                scrollToBottom();
-            })
-            .catch(() => {
-                document.getElementById('loadingMsg')?.remove();
-                const errMsg = document.createElement('div');
-                errMsg.className = 'message bot-message';
-                errMsg.innerHTML = `<div class="message-avatar">⚠️</div><div class="message-bubble">Ошибка соединения</div>`;
-                messagesContainer.appendChild(errMsg);
-                scrollToBottom();
-            })
-            .finally(() => {
-                submitBtn.disabled = false;
-                questionInput.focus();
-            });
-        });
-
-        document.querySelectorAll('.session-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                if (!e.target.classList.contains('edit-session') && !e.target.classList.contains('delete-session')) {
-                    const sid = item.dataset.sessionId;
-                    if (sid) switchSession(sid);
+                document.getElementById(loadId)?.remove();
+                if (data.success) {
+                    messages.innerHTML += `
+                        <div class="message bot-message">
+                            <div class="message-avatar">🤖</div>
+                            <div class="message-bubble">${data.answer.replace(/\n/g, '<br>')}</div>
+                            <div class="response-actions">
+                                <button class="action-btn copy-btn" onclick="copyAnswer(this, '${data.answer.replace(/'/g, "\\'")}')">📋 Копировать</button>
+                                <button class="action-btn" onclick="regenerateAnswer(this)">🔄 Не нравится</button>
+                            </div>
+                        </div>
+                    `;
+                    MathJax.typesetPromise();
                 }
+                scrollToBottom();
+                input.focus();
             });
-        });
+        };
 
-        questionInput.focus();
+        input.focus();
         scrollToBottom();
     </script>
 </body>

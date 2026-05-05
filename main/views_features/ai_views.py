@@ -26,6 +26,7 @@ def search_question(request):
 
     question = request.GET.get('q', '')
     session_id = None
+
     if question and request.user.is_authenticated:
         session = ChatSession.objects.create(user_id=request.user.id, title=question[:50])
         session_id = session.id

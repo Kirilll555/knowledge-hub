@@ -70,44 +70,16 @@
     </div>
 
     <script>
-        (function() {
-            const form = document.querySelector('form');
-            const titleInput = document.querySelector('input[name="title"]');
-            const contentTextarea = document.querySelector('textarea[name="content"]');
+        const form = document.querySelector('form');
+        const title = document.querySelector('input[name="title"]');
+        const content = document.querySelector('textarea[name="content"]');
 
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    let hasError = false;
-
-                    if (!titleInput.value.trim()) {
-                        titleInput.style.borderColor = '#fa5252';
-                        hasError = true;
-                    } else {
-                        titleInput.style.borderColor = '';
-                    }
-
-                    if (!contentTextarea.value.trim()) {
-                        contentTextarea.style.borderColor = '#fa5252';
-                        hasError = true;
-                    } else {
-                        contentTextarea.style.borderColor = '';
-                    }
-
-                    if (hasError) {
-                        e.preventDefault();
-                        alert('Пожалуйста, заполните все обязательные поля (отмечены *)');
-                    }
-                });
+        form.addEventListener('submit', function(event) {
+            if (title.value === '' || content.value === '') {
+                event.preventDefault();
+                alert('Заполните все поля');
             }
-
-            const resetBtn = document.getElementById('resetBtn');
-            if (resetBtn) {
-                resetBtn.addEventListener('click', function() {
-                    titleInput.style.borderColor = '';
-                    contentTextarea.style.borderColor = '';
-                });
-            }
-        })();
+        });
     </script>
 </body>
 </html>

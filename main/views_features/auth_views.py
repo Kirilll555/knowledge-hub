@@ -1,93 +1,106 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from main.models_features import save_profile
-from main.utils.logger import log_auth
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from main.models_features.profile_feature import get_profile, save_profile
+from main.models_features.settings_feature import get_user_settings, update_user_settings
+from main.models_features.question_feature import get_recent_questions
 from .helpers import get_menu
 
 
-def register(request):
-    """ Регистрация пользователя """
+def index(request):
+    questions = get_recent_questions(10)
+    return render(request, 'index.html', {
+        'questions': questions,
+        'menu': get_menu(request),
+        'user': request.user
+    })
 
-    if request.user.is_authenticated:
-        return redirect('/')
 
+def register_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username', '').strip()
-        email = request.POST.get('email', '').strip()
-        password = request.POST.get('password', '')
-        password2 = request.POST.get('password2', '')
-
-        if not username or not password:
-            log_auth(username, 'register', success=False)
-            return render(request, 'register.html', {
-                'error': 'Заполните все обязательные поля',
-                'menu': get_menu(request)
-            })
-
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+        
         if password != password2:
-            log_auth(username, 'register', success=False)
-            return render(request, 'register.html', {
-                'error': 'Пароли не совпадают',
-                'username': username,
-                'email': email,
-                'menu': get_menu(request)
-            })
-
-        from django.contrib.auth.models import User
+            return render(request, 'register.html', {'error': 'Пароли не совпадают'})
+        
         if User.objects.filter(username=username).exists():
-            log_auth(username, 'register', success=False)
-            return render(request, 'register.html', {
-                'error': 'Пользователь с таким именем уже существует',
-                'email': email,
-                'menu': get_menu(request)
-            })
-
+            return render(request, 'register.html', {'error': 'Пользователь уже существует'})
+        
         user = User.objects.create_user(username=username, email=email, password=password)
-        save_profile(user.id, username, {'nickname': username, 'role': 'user'})
-
-        if User.objects.count() == 1:
-            from main.models_features.profile_feature import Profile
-            profile = Profile.objects.get(user=user)
-            profile.role = 'admin'
-            profile.save()
-
-        auth_login(request, user)
-        log_auth(user, 'register', success=True)
+        login(request, user)
         return redirect('/')
-
+    
     return render(request, 'register.html', {'menu': get_menu(request)})
 
 
 def login_view(request):
-    """ Вход в систему """
-
-    if request.user.is_authenticated:
-        return redirect('/')
-
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-
         user = authenticate(request, username=username, password=password)
-        if user:
-            auth_login(request, user)
-            log_auth(user, 'login', success=True)
-            next_url = request.GET.get('next', '/')
-            return redirect(next_url)
+        
+        if user is not None:
+            login(request, user)
+            return redirect(request.GET.get('next', '/'))
         else:
-            log_auth(username, 'login', success=False)
-            return render(request, 'login.html', {
-                'error': 'Неверное имя пользователя или пароль',
-                'menu': get_menu(request)
-            })
-
+            return render(request, 'login.html', {'error': 'Неверное имя пользователя или пароль'})
+    
     return render(request, 'login.html', {'menu': get_menu(request)})
 
 
 def logout_view(request):
-    """ Выход из системы """
-
-    if request.user.is_authenticated:
-        log_auth(request.user, 'logout', success=True)
-    auth_logout(request)
+    logout(request)
     return redirect('/')
+
+
+@login_required
+def profile(request, username):
+    profile_user = User.objects.get(username=username)
+    questions_count = profile_user.questions.count()
+    answers_count = profile_user.answers.count()
+    
+    return render(request, 'profile.html', {
+        'profile_user': profile_user,
+        'questions_count': questions_count,
+        'answers_count': answers_count,
+        'menu': get_menu(request),
+        'user': request.user
+    })
+
+
+@login_required
+def settings(request):
+    if request.method == 'POST':
+        nickname = request.POST.get('nickname')
+        age = request.POST.get('age')
+        hobby = request.POST.get('hobby')
+        main_subject = request.POST.get('main_subject')
+        
+        save_profile(request.user.id, request.user.username, {
+            'nickname': nickname,
+            'age': age,
+            'hobby': hobby,
+            'main_subject': main_subject,
+        })
+        
+        update_user_settings(request.user.id, {
+            'notifications': request.POST.get('notifications') == 'on',
+            'theme': request.POST.get('theme', 'light'),
+            'language': request.POST.get('language', 'ru'),
+        })
+        
+        return render(request, 'settings.html', {'saved': True, 'menu': get_menu(request)})
+    
+    profile_data = get_profile(request.user.id)
+    settings_data = get_user_settings(request.user.id)
+    
+    return render(request, 'settings.html', {
+        'profile': profile_data,
+        'settings': settings_data,
+        'menu': get_menu(request),
+        'user': request.user
+    })

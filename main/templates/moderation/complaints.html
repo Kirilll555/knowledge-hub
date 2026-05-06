@@ -55,7 +55,7 @@
         .type-incorrect { background: #4dabf7; color: white; }
         .type-user_behavior { background: #ff6b6b; color: white; }
         .type-other { background: #868e96; color: white; }
-
+        
         .target-badge {
             display: inline-block;
             padding: 4px 8px;
@@ -64,28 +64,28 @@
             font-weight: bold;
             margin-left: 10px;
         }
-
+        
         .target-question { background: #4dabf7; color: white; }
         .target-answer { background: #51cf66; color: white; }
         .target-user { background: #ff6b6b; color: white; }
-
+        
         .status-pending { color: #ffd93d; }
         .status-approved { color: #51cf66; }
         .status-rejected { color: #fa5252; }
-
+        
         .complaint-content {
             margin: 15px 0;
             padding: 15px;
             background: var(--item-bg);
             border-radius: 12px;
         }
-
+        
         .complaint-actions {
             display: flex;
             gap: 10px;
             margin-top: 15px;
         }
-
+        
         .btn-approve {
             background: #51cf66;
             color: white;
@@ -95,12 +95,12 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-
+        
         .btn-approve:hover {
             transform: translateY(-1px);
             box-shadow: 0 2px 8px rgba(81, 207, 102, 0.4);
         }
-
+        
         .btn-warn {
             background: #ffd93d;
             color: #000;
@@ -110,12 +110,12 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-
+        
         .btn-warn:hover {
             transform: translateY(-1px);
             box-shadow: 0 2px 8px rgba(255, 217, 61, 0.4);
         }
-
+        
         .btn-reject {
             background: #fa5252;
             color: white;
@@ -125,12 +125,12 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-
+        
         .btn-reject:hover {
             transform: translateY(-1px);
             box-shadow: 0 2px 8px rgba(250, 82, 82, 0.4);
         }
-
+        
         .btn-ban {
             background: #c92a2a;
             color: white;
@@ -140,38 +140,30 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-
+        
         .btn-ban:hover {
             transform: translateY(-1px);
             box-shadow: 0 2px 8px rgba(201, 42, 42, 0.4);
         }
-
+        
         .badge {
             padding: 4px 8px;
             border-radius: 12px;
             font-size: 12px;
             font-weight: bold;
         }
-
+        
         .question-link {
             color: var(--accent);
             text-decoration: none;
         }
-
-        .question-link:hover {
-            text-decoration: underline;
-        }
-
+        
         .user-link {
             color: #ff6b6b;
             text-decoration: none;
             font-weight: bold;
         }
-
-        .user-link:hover {
-            text-decoration: underline;
-        }
-
+        
         /* Модальное окно для бана */
         .modal {
             display: none;
@@ -185,11 +177,11 @@
             justify-content: center;
             align-items: center;
         }
-
+        
         .modal.show {
             display: flex;
         }
-
+        
         .modal-content {
             background: var(--card-bg);
             border-radius: 24px;
@@ -198,7 +190,7 @@
             max-width: 500px;
             animation: modalSlideIn 0.3s ease;
         }
-
+        
         @keyframes modalSlideIn {
             from {
                 transform: translateY(-50px);
@@ -209,7 +201,7 @@
                 opacity: 1;
             }
         }
-
+        
         .modal-header {
             padding: 20px;
             border-bottom: 1px solid var(--border);
@@ -217,12 +209,12 @@
             justify-content: space-between;
             align-items: center;
         }
-
+        
         .modal-header h3 {
             margin: 0;
             color: var(--text);
         }
-
+        
         .modal-close {
             background: none;
             border: none;
@@ -230,11 +222,11 @@
             cursor: pointer;
             color: var(--text);
         }
-
+        
         .modal-body {
             padding: 20px;
         }
-
+        
         .modal-footer {
             padding: 20px;
             border-top: 1px solid var(--border);
@@ -242,7 +234,17 @@
             justify-content: flex-end;
             gap: 10px;
         }
-
+        
+        .complaint-select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg);
+            color: var(--text);
+            margin-bottom: 15px;
+        }
+        
         .ban-reason {
             width: 100%;
             padding: 10px;
@@ -254,7 +256,7 @@
             resize: vertical;
             font-family: inherit;
         }
-
+        
         .btn-ban-submit {
             background: #c92a2a;
             color: white;
@@ -263,7 +265,7 @@
             border-radius: 40px;
             cursor: pointer;
         }
-
+        
         .btn-cancel {
             background: transparent;
             border: 2px solid var(--border);
@@ -276,13 +278,13 @@
 </head>
 <body>
     {% include 'menu.html' %}
-
+    
     <div class="complaints-container">
         <div class="complaints-header">
             <h1>🚩 Модерация жалоб</h1>
             <p>Всего жалоб: {{ complaints|length }}</p>
         </div>
-
+        
         {% for complaint in complaints %}
         <div class="complaint-card" id="complaint-{{ complaint.id }}">
             <div class="complaint-header">
@@ -310,45 +312,35 @@
                 </div>
                 <div class="complaint-date">📅 {{ complaint.created_at|date:"d.m.Y H:i" }}</div>
             </div>
-
+            
             <div class="complaint-content">
                 <p><strong>👤 Жалоба от:</strong> {{ complaint.user.username }}</p>
                 <p><strong>📝 Описание:</strong> {{ complaint.description|default:"Не указано" }}</p>
-
+                
                 {% if complaint.target_type == 'user' %}
-                <p><strong>🎯 Цель жалобы:</strong>
+                <p><strong>🎯 Цель жалобы:</strong> 
                     <a href="/profile/{{ complaint.target_user.username }}/" class="user-link">
                         @{{ complaint.target_user.username }}
                     </a>
                 </p>
-                <p><strong>📊 Статус пользователя:</strong>
-                    {% if complaint.target_user.profile.is_banned %}
-                    🔒 Заблокирован
-                    {% else %}
-                    ✅ Активен
-                    {% endif %}
-                </p>
                 {% elif complaint.question %}
-                <p><strong>🔗 Объект жалобы:</strong>
+                <p><strong>🔗 Объект жалобы:</strong> 
                     <a href="/question/{{ complaint.question.id }}/" class="question-link">
-                        Вопрос #{{ complaint.question.id }}: {{ complaint.question.title|truncatechars:50 }}
+                        Вопрос #{{ complaint.question.id }}
                     </a>
                 </p>
-                <p><strong>👤 Автор:</strong> {{ complaint.question.user.username }}</p>
                 {% else %}
-                <p><strong>🔗 Объект жалобы:</strong>
+                <p><strong>🔗 Объект жалобы:</strong> 
                     <a href="/question/{{ complaint.answer.question.id }}/" class="question-link">
                         Ответ к вопросу #{{ complaint.answer.question.id }}
                     </a>
                 </p>
-                <p><strong>👤 Автор:</strong> {{ complaint.answer.user.username }}</p>
                 {% endif %}
             </div>
-
+            
             {% if complaint.status == 'pending' %}
             <div class="complaint-actions">
                 {% if complaint.target_type == 'user' %}
-                    <button class="btn-warn" onclick="warnUser({{ complaint.target_user.id }}, {{ complaint.id }})">⚠️ Предупредить</button>
                     <button class="btn-ban" onclick="showBanModal({{ complaint.target_user.id }}, {{ complaint.id }})">🔒 Заблокировать</button>
                     <button class="btn-reject" onclick="resolveComplaint({{ complaint.id }}, 'reject')">❌ Отклонить</button>
                 {% else %}
@@ -364,7 +356,7 @@
         </div>
         {% endfor %}
     </div>
-
+    
     <!-- Модальное окно для бана -->
     <div class="modal" id="banModal">
         <div class="modal-content">
@@ -375,6 +367,17 @@
             <div class="modal-body">
                 <label>Причина блокировки:</label>
                 <textarea id="banReason" class="ban-reason" rows="3" placeholder="Укажите причину блокировки..."></textarea>
+                
+                <label style="margin-top: 15px;">Длительность блокировки:</label>
+                <select id="banDays" class="complaint-select">
+                    <option value="1">1 день</option>
+                    <option value="3">3 дня</option>
+                    <option value="7">7 дней</option>
+                    <option value="14">14 дней</option>
+                    <option value="30" selected>30 дней</option>
+                    <option value="90">90 дней</option>
+                    <option value="365">Навсегда (365 дней)</option>
+                </select>
             </div>
             <div class="modal-footer">
                 <button class="btn-cancel" onclick="closeBanModal()">Отмена</button>
@@ -382,10 +385,10 @@
             </div>
         </div>
     </div>
-
+    
     <script>
         let currentBanData = { userId: null, complaintId: null };
-
+        
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -400,11 +403,11 @@
             }
             return cookieValue;
         }
-
+        
         function resolveComplaint(complaintId, action) {
             const formData = new FormData();
             formData.append('action', action);
-
+            
             fetch(`/moderation/complaints/${complaintId}/resolve/`, {
                 method: 'POST',
                 headers: {
@@ -421,70 +424,50 @@
                 }
             });
         }
-
-        function warnUser(userId, complaintId) {
-            if (confirm('Отправить предупреждение пользователю?')) {
-                fetch(`/moderation/user/${userId}/warn/`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken'),
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ complaint_id: complaintId })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('✅ Предупреждение отправлено');
-                        location.reload();
-                    } else {
-                        alert('Ошибка: ' + data.error);
-                    }
-                });
-            }
-        }
-
+        
         function showBanModal(userId, complaintId) {
             currentBanData = { userId: userId, complaintId: complaintId };
             document.getElementById('banModal').classList.add('show');
         }
-
+        
         function closeBanModal() {
             document.getElementById('banModal').classList.remove('show');
             currentBanData = { userId: null, complaintId: null };
         }
-
+        
         function banUser() {
             const reason = document.getElementById('banReason').value;
+            const days = document.getElementById('banDays').value;
+            
             if (!reason.trim()) {
                 alert('Укажите причину блокировки');
                 return;
             }
-
-            fetch(`/moderation/user/${currentBanData.userId}/ban/`, {
+            
+            fetch(`/moderation/ban_user/${currentBanData.userId}/`, {
                 method: 'POST',
                 headers: {
-                    'X-CSRFToken': getCookie('csrftoken'),
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
                 },
-                body: JSON.stringify({
+                body: JSON.stringify({ 
                     reason: reason,
-                    complaint_id: currentBanData.complaintId
+                    days: parseInt(days),
+                    complaint_id: currentBanData.complaintId 
                 })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('🔒 Пользователь заблокирован');
+                    alert(`🔒 Пользователь заблокирован на ${days} дней`);
                     closeBanModal();
-                    location.reload();
+                    resolveComplaint(currentBanData.complaintId, 'approve');
                 } else {
                     alert('Ошибка: ' + data.error);
                 }
             });
         }
-
-        // Закрытие модального окна по клику вне его
+        
         window.onclick = function(event) {
             const modal = document.getElementById('banModal');
             if (event.target === modal) {

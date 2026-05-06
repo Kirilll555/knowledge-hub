@@ -5,7 +5,6 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from main.models_features.answer_rating_feature import Answer
-from django.db.models import Count, Q
 from main.models_features import (
     create_question, get_question_by_id, create_answer, get_answers_for_question,
     rate_answer, add_activity, Question,

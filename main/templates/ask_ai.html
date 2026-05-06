@@ -66,72 +66,61 @@
 
     <script>
         const form = document.getElementById('chatForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const questionInput = document.getElementById('questionInput');
-        const messagesContainer = document.getElementById('chatMessages');
-        const sessionId = form.dataset.sessionId;
-
-        function formatText(text) {
-            return text.replace(/\n/g, '<br>');
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
+        const input = document.getElementById('questionInput');
+        const messages = document.getElementById('chatMessages');
 
         function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
+            let value = null;
+            if (document.cookie) {
+                document.cookie.split(';').some(cookie => {
+                    const [key, val] = cookie.trim().split('=');
+                    if (key === name) {
+                        value = decodeURIComponent(val);
+                        return true;
                     }
-                }
+                });
             }
-            return cookieValue;
+            return value;
         }
 
         function scrollToBottom() {
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function addMessage(role, text) {
+            const div = document.createElement('div');
+            div.className = `message ${role === 'user' ? 'user-message' : 'bot-message'}`;
+            div.innerHTML = `<div class="message-avatar">${role === 'user' ? '👤' : '🤖'}</div>
+                             <div class="message-bubble">${text.replace(/\n/g, '<br>')}</div>`;
+            messages.appendChild(div);
+            scrollToBottom();
+            return div;
         }
 
         function createNewSession() {
-            fetch('/ask_ai/create/', {
-                method: 'POST',
-                headers: { 'X-CSRFToken': getCookie('csrftoken') }
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.session_id) window.location.href = `/ask_ai/${data.session_id}/`;
-            });
+            fetch('/ask_ai/create/', { method: 'POST', headers: { 'X-CSRFToken': getCookie('csrftoken') } })
+                .then(r => r.json())
+                .then(data => data.session_id && (window.location.href = `/ask_ai/${data.session_id}/`));
         }
 
-        function switchSession(sessionId) {
-            window.location.href = `/ask_ai/${sessionId}/`;
+        function switchSession(sid) {
+            window.location.href = `/ask_ai/${sid}/`;
         }
 
-        function editSession(sessionId) {
-            const titleSpan = document.getElementById(`title-${sessionId}`);
+        function editSession(sid) {
+            const titleSpan = document.getElementById(`title-${sid}`);
             const newTitle = prompt('Введите новое название диалога:', titleSpan.textContent);
             if (newTitle && newTitle.trim()) {
-                fetch(`/ask_ai/rename/${sessionId}/`, {
+                fetch(`/ask_ai/rename/${sid}/`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken')
-                    },
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
                     body: JSON.stringify({ title: newTitle.trim() })
                 })
                 .then(r => r.json())
                 .then(data => {
                     if (data.success) {
                         titleSpan.textContent = newTitle.trim();
-                        if (parseInt(sessionId) === parseInt('{{ current_session.id }}')) {
+                        if (parseInt(sid) === parseInt('{{ current_session.id }}')) {
                             document.querySelector('.chat-header h2').textContent = newTitle.trim();
                         }
                     }
@@ -139,9 +128,9 @@
             }
         }
 
-        function deleteSession(sessionId) {
+        function deleteSession(sid) {
             if (!confirm('Удалить этот диалог?')) return;
-            fetch(`/ask_ai/delete/${sessionId}/`, {
+            fetch(`/ask_ai/delete/${sid}/`, {
                 method: 'POST',
                 headers: { 'X-CSRFToken': getCookie('csrftoken') }
             }).then(() => {
@@ -149,55 +138,29 @@
             });
         }
 
-        form.addEventListener('submit', function(e) {
+        form?.addEventListener('submit', e => {
             e.preventDefault();
-            const question = questionInput.value.trim();
+            const question = input.value.trim();
             if (!question) return;
 
-            const userMsg = document.createElement('div');
-            userMsg.className = 'message user-message';
-            userMsg.innerHTML = `<div class="message-avatar">👤</div><div class="message-bubble">${formatText(escapeHtml(question))}</div>`;
-            messagesContainer.appendChild(userMsg);
-            scrollToBottom();
-
-            const loading = document.createElement('div');
-            loading.className = 'message bot-message';
+            addMessage('user', question);
+            input.value = '';
+            const loading = addMessage('bot', '<span class="thinking-dots"><span>.</span><span>.</span><span>.</span></span>');
             loading.id = 'loadingMsg';
-            loading.innerHTML = `<div class="message-avatar">🤖</div><div class="message-bubble thinking-dots"><span></span><span></span><span></span></div>`;
-            messagesContainer.appendChild(loading);
-            scrollToBottom();
-
-            questionInput.value = '';
-            submitBtn.disabled = true;
 
             fetch(window.location.href, {
                 method: 'POST',
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken'),
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
+                headers: { 'X-CSRFToken': getCookie('csrftoken'), 'X-Requested-With': 'XMLHttpRequest' },
                 body: new URLSearchParams({ 'question': question })
             })
             .then(r => r.json())
             .then(data => {
                 document.getElementById('loadingMsg')?.remove();
-                const botMsg = document.createElement('div');
-                botMsg.className = 'message bot-message';
-                botMsg.innerHTML = `<div class="message-avatar">🤖</div><div class="message-bubble">${formatText(escapeHtml(data.answer))}</div>`;
-                messagesContainer.appendChild(botMsg);
-                scrollToBottom();
+                addMessage('bot', data.answer);
             })
             .catch(() => {
                 document.getElementById('loadingMsg')?.remove();
-                const errMsg = document.createElement('div');
-                errMsg.className = 'message bot-message';
-                errMsg.innerHTML = `<div class="message-avatar">⚠️</div><div class="message-bubble">Ошибка соединения</div>`;
-                messagesContainer.appendChild(errMsg);
-                scrollToBottom();
-            })
-            .finally(() => {
-                submitBtn.disabled = false;
-                questionInput.focus();
+                addMessage('bot', 'Ошибка соединения');
             });
         });
 
@@ -210,7 +173,7 @@
             });
         });
 
-        questionInput.focus();
+        input?.focus();
         scrollToBottom();
     </script>
 </body>

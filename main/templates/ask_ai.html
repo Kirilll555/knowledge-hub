@@ -147,14 +147,21 @@
             const question = input.value.trim();
             if (!question) return;
 
-            messages.innerHTML += `<div class="message user-message"><div class="message-avatar">👤</div><div class="message-bubble">${question.replace(/\n/g, '<br>')}</div></div>`;
-            const loadId = 'load_' + Date.now();
-            messages.innerHTML += `<div class="message bot-message" id="${loadId}">
-            <div class="message-avatar">🤖</div>
-            <div class="thinking-dots"><span></span><span></span><span></span></div>
-            </div>`;
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user-message';
+            userMsg.innerHTML = `<div class="message-avatar">👤</div><div class="message-bubble">${formatText(escapeHtml(question))}</div>`;
+            messagesContainer.appendChild(userMsg);
             scrollToBottom();
-            input.value = '';
+
+            const loading = document.createElement('div');
+            loading.className = 'message bot-message';
+            loading.id = 'loadingMsg';
+            loading.innerHTML = `<div class="message-avatar">🤖</div><div class="message-bubble thinking-dots"><span></span><span></span><span></span></div>`;
+            messagesContainer.appendChild(loading);
+            scrollToBottom();
+
+            questionInput.value = '';
+            submitBtn.disabled = true;
 
             fetch(window.location.href, {
                 method: 'POST',

@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
+
 ]
 
 STATIC_URL = '/static/'
@@ -38,6 +39,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'main.middleware.BanCheckMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'

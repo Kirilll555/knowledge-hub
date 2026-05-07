@@ -1,3 +1,5 @@
+from django.utils import timezone
+from datetime import timedelta
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -19,6 +21,7 @@ class Profile(models.Model):
     is_banned = models.BooleanField(default=False)
     ban_reason = models.TextField(blank=True)
     banned_at = models.DateTimeField(null=True, blank=True)
+    banned_until = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -67,13 +70,13 @@ def save_profile(user_id, username, data):
     return True
 
 
-def ban_user(user_id, moderator_id, reason):
-    """ Блокировка пользователя """
-
+def ban_user(user_id, moderator_id, reason, days=30):
+    """Блокировка пользователя на определенное количество дней"""
     profile = Profile.objects.get(user_id=user_id)
     profile.is_banned = True
     profile.ban_reason = reason
     profile.banned_at = timezone.now()
+    profile.banned_until = timezone.now() + timedelta(days=days)
     profile.save()
     return True
 

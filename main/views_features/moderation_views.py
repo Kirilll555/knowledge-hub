@@ -1,6 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+
 from main.models_features.complaint_feature import get_all_complaints, update_complaint_status
 from main.models_features.question_feature import delete_question
 from main.models_features.answer_rating_feature import delete_answer
@@ -139,29 +142,34 @@ def moderate_delete_answer(request, answer_id):
 
 
 @login_required
+@csrf_exempt
+@require_http_methods(["POST"])
 def moderate_ban_user(request, user_id):
     """Блокировка пользователя"""
     if not request.user.is_superuser:
         return JsonResponse({'error': 'Access denied'}, status=403)
-    
-    if request.method == 'POST':
+
+    try:
         data = json.loads(request.body)
         reason = data.get('reason', 'Нарушение правил')
-        ban_user(user_id, request.user.id, reason)
-        
-        # Уведомление заблокированному пользователю
+        days = int(data.get('days', 30))  # Количество дней бана
+
+        from main.models_features.profile_feature import ban_user
+        from main.models_features.notification_feature import create_notification
+
+        ban_user(user_id, request.user.id, reason, days)
+
         create_notification(
             user_id=user_id,
             notification_type='system',
             title='🔒 Вы заблокированы',
-            message=f'Ваш аккаунт заблокирован модератором. Причина: {reason}',
+            message=f'Ваш аккаунт заблокирован на {days} дней. Причина: {reason}',
             link='/'
         )
-        
-        return JsonResponse({'success': True})
-    
-    return JsonResponse({'error': 'Invalid request'}, status=400)
 
+        return JsonResponse({'success': True, 'message': f'Пользователь заблокирован на {days} дней'})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 @login_required
 def moderate_unban_user(request, user_id):

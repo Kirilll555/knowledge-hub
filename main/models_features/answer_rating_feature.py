@@ -4,6 +4,7 @@ from django.db.models import Count, Q
 from .question_feature import Question
 from main.utils.email_notifications import send_answer_notification
 from main.models_features.notification_feature import create_notification
+from main.utils.logger import log_error
 
 
 class Answer(models.Model):
@@ -58,7 +59,10 @@ def create_answer(user_id, question_id, content):
                 link=f'/question/{question_id}/'
             )
     except Exception as e:
-        print(f"[NOTIFICATION ERROR] {e}")
+        log_error(
+            location="main.models_features.answer_rating_feature.py",
+            error=str(e),
+            )
 
     return answer_id
 

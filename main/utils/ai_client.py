@@ -11,7 +11,6 @@ class AIClient:
     def generate(self, prompt: str) -> dict:
         """ Делает запрос на сервер с ИИ """
         try:
-            print(123213123)
             encoded_prompt = urllib.parse.quote(prompt)
             response = httpx.post(
                 f"{self.base_url}/generate?api_key={self.api_key}&prompt={encoded_prompt}",

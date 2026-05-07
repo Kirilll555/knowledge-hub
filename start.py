@@ -6,17 +6,20 @@ def run(cmd):
     try:
         subprocess.run(cmd, shell=True)
     except KeyboardInterrupt:
-        print("\nStopped by user")
+        print("\nОстановлено пользователем")
         sys.exit(0)
 
 
 def main():
     python = sys.executable
 
-    print("Applying migrations...")
+    print("Устанавливаем зависимости...")
+    run(f"{python} -m pip install -r requirements.txt")
+
+    print("Выполняем миграции...")
     run(f"{python} manage.py migrate")
 
-    print("Starting server...")
+    print("Запускаем сервер...")
     run(f"{python} manage.py runserver")
 
 

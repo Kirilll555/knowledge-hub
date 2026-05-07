@@ -16,10 +16,8 @@ class AIClient:
                 f"{self.base_url}/generate?api_key={self.api_key}&prompt={encoded_prompt}",
                 timeout=120.0
             )
-
             return response.json()
         except Exception as e:
-            print("OI", e)
             return {"success": False, "error": str(e)}
 
     def regenerate(self, question: str, old_answer: str) -> dict:

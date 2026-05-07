@@ -18,16 +18,24 @@ def search_question(request):
             Q(subject__icontains=query)
         ).order_by('-created_at')
 
-        results = [{
-            'id': q.id,
-            'title': q.title,
-            'content': q.content,
-            'subject': q.subject,
-            'created_at': q.created_at,
-            'user_id': q.user.id,
-            'author_name': q.user.profile.nickname or q.user.username,
-            'answers_count': q.answers_count
-        } for q in questions]
+        results = []
+        for q in questions:
+            author_name = q.user.username
+            try:
+                if q.user.profile:
+                    author_name = q.user.profile.nickname or q.user.username
+            except:
+                pass
+            results.append({
+                'id': q.id,
+                'title': q.title,
+                'content': q.content,
+                'subject': q.subject,
+                'created_at': q.created_at,
+                'user_id': q.user.id,
+                'author_name': author_name,
+                'answers_count': q.answers_count
+            })
 
     return render(request, 'search_question.html', {
         'question': query,

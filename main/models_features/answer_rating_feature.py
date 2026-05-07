@@ -42,7 +42,12 @@ def create_answer(user_id, question_id, content):
         question = get_question_by_id(question_id)
         if question and question['user_id'] != user_id:
             answer_author = User.objects.get(id=user_id)
-            author_name = answer_author.profile.nickname or answer_author.username
+            author_name = answer_author.username
+            try:
+                if answer_author.profile:
+                    author_name = answer_author.profile.nickname or answer_author.username
+            except:
+                pass
 
             send_answer_notification(
                 question_author_id=question['user_id'],
@@ -80,12 +85,19 @@ def get_answers_for_question(question_id, user_id=None):
             dislikes=Count('id', filter=models.Q(is_like=False))
         )
 
+        author_name = a.user.username
+        try:
+            if a.user.profile:
+                author_name = a.user.profile.nickname or a.user.username
+        except:
+            pass
+
         answer_data = {
             'id': a.id,
             'content': a.content,
             'created_at': a.created_at,
             'user_id': a.user.id,
-            'author_name': a.user.profile.nickname or a.user.username,
+            'author_name': author_name,
             'author_username': a.user.username,
             'likes': ratings['likes'],
             'dislikes': ratings['dislikes'],

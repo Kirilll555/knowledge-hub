@@ -30,22 +30,37 @@ def get_recent_questions(limit=10):
         answers_count=Count('answers', filter=Q(answers__is_deleted=False))
     ).order_by('-created_at')[:limit]
 
-    return [{
-        'id': q.id,
-        'title': q.title,
-        'content': q.content,
-        'subject': q.subject,
-        'created_at': q.created_at,
-        'user_id': q.user.id,
-        'author_name': q.user.profile.nickname or q.user.username,
-        'author_username': q.user.username,
-        'answers_count': q.answers_count
-    } for q in questions]
+    result = []
+    for q in questions:
+        author_name = q.user.username
+        try:
+            if q.user.profile:
+                author_name = q.user.profile.nickname or q.user.username
+        except:
+            pass
+        result.append({
+            'id': q.id,
+            'title': q.title,
+            'content': q.content,
+            'subject': q.subject,
+            'created_at': q.created_at,
+            'user_id': q.user.id,
+            'author_name': author_name,
+            'author_username': q.user.username,
+            'answers_count': q.answers_count
+        })
+    return result
 
 
 def get_question_by_id(question_id):
     try:
         q = Question.objects.select_related('user', 'user__profile').get(id=question_id, is_deleted=False)
+        author_name = q.user.username
+        try:
+            if q.user.profile:
+                author_name = q.user.profile.nickname or q.user.username
+        except:
+            pass
         return {
             'id': q.id,
             'title': q.title,
@@ -53,7 +68,7 @@ def get_question_by_id(question_id):
             'subject': q.subject,
             'created_at': q.created_at,
             'user_id': q.user.id,
-            'author_name': q.user.profile.nickname or q.user.username,
+            'author_name': author_name,
             'author_username': q.user.username,
         }
     except Question.DoesNotExist:

@@ -4,8 +4,8 @@ from .profile_feature import (
     check_user_access, check_moderator_access, check_admin_access
 )
 from .question_feature import (
-    Question, get_recent_questions, get_question_by_id,
-    create_question, delete_question
+    Question, QuestionView, get_recent_questions, get_question_by_id,
+    create_question, delete_question, add_view, get_views_count
 )
 from .answer_rating_feature import (
     Answer, create_answer, get_answers_for_question, delete_answer
@@ -28,7 +28,7 @@ __all__ = [
     'Profile', 'get_profile', 'save_profile',
     'ban_user', 'unban_user', 'set_moderator', 'remove_moderator',
     'check_user_access', 'check_moderator_access', 'check_admin_access',
-    'Question', 'get_recent_questions', 'get_question_by_id', 'create_question', 'delete_question',
+    'Question', 'QuestionView', 'get_recent_questions', 'get_question_by_id', 'create_question', 'delete_question', 'add_view', 'get_views_count',
     'Answer', 'create_answer', 'get_answers_for_question', 'delete_answer',
     'AnswerRating', 'rate_answer',
     'ChatSession', 'ChatMessage',

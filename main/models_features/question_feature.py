@@ -16,6 +16,15 @@ class Question(models.Model):
         return self.title
 
 
+class QuestionView(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='views')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    viewed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('question', 'user')
+
+
 def create_question(user_id, title, content, subject='general'):
     return Question.objects.create(
         user_id=user_id,
@@ -27,7 +36,8 @@ def create_question(user_id, title, content, subject='general'):
 
 def get_recent_questions(limit=10):
     questions = Question.objects.filter(is_deleted=False).select_related('user__profile').annotate(
-        answers_count=Count('answers', filter=Q(answers__is_deleted=False))
+        answers_count=Count('answers', filter=Q(answers__is_deleted=False)),
+        views_count=Count('views', distinct=True)
     ).order_by('-created_at')[:limit]
 
     result = []
@@ -47,14 +57,17 @@ def get_recent_questions(limit=10):
             'user_id': q.user.id,
             'author_name': author_name,
             'author_username': q.user.username,
-            'answers_count': q.answers_count
+            'answers_count': q.answers_count,
+            'views_count': q.views_count
         })
     return result
 
 
 def get_question_by_id(question_id):
     try:
-        q = Question.objects.select_related('user', 'user__profile').get(id=question_id, is_deleted=False)
+        q = Question.objects.select_related('user', 'user__profile').annotate(
+            views_count=Count('views', distinct=True)
+        ).get(id=question_id, is_deleted=False)
         author_name = q.user.username
         try:
             if q.user.profile:
@@ -70,9 +83,24 @@ def get_question_by_id(question_id):
             'user_id': q.user.id,
             'author_name': author_name,
             'author_username': q.user.username,
+            'views_count': q.views_count,
         }
     except Question.DoesNotExist:
         return None
+
+
+def add_view(question_id, user_id=None):
+    """Добавляет просмотр вопроса (только один просмотр на пользователя)"""
+    if question_id:
+        QuestionView.objects.get_or_create(
+            question_id=question_id,
+            user_id=user_id
+        )
+
+
+def get_views_count(question_id):
+    """Получает количество уникальных просмотров"""
+    return QuestionView.objects.filter(question_id=question_id).count()
 
 
 def delete_question(question_id, moderator_id):

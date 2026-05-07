@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from main.models_features.answer_rating_feature import Answer
 from main.models_features import (
     create_question, get_question_by_id, create_answer, get_answers_for_question,
-    rate_answer, add_activity, Question,
+    rate_answer, add_activity, Question, add_view,
 )
 from .helpers import get_menu
 
@@ -35,6 +35,10 @@ def question_detail(request, question_id):
     question = get_question_by_id(question_id)
     if not question:
         return render(request, '404.html', {'menu': get_menu(request)}, status=404)
+
+    # Record view
+    user_id = request.user.id if request.user.is_authenticated else None
+    add_view(question_id, user_id)
 
     if request.method == 'POST':
         if not request.user.is_authenticated:

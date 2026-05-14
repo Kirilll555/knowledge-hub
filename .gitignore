@@ -384,4 +384,45 @@ logs/
 # Static collected
 static_collected/
 
+# Django migrations (auto-generated)
+# Keep the __init__.py but ignore migration files
+main/migrations/*.py
+main/migrations/__pycache__/
+config/migrations/*.py
+config/migrations/__pycache__/
+!main/migrations/__init__.py
+!config/migrations/__init__.py
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE specific
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# Cache files
+.pytest_cache/
+.hypothesis/
+.ruff_cache/
+
+# Local environment files
+.env.local
+.env.*.local
+
+# Media uploads
+media/uploads/
+
+# Compiled Python files not caught above
+*.pyc
+*.pyo
+
 # End of https://www.toptal.com/developers/gitignore/api/django,dotenv,python,pycharm+all,visualstudiocode

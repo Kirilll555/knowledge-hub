@@ -7,11 +7,13 @@ before_script:
 
 stages:
   - style
+  - test
+  - docs
 
 pylint:
   stage: style
   script:
-  - pylint --fail-under=6 --ignore-paths="docs/*" **/*.py 
+  - pylint --rcfile=.pylintrc --fail-under=6 --ignore-paths="migrations/*" config/ main/
   - echo "Pylint complete."
   artifacts:
     when: on_success
@@ -20,9 +22,33 @@ pylint:
 pycodestyle:
   stage: style
   script:
-  - pycodestyle --max-line-length=120 *.py
+  - pycodestyle config/ main/ --config=setup.cfg
   - echo "Pycodestyle complete."
   artifacts:
     when: on_failure
     expire_in: 30 days
-    
+
+tests:
+  stage: test
+  script:
+  - python -m pytest main/tests/ -v --cov=main --cov-report=term --cov-report=html
+  - echo "Tests complete."
+  artifacts:
+    when: on_success
+    expire_in: 30 days
+    paths:
+      - htmlcov/
+  allow_failure: false
+
+sphinx_docs:
+  stage: docs
+  script:
+  - pip install sphinx sphinx-rtd-theme
+  - sphinx-build -b html docs docs/_build
+  - echo "Documentation build complete."
+  artifacts:
+    when: on_success
+    expire_in: 30 days
+    paths:
+      - docs/_build/
+  allow_failure: true

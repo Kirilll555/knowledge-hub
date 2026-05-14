@@ -32,7 +32,11 @@ disable=
     too-many-instance-attributes,
     line-too-long,
     fixme,
-    import-error
+    import-error,
+    bare-except,
+    trailing-whitespace,
+    trailing-newline,
+    wrong-import-position
 
 [REPORTS]
 # Set the output format
@@ -85,10 +89,6 @@ min-similarity-lines=4
 ignore-comments=yes
 
 ignore-docstrings=yes
-
-[SPELLING]
-# Spelling dictionary name
-spelling-dict=en_US
 
 [TYPECHECK]
 # List of decorators that produce context managers

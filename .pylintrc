@@ -12,9 +12,6 @@ jobs=4
 # List of plugins
 load-plugins=pylint_django
 
-# Django settings module
-init-hook='import django; from django.conf import settings; django.setup()' if not settings.configured else None
-
 # Ignore patterns
 ignore=
     migrations,

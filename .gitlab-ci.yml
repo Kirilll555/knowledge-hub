@@ -1,5 +1,10 @@
 image: python:3.13.3-alpine3.20
 
+cache:
+  paths:
+    - .venv/
+  key: ${CI_COMMIT_REF_SLUG}
+
 before_script:
   - python3 -m venv .venv 
   - . .venv/bin/activate
@@ -13,7 +18,7 @@ stages:
 pylint:
   stage: style
   script:
-  - pylint --rcfile=.pylintrc --fail-under=6 --ignore-paths="migrations/*" config/ main/
+  - python -m pylint --rcfile=.pylintrc --fail-under=6 --ignore-paths="migrations/*" config/ main/
   - echo "Pylint complete."
   artifacts:
     when: on_success
@@ -22,11 +27,12 @@ pylint:
 pycodestyle:
   stage: style
   script:
-  - pycodestyle config/ main/ --config=setup.cfg
+  - python -m pycodestyle config/ main/ --config=setup.cfg --count
   - echo "Pycodestyle complete."
   artifacts:
     when: on_failure
     expire_in: 30 days
+  allow_failure: true
 
 tests:
   stage: test

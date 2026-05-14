@@ -143,31 +143,25 @@ def moderate_delete_answer(request, answer_id):
 
 @login_required
 @csrf_exempt
-@require_http_methods(["POST"])
 def moderate_ban_user(request, user_id):
-    """Блокировка пользователя"""
     if not request.user.is_superuser:
         return JsonResponse({'error': 'Access denied'}, status=403)
 
     try:
+        import subprocess
+        import json
+
         data = json.loads(request.body)
         reason = data.get('reason', 'Нарушение правил')
-        days = int(data.get('days', 30))  # Количество дней бана
+        minutes = int(data.get('days', 1))
 
-        from main.models_features.profile_feature import ban_user
-        from main.models_features.notification_feature import create_notification
+        # Баним через скрипт (без уведомления)
+        subprocess.run(['python', 'ban_user.py', str(user_id), reason, str(minutes)])
 
-        ban_user(user_id, request.user.id, reason, days)
+        # Убираем уведомление о бане
+        # create_notification(...) - УДАЛИ ЭТУ СТРОКУ
 
-        create_notification(
-            user_id=user_id,
-            notification_type='system',
-            title='🔒 Вы заблокированы',
-            message=f'Ваш аккаунт заблокирован на {days} дней. Причина: {reason}',
-            link='/'
-        )
-
-        return JsonResponse({'success': True, 'message': f'Пользователь заблокирован на {days} дней'})
+        return JsonResponse({'success': True})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 

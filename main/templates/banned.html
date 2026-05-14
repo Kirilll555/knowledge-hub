@@ -13,7 +13,6 @@
             min-height: 100vh;
         }
         
-        /* Пузырьки */
         .bubbles {
             position: fixed;
             top: 0;
@@ -24,7 +23,7 @@
             z-index: 0;
             pointer-events: none;
         }
-        
+
         .bubble {
             position: absolute;
             bottom: -100px;
@@ -32,7 +31,7 @@
             border-radius: 50%;
             animation: float 8s infinite ease-in-out;
         }
-        
+
         .bubble:nth-child(1) { width: 40px; height: 40px; left: 10%; animation-duration: 6s; animation-delay: 0s; }
         .bubble:nth-child(2) { width: 20px; height: 20px; left: 20%; animation-duration: 5s; animation-delay: 1s; }
         .bubble:nth-child(3) { width: 60px; height: 60px; left: 35%; animation-duration: 8s; animation-delay: 2s; }
@@ -43,24 +42,14 @@
         .bubble:nth-child(8) { width: 35px; height: 35px; left: 95%; animation-duration: 6.5s; animation-delay: 4s; }
         .bubble:nth-child(9) { width: 55px; height: 55px; left: 45%; animation-duration: 8.5s; animation-delay: 1s; }
         .bubble:nth-child(10) { width: 15px; height: 15px; left: 15%; animation-duration: 4.5s; animation-delay: 3.5s; }
-        
+
         @keyframes float {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.5;
-            }
-            90% {
-                opacity: 0.5;
-            }
-            100% {
-                transform: translateY(-110vh) rotate(360deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
         }
-        
+
         .ban-container {
             position: relative;
             z-index: 1;
@@ -69,18 +58,12 @@
             padding: 0 20px;
             animation: fadeInUp 0.6s ease;
         }
-        
+
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .ban-card {
             background: white;
             border: 2px solid #dc2626;
@@ -91,8 +74,7 @@
             position: relative;
             overflow: hidden;
         }
-        
-        /* Красная анимированная полоска сверху */
+
         .ban-card::before {
             content: '';
             position: absolute;
@@ -103,30 +85,30 @@
             background: linear-gradient(90deg, #dc2626, #ef4444, #dc2626, #991b1b);
             animation: pulseRed 1.5s infinite;
         }
-        
+
         @keyframes pulseRed {
             0%, 100% { opacity: 0.6; }
             50% { opacity: 1; filter: brightness(1.2); }
         }
-        
+
         .ban-card:hover {
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
             transition: all 0.3s ease;
         }
-        
+
         .ban-icon {
             font-size: 80px;
             margin-bottom: 20px;
             animation: shake 0.5s ease;
             display: inline-block;
         }
-        
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-5px); }
             75% { transform: translateX(5px); }
         }
-        
+
         .ban-title {
             font-size: 28px;
             font-weight: 800;
@@ -135,13 +117,13 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        
+
         .ban-subtitle {
             color: #666;
             margin-bottom: 30px;
             font-size: 14px;
         }
-        
+
         .ban-reason-box {
             background: #fef2f2;
             border-left: 4px solid #dc2626;
@@ -150,7 +132,7 @@
             margin: 25px 0;
             text-align: left;
         }
-        
+
         .ban-reason-label {
             font-size: 12px;
             text-transform: uppercase;
@@ -159,14 +141,14 @@
             color: #dc2626;
             margin-bottom: 8px;
         }
-        
+
         .ban-reason-text {
             font-size: 14px;
             color: #333;
             font-weight: 500;
             line-height: 1.5;
         }
-        
+
         .ban-dates {
             background: #f8f9fa;
             border-radius: 16px;
@@ -175,7 +157,7 @@
             text-align: left;
             border: 1px solid #e5e7eb;
         }
-        
+
         .date-row {
             display: flex;
             justify-content: space-between;
@@ -183,11 +165,11 @@
             padding: 12px 0;
             border-bottom: 1px solid #e5e7eb;
         }
-        
+
         .date-row:last-child {
             border-bottom: none;
         }
-        
+
         .date-label {
             display: flex;
             align-items: center;
@@ -195,33 +177,13 @@
             color: #666;
             font-size: 14px;
         }
-        
+
         .date-value {
             color: #333;
             font-weight: 600;
             font-size: 15px;
         }
-        
-        .days-left {
-            background: #fef2f2;
-            border-radius: 40px;
-            padding: 12px 20px;
-            margin: 20px 0;
-            display: inline-block;
-            border: 1px solid #fecaca;
-        }
-        
-        .days-left-number {
-            font-size: 32px;
-            font-weight: 800;
-            color: #dc2626;
-        }
-        
-        .days-left-text {
-            font-size: 14px;
-            color: #666;
-        }
-        
+
         .logout-btn {
             display: inline-flex;
             align-items: center;
@@ -238,29 +200,29 @@
             cursor: pointer;
             font-size: 14px;
         }
-        
+
         .logout-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
             background: linear-gradient(135deg, #ef4444, #dc2626);
         }
-        
+
         .support-text {
             font-size: 12px;
             color: #999;
             margin-top: 25px;
         }
-        
+
         .support-link {
             color: #dc2626;
             text-decoration: none;
             font-weight: 500;
         }
-        
+
         .support-link:hover {
             text-decoration: underline;
         }
-        
+
         .warning-corner {
             position: fixed;
             bottom: 20px;
@@ -277,35 +239,21 @@
             animation: pulse 2s infinite;
             border: 1px solid #fecaca;
         }
-        
+
         @keyframes pulse {
             0%, 100% { transform: scale(1); opacity: 0.7; }
             50% { transform: scale(1.1); opacity: 1; }
         }
-        
+
         @media (max-width: 640px) {
-            .ban-card {
-                padding: 35px 25px;
-            }
-            .ban-title {
-                font-size: 24px;
-            }
-            .ban-icon {
-                font-size: 60px;
-            }
-            .days-left-number {
-                font-size: 28px;
-            }
-            .date-row {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
-            }
+            .ban-card { padding: 35px 25px; }
+            .ban-title { font-size: 24px; }
+            .ban-icon { font-size: 60px; }
+            .date-row { flex-direction: column; align-items: flex-start; gap: 5px; }
         }
     </style>
 </head>
 <body>
-    <!-- Пузырьки -->
     <div class="bubbles">
         <div class="bubble"></div>
         <div class="bubble"></div>
@@ -318,11 +266,11 @@
         <div class="bubble"></div>
         <div class="bubble"></div>
     </div>
-    
+
     <div class="warning-corner">
         ⚠️
     </div>
-    
+
     <div class="ban-container">
         <div class="ban-card">
             <div class="ban-icon">
@@ -334,7 +282,7 @@
             <div class="ban-subtitle">
                 Ваш аккаунт временно ограничен
             </div>
-            
+
             {% if ban_reason %}
             <div class="ban-reason-box">
                 <div class="ban-reason-label">
@@ -345,7 +293,7 @@
                 </div>
             </div>
             {% endif %}
-            
+
             <div class="ban-dates">
                 <div class="date-row">
                     <div class="date-label">
@@ -366,39 +314,15 @@
                 </div>
                 {% endif %}
             </div>
-            
-            {% if banned_until %}
-            <div class="days-left">
-                <span class="days-left-number" id="daysLeft"></span>
-                <span class="days-left-text"> дней до разблокировки</span>
-            </div>
-            {% endif %}
-            
+
             <a href="/logout/" class="logout-btn">
                 🚪 Выйти из аккаунта
             </a>
-            
+
             <div class="support-text">
                 Вопросы по блокировке можно задать <a href="mailto:admin@knowledgehub.com" class="support-link">администратору</a>
             </div>
         </div>
     </div>
-    
-    {% if banned_until %}
-    <script>
-        function calculateDaysLeft() {
-            const untilDate = new Date('{{ banned_until|date:"Y-m-d H:i:s" }}');
-            const now = new Date();
-            const diffTime = untilDate - now;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            const daysLeftSpan = document.getElementById('daysLeft');
-            if (daysLeftSpan) {
-                daysLeftSpan.textContent = diffDays > 0 ? diffDays : 0;
-            }
-        }
-        calculateDaysLeft();
-        setInterval(calculateDaysLeft, 3600000);
-    </script>
-    {% endif %}
 </body>
 </html>

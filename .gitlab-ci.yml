@@ -32,7 +32,7 @@ pycodestyle:
 tests:
   stage: test
   script:
-  - python -m pytest main/tests/ -v --cov=main --cov-report=term --cov-report=html
+  - python -m pytest tests/ -v --cov=main --cov-report=term --cov-report=html
   - echo "Tests complete."
   artifacts:
     when: on_success

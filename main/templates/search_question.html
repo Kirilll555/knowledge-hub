@@ -29,7 +29,11 @@
                 {% endif %}
             </div>
             <div class="response-footer" id="responseFooter">
-                <a href="/ask_ai/{{ session_id }}/" class="chat-link">💬 Перейти в чат</a>
+                {% if session_id %}
+                    <a href="/ask_ai/{{ session_id }}/" class="chat-link">💬 Перейти в чат</a>
+                {% else %}
+                    <a href="/ask_ai/" class="chat-link">💬 Перейти в чат</a>
+                {% endif %}
             </div>
         </div>
 
@@ -51,7 +55,7 @@
     <script>
         const csrftoken = document.cookie.split('; ').find(row => row.startsWith('csrftoken=')).split('=')[1];
         const q = new URLSearchParams(window.location.search).get('q');
-        const sessionId = '{{ session_id }}';
+        const sessionId = '{{ session_id|default:"" }}';
         const content = document.getElementById('responseContent');
         const footer = document.getElementById('responseFooter');
         let currentAnswer = '';
@@ -62,6 +66,7 @@
         }
 
         function regenerateAnswer() {
+            if (!q) return;
             content.innerHTML = '<div class="thinking-dots"><span></span><span></span><span></span></div>';
             footer.innerHTML = '';
 
@@ -79,14 +84,14 @@
                         <div class="response-actions">
                             <button class="action-btn copy-btn" onclick="copyAnswer()">📋 Копировать</button>
                             <button class="action-btn" onclick="regenerateAnswer()">🔄 Не понравился ответ</button>
-                            <a href="/ask_ai/${sessionId}/" class="chat-link">💬 В чат</a>
+                            <a href="/ask_ai/${sessionId && sessionId !== 'None' ? sessionId + '/' : ''}" class="chat-link">💬 В чат</a>
                         </div>
                     `;
                 }
             });
         }
 
-        if (q && sessionId) {
+        if (q && sessionId && sessionId !== 'None') {
             content.innerHTML = '<div class="thinking-dots"><span></span><span></span><span></span></div>';
             footer.innerHTML = '';
 

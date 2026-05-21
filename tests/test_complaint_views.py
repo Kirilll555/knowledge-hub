@@ -1,10 +1,8 @@
 import json
-import unittest
 from django.test import TestCase, Client, RequestFactory
 from django.urls import reverse
 from django.contrib.auth.models import User
 from unittest.mock import patch, MagicMock
-from main.models_features.complaint_feature import Complaint
 
 
 class ComplaintViewsTestCase(TestCase):

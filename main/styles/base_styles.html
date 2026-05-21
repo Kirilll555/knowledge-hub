@@ -47,6 +47,18 @@ body.dark-theme {
 *::-webkit-scrollbar-track { background: transparent; }
 *::-webkit-scrollbar-thumb { background: var(--accent-dark); border-radius: 10px; }
 
+input, textarea, select {
+    background-color: #ffffff;
+    color: #111827;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(242, 218, 172, 0.2);
+}
+
 .notif-btn-nav {
     position: relative;
     background: none;
@@ -174,7 +186,6 @@ body.dark-theme {
         right: -50px;
     }
 }
-
 
 .navbar {
     background: var(--card-bg);
@@ -325,6 +336,56 @@ body.dark-theme {
     color: #000;
 }
 
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select,
+body.dark-theme .field-select,
+body.dark-theme .form-input {
+    background-color: #1a1a1a !important;
+    color: #f8fafc !important;
+    border-color: rgba(242, 218, 172, 0.3) !important;
+}
+
+body.dark-theme input::placeholder,
+body.dark-theme textarea::placeholder {
+    color: #94a3b8 !important;
+}
+
+body.dark-theme select option,
+body.dark-theme .field-select option {
+    background-color: #1a1a1a !important;
+    color: #f8fafc !important;
+}
+
+body.dark-theme input:focus,
+body.dark-theme textarea:focus,
+body.dark-theme select:focus,
+body.dark-theme .field-select:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 2px rgba(242, 218, 172, 0.2) !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+    transition: background-color 0s 600000s, color 0s 600000s;
+}
+
+input:-webkit-autofill {
+    background-color: #ffffff !important;
+    -webkit-text-fill-color: #111827 !important;
+}
+
+body.dark-theme input:-webkit-autofill,
+body.dark-theme input:-webkit-autofill:hover,
+body.dark-theme input:-webkit-autofill:focus,
+body.dark-theme input:-webkit-autofill:active {
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+    background-color: #1a1a1a !important;
+    -webkit-box-shadow: 0 0 0 100px #1a1a1a inset !important;
+    box-shadow: 0 0 0 100px #1a1a1a inset !important;
+}
+
 @media (max-width: 768px) {
     .nav-container {
         flex-direction: column;
@@ -361,12 +422,6 @@ body.dark-theme {
         font-size: 1.4rem;
     }
 }
-
-input:-webkit-autofill,
-input:-webkit-autofill:focus {
-    transition: background-color 0s 600000s, color 0s 600000s;
-}
-
 
 @media (max-height: 750px) {
     body {

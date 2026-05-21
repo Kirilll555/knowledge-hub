@@ -7,8 +7,8 @@ before_script:
 
 stages:
   - style
-  - test
   - docs
+  - test
 
 pylint:
   stage: style

@@ -248,3 +248,4 @@ class RegenerateAnswerTests(AITestCase):
                 session_id=session.id, content="Перегенерированный ответ"
             ).exists()
         )
+

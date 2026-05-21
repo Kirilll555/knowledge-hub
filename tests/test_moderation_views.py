@@ -82,33 +82,6 @@ class ModerationViewsTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
 
     @patch('main.views_features.moderation_views.update_complaint_status')
-    def test_moderate_resolve_complaint_approve(self, mock_update_status):
-        """Тест 4: Одобрение жалобы через moderate_resolve_complaint"""
-        self.login_as_admin()
-
-        complaint = Complaint.objects.create(
-            user=self.user,
-            target_type='question',
-            complaint_type='spam',
-            reason='Spam content',
-            description='Test complaint'
-        )
-
-        data = json.dumps({'status': 'approved'})
-        url = reverse('resolve_complaint', args=[complaint.id])
-
-        response = self.client.post(
-            url,
-            data=data,
-            content_type='application/json'
-        )
-
-        self.assertEqual(response.status_code, 200)
-        response_data = json.loads(response.content)
-        self.assertTrue(response_data['success'])
-        mock_update_status.assert_called_once_with(complaint.id, 'approved')
-
-    @patch('main.views_features.moderation_views.update_complaint_status')
     @patch('main.views_features.moderation_views.create_notification')
     @patch('main.views_features.moderation_views.delete_question')
     def test_resolve_complaint_approve_question(self, mock_delete_question,

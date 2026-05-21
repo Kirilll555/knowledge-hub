@@ -227,7 +227,7 @@ class HelpersTestCase(TestCase):
 
     @patch('main.views_features.helpers.check_user_access')
     def test_check_ban_decorator_with_active_user(self, mock_check_user):
-        """Бонусный тест 1: Проверка декоратора check_ban с активным пользователем"""
+        """Тест 10: Проверка декоратора check_ban с активным пользователем"""
         mock_check_user.return_value = True
 
         @check_ban
@@ -243,7 +243,7 @@ class HelpersTestCase(TestCase):
 
     @patch('main.views_features.helpers.check_moderator_access')
     def test_moderator_required_decorator_preserves_function_metadata(self, mock_check_moderator):
-        """Бонусный тест 2: Проверка сохранения метаданных функции декоратором"""
+        """Тест 11: Проверка сохранения метаданных функции декоратором"""
         mock_check_moderator.return_value = True
 
         @moderator_required
@@ -257,7 +257,7 @@ class HelpersTestCase(TestCase):
 
     @patch('main.views_features.helpers.check_admin_access')
     def test_admin_required_decorator_with_regular_user(self, mock_check_admin):
-        """Бонусный тест 3: Проверка декоратора admin_required с обычным пользователем"""
+        """Тест 12: Проверка декоратора admin_required с обычным пользователем"""
         mock_check_admin.return_value = False
 
         @admin_required
@@ -272,7 +272,7 @@ class HelpersTestCase(TestCase):
 
     @patch('main.views_features.helpers.check_moderator_access')
     def test_moderator_required_decorator_with_anonymous_user(self, mock_check_moderator):
-        """Бонусный тест 4: Проверка декоратора moderator_required с анонимным пользователем"""
+        """Тест 13: Проверка декоратора moderator_required с анонимным пользователем"""
         mock_check_moderator.return_value = False
 
         @moderator_required
@@ -286,7 +286,7 @@ class HelpersTestCase(TestCase):
         self.assertIsInstance(response, HttpResponseForbidden)
 
     def test_get_menu_with_special_characters_in_username(self):
-        """Бонусный тест 5: Проверка меню с специальными символами в имени пользователя"""
+        """Тест 14: Проверка меню с специальными символами в имени пользователя"""
         special_user = User.objects.create_user(
             username='user@test.com',
             email='special@example.com',

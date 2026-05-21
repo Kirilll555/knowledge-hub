@@ -22,5 +22,3 @@ cursor.execute("""
 
 conn.commit()
 conn.close()
-
-print(f"✅ Пользователь {user_id} забанен до {banned_until}")

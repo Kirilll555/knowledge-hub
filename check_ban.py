@@ -14,11 +14,9 @@ if row and row[0] == 1:
         if banned_until > datetime.now():
             print('banned')
         else:
-            # Снимаем бан и отправляем уведомление
             cursor.execute("UPDATE main_profile SET is_banned = 0, banned_until = NULL WHERE user_id = ?", (user_id,))
             conn.commit()
 
-            # Добавляем уведомление о разбане
             cursor.execute("""
                 INSERT INTO main_notification (user_id, notification_type, title, message, link, is_read, created_at)
                 VALUES (?, 'system', '🔓 Аккаунт разблокирован', 'Ваш аккаунт был автоматически разблокирован по истечении срока бана.', '/', 0, datetime('now'))

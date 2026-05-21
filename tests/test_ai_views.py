@@ -1,3 +1,4 @@
+# pylint: disable=no-member
 import json
 from unittest.mock import patch
 
@@ -146,7 +147,6 @@ class SessionManagementTests(AITestCase):
 
         self.assertTrue(response_data["success"])
         self.assertIsNotNone(response_data["session_id"])
-
         session = ChatSession.objects.get(id=response_data["session_id"])
         self.assertEqual(session.user_id, self.user.id)
         self.assertEqual(session.title, "Новый диалог")
@@ -181,9 +181,7 @@ class SessionManagementTests(AITestCase):
         response = delete_ai_session(request, other_session.id)
         response_data = json.loads(response.content)
 
-        self.assertTrue(
-            response_data["success"]
-        )  # delete_session не выбрасывает ошибку
+        self.assertTrue(response_data["success"])
         self.assertTrue(ChatSession.objects.filter(id=other_session.id).exists())
 
     def test_rename_ai_session(self):
@@ -248,4 +246,3 @@ class RegenerateAnswerTests(AITestCase):
                 session_id=session.id, content="Перегенерированный ответ"
             ).exists()
         )
-

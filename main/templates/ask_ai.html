@@ -78,6 +78,26 @@
         const input = document.getElementById('questionInput');
         const sessionId = {{ current_session.id }};
 
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatMessage(text) {
+            let formatted = text;
+            formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            formatted = formatted.replace(/\n/g, '<br>');
+            return formatted;
+        }
+
+        function renderMath() {
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise().catch(err => console.log('MathJax error:', err));
+            }
+        }
+
         function scrollToBottom() {
             messages.scrollTop = messages.scrollHeight;
         }
@@ -85,20 +105,34 @@
         function addMessage(role, text, isHtml = false) {
             const div = document.createElement('div');
             div.className = `message ${role === 'user' ? 'user-message' : 'bot-message'}`;
+
+            let content;
+            if (role === 'user') {
+                content = escapeHtml(text).replace(/\n/g, '<br>');
+            } else {
+                if (isHtml) {
+                    content = text;
+                } else {
+                    content = formatMessage(text);
+                }
+            }
+
             div.innerHTML = `
                 <div class="message-avatar">${role === 'user' ? '👤' : '🤖'}</div>
-                <div class="message-bubble">${isHtml ? text : text.replace(/\n/g, '<br>')}</div>
+                <div class="message-bubble">${content}</div>
             `;
             messages.appendChild(div);
             scrollToBottom();
+            renderMath();
             return div;
         }
 
         function addActionsToMessage(msgDiv, answer) {
             const actions = document.createElement('div');
             actions.className = 'response-actions';
+            const escapedAnswer = escapeHtml(answer).replace(/'/g, "\\'");
             actions.innerHTML = `
-                <button class="action-btn copy-btn" onclick="copyAnswer(this, '${answer.replace(/'/g, "\\'")}')">📋 Копировать</button>
+                <button class="action-btn copy-btn" onclick="copyAnswer(this, '${escapedAnswer}')">📋 Копировать</button>
                 <button class="action-btn" onclick="regenerateAnswer(this)">🔄 Не нравится</button>
             `;
             msgDiv.appendChild(actions);
@@ -124,11 +158,12 @@
             .then(r => r.json())
             .then(data => {
                 if (data.answer) {
-                    msgDiv.querySelector('.message-bubble').innerHTML = data.answer.replace(/\n/g, '<br>');
-                    MathJax.typesetPromise();
-                    // Обновляем кнопку копирования для нового текста
+                    const formatted = formatMessage(data.answer);
+                    msgDiv.querySelector('.message-bubble').innerHTML = formatted;
                     const copyBtn = msgDiv.querySelector('.copy-btn');
-                    copyBtn.setAttribute('onclick', `copyAnswer(this, '${data.answer.replace(/'/g, "\\'")}')`);
+                    const escapedAnswer = escapeHtml(data.answer).replace(/'/g, "\\'");
+                    copyBtn.setAttribute('onclick', `copyAnswer(this, '${escapedAnswer}')`);
+                    renderMath();
                 }
                 btn.disabled = false;
             });
@@ -167,6 +202,22 @@
             }
         }
 
+        function formatExistingMessages() {
+            document.querySelectorAll('.message.bot-message .message-bubble').forEach(bubble => {
+                let html = bubble.innerHTML;
+                if (html.includes('<strong>') || html.includes('<em>')) {
+                    return;
+                }
+                let text = bubble.innerText;
+                let formatted = text;
+                formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                formatted = formatted.replace(/\n/g, '<br>');
+                bubble.innerHTML = formatted;
+            });
+            renderMath();
+        }
+
         document.getElementById('chatForm').onsubmit = (e) => {
             e.preventDefault();
             const question = input.value.trim();
@@ -189,7 +240,6 @@
                 if (data.success) {
                     const botMsg = addMessage('bot', data.answer);
                     addActionsToMessage(botMsg, data.answer);
-                    MathJax.typesetPromise();
                 }
                 input.focus();
             });
@@ -197,6 +247,7 @@
 
         input.focus();
         scrollToBottom();
+        formatExistingMessages();
     </script>
 </body>
 </html>
